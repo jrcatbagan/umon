@@ -1,0 +1,23 @@
+Subject: Re: copies of zlib source code
+Date: Wed, 15 Dec 1999 13:12:37 -0800
+From: Mark Adler <Mark.Adler@quest.jpl.nasa.gov>
+To: esutter@lucent.com
+CC: jloup@gzip.org
+
+At 1:03 PM -0600 12/15/99, Ed wrote:
+>Is there any problem with providing copies of the zlib source
+>within the directory structure of the other code I am releasing
+>or must I indirectly refer to your zlib web site and have users
+>get it from there?
+
+No there is no problem, you can distribute it directly.  You must not
+misrepresent the origin of the source.  If you have modified the zlib
+sources at all, then you have to mark them as such and include that
+in the ChangeLog.
+
+I recommend that you include a reference to the zlib web site so that
+users can if they wish get the latest version.
+
+    http://www.cdrom.com/pub/infozip/zlib/
+
+mark

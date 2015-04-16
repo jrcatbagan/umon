@@ -1,0 +1,59 @@
+etheraddr   		= MACADDRBASE;
+alt_tfsdevtbl_base	= ALTTFSDEVTBLBASE;
+
+MEMORY 
+{
+	rom :	org = RAMTSTROMBASE,	len = RAMTSTROMLEN
+}
+
+SECTIONS
+{
+	.text	:
+	{
+		boot_base = .;
+		ram_reset.o(.text)
+		*(.glue_7t)
+		*(.glue_7)
+	} >rom
+
+	.data	:
+	{
+		*(.data)
+	} >rom
+
+	.sdata	:
+	{
+		*(.sdata)
+	} >rom
+
+	.sdata2	:
+	{
+		*(.sdata2)
+	} >rom
+
+	.rodata	:
+	{
+		*(.rodata)
+        *(.rodata.str1.4)
+	} >rom
+
+	.got	:
+	{
+		*(.got)
+	} >rom
+
+	.bss	:
+	{
+		bss_start = .;
+		atag_space = .;
+		. += ATAGSIZE;
+		end_atag_space = .;
+		*(.bss) *(COMMON)
+	} >rom
+
+	.sbss	:
+	{
+		*(.sbss)
+		bss_end = .;
+	} >rom
+}

@@ -1,0 +1,12 @@
+PS1=CSB740:
+export TITLE="COGENT CSB740 ARM Monitor Development"
+export UMONTOP=../../umon_main
+export tools=$UMONTOP/host
+export target=$UMONTOP/target
+export cpu=$target/cpu
+export zlib=$target/zlib
+export com=$target/common
+export misc=$target/misc
+export make=$target/make
+export flash=$target/flash
+export dev=$target/dev

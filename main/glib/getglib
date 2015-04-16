@@ -1,0 +1,49 @@
+#
+# This is the original script I used to pull in files from the FreeBsd project:
+#
+export GLIBFILES="abs.c atoi.c crc16.c crc32.c ctypetbl.c div.c getopt.c gmtime.c inrange.c lceil.c ldiv.c little_print.c memccpy.c memchr.c memcmp.c memcpy.c memset.c pollconsole.c prascii.c printmem.c smemcpy.c smemset.c sprnfloat.c strcasecmp.c strcat.c strchr.c strcmp.c strcpy.c strcspn.c strlen.c strncat.c strncmp.c strncpy.c strnlen.c strpbrk.c strrchr.c strspn.c strstr.c strtod.c strtok.c strtol.c strtoul.c strtolower.c strtoupper.c swap.c ticktock.c ulceil.c"
+
+export MYFILES="asctime.c inrange.c memcpy.c pollconsole.c prascii.c printmem.c smemcpy.c smemset.c swap.c ticktock.c"
+
+export BSDPATH=https://raw.githubusercontent.com/freebsd/freebsd/master
+
+export BSD_STRING_FILES="memccpy.c memchr.c memcmp.c memset.c strcasecmp.c strcat.c strchr.c strcmp.c strcpy.c strcspn.c strlen.c strncat.c strncmp.c strncpy.c strnlen.c strpbrk.c strrchr.c strspn.c strstr.c strtok.c"
+
+export BSD_STDLIB_FILES="abs.c atoi.c div.c getopt.c ldiv.c strtol.c"
+
+rm -f *.c *.1 list
+
+for file in $MYFILES
+do
+  cp orig/$file .
+  echo "myfile: $file" >>list
+done
+
+for file in $BSD_STDLIB_FILES
+do
+  if ! [ -f $file ] 
+  then
+    wget ${BSDPATH}/lib/libc/stdlib/$file
+    if [ $? == 0 ]
+    then
+      echo "stdlib: $file" >>list
+    fi
+  fi
+done
+
+for file in $BSD_STRING_FILES
+do
+  if ! [ -f $file ] 
+  then
+    wget ${BSDPATH}/lib/libc/string/$file
+    if [ $? == 0 ]
+    then
+      echo "string: $file" >>list
+    fi
+  fi
+done
+
+wget ${BSDPATH}/contrib/tzcode/stdtime/asctime.c
+wget https://raw.githubusercontent.com/LADSoft/OrangeC/master/src/clibs/time/gmtime.c
+wget https://raw.githubusercontent.com/freebsd/freebsd-ports/master/converters/ta2as/files/strtolower.c
+wget https://raw.githubusercontent.com/freebsd/freebsd/master/sys/libkern/crc32.c

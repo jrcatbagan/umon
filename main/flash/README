@@ -1,0 +1,16 @@
+devices:
+	Each .c file represents one configuration of one particular flash
+	device.  These files can be used standalone or mixed, depending on
+	the configuration of the board.  Refer to devices/README for full
+	details.
+	Not all driver files have been updated to conform with uMon1.0.
+	The easiest way to determine if the driver has been updated to 
+	uMon1.0 is to look at the relocatable xxx_lock() function.  If
+	it supports the FLASH_LOCKABLE operation properly, then it has
+	been updated to be uMon1.0 compatible.
+
+Note that several of these drivers may need updating.
+Especially notable is the need for the WATCHDOG_MACRO to be inserted
+in strategic points within the driver.  Obviously this will only be
+needed if the hardware runs with a watchdog.
+

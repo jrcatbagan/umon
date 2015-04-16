@@ -1,0 +1,24 @@
+   Micromonitor Embedded System Boot Monitor
+
+   This package contains code primarily developed at
+   Bell Laboratories, Alcatel-Lucent Technologies
+   (http:http://www.alcatel-lucent.com/).
+
+   This software contains code derived from the Freebsd project
+   (https://www.freebsd.org/).
+
+   The compression/decomppresion support is provided by the Zlib
+   project (www.zlib.net). 
+
+   Some files from both Freebsd and Zlib have been modified
+   to build in the Micromonitor environment.
+
+   Some port/cpu/device-specific files are from Mike Kelly
+   Cogent Computer Systems (http://www.cogcomp.com).
+
+   An SMC ethernet driver from Jay Monkman
+   (www.lopingdog.com).
+
+   Some improvements to original JFFS2 code from Bill Gatliff
+   (www.billgatliff.com).
+

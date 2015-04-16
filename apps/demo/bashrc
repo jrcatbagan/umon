@@ -1,0 +1,8 @@
+export PS1=uMonDemo:
+export EDITOR=vi
+export TITLE="MicroMonitor Demo Application"
+export UMONTOP=../../umon_main
+export HOME=`pwd`
+unset TERM
+. $UMONTOP/host/bin/umon_setup
+export TARGET_IP=192.168.1.110

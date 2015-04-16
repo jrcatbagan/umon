@@ -1,0 +1,7 @@
+This directory contains source and makefile to build a small
+uMon-resident application that creates it's own stack area and
+also provides a few umon-ish demonstrations (particularly a
+stack trace demo).
+
+Refer to makefile for details on how to build for various CPU architectures
+and target configurations.

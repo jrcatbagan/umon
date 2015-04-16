@@ -1,0 +1,122 @@
+# flashtest.scr:
+# This script can be run after a port is completed to verify
+# that the flash driver can properly deal with various address
+# and data alignments.
+#
+# Required shell variables: SECTORBASE & SNUM ...
+#
+# SECTORBASE: set to the base address of some sector within
+#   TFS that can be erased during this test.
+# SNUM: the number of the sector whose base address is
+#   $SECTORBASE.
+# NOLOCK: set to TRUE if the flash driver doesn't support flash
+#   lock/unlock
+
+if $SECTORBASE seq \$SECTORBASE goto USAGE
+if $SNUM seq \$SNUM goto USAGE
+
+# Copy SECTORBASE to SBASE, and APPRAMBASE to SRC
+set SBASE $SECTORBASE
+set SRC $APPRAMBASE
+
+# TEST1:
+echo TEST1: 
+echo Verify pattern
+# Establish a few known bytes of source data:
+pm $SRC 0x2a 0x2a 0x2a 0x2a 0x2a 0x2a 0x2a 0x2a
+set SRC=hex($SRC+8)
+pm $SRC 0x2a 0x2a 0x2a 0x2a 0x2a 0x2a 0x2a 0x2a
+dm $APPRAMBASE 16
+set SRC $APPRAMBASE
+
+# Unlock and erase the sector and verify erasure
+# (should be all 0xff):
+gosub FLASH_UNLOCK
+flash erase $SNUM
+dm $SBASE 16
+set SIZE 16
+
+# LOOP:
+if $SIZE eq 0 goto NEXTLOOP
+gosub FLASHTEST
+set SBASE=hex($SBASE+1) 
+set SRC=hex($SRC+1)
+set SIZE=hex($SIZE-2)
+goto LOOP
+
+# NEXTLOOP:
+set SRC $APPRAMBASE
+set SBASE $SECTORBASE
+set SIZE 8
+# LOOP2:
+if $SIZE eq 0 goto TEST2
+gosub FLASHTEST
+set SIZE=hex($SIZE-1)
+goto LOOP2
+
+# FLASHTEST
+flash write $SBASE $SRC $SIZE
+dm $SECTORBASE 16
+flash erase $SNUM
+dm $SECTORBASE 16
+return
+
+# TEST2:
+# Write a few known initial bytes of data with 0xff's within
+# the data...
+echo TEST2:
+pm $APPRAMBASE 0x41 0xff 0xff 0x44 0x45 0xff 0x47 0x48
+flash write $SECTORBASE $APPRAMBASE 8
+
+# Then try to insert data into the fields that were
+# originally 0xff...
+pm $APPRAMBASE 0x42 0x43
+set ADDR=hex($SECTORBASE+1)
+flash write $ADDR $APPRAMBASE 2
+
+pm $APPRAMBASE 0x46
+set ADDR=hex($SECTORBASE+5)
+flash write $ADDR $APPRAMBASE 1
+
+# Now make sure the write worked...
+pm $APPRAMBASE 0x41 0x42 0x43 0x44 0x45 0x46 0x47 0x48
+echo Next two lines of data should match...
+dm $SECTORBASE 8
+dm $APPRAMBASE 8
+cm -v $APPRAMBASE $SECTORBASE 8
+flash erase $SNUM
+
+#####################
+#
+# TEST 3:
+echo TEST3:
+if $NOLOCK seq TRUE exit
+echo Verify that a locked sector will not write or erase:
+set SCRIPT_IGNORE_ERROR TRUE
+flash write $SECTORBASE $APPRAMBASE 1
+flash lock $SNUM
+dm $SECTORBASE 16
+echo This line should generate a flash write error...
+flash write $SECTORBASE $APPRAMBASE 16
+dm $SECTORBASE 16
+echo This erase should fail...
+flash erase $SNUM
+gosub FLASH_UNLOCK
+echo This erase should succeed...
+flash erase $SNUM
+dm $SECTORBASE 16
+
+exit
+
+# FLASH_UNLOCK:
+if $NOLOCK seq TRUE return
+flash unlock $SNUM
+return 
+
+# FLASH_LOCK:
+if $NOLOCK seq TRUE return
+flash lock $SNUM
+return 
+
+# USAGE:
+echo Establish SECTORBASE and SNUM, then rerun.

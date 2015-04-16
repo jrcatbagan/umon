@@ -1,0 +1,51 @@
+This is the top-level of the MicroMonitor source tree.
+
+There are three main directories:
+umon_main:
+  This is the common code reusable on various targets as the core
+  of MicroMonitor's functionality.
+umon_ports:
+  This directory contains the public ports of MicroMonitor.  Each
+  subdirectory contains the makefile and target-specific code for
+  one uMon port.
+umon_apps:
+  This code provides a few different application examples for use
+  after the bootmonitor is built and running on your target.  The
+  best place to go there is umon_apps/demo.  This directory contains
+  the source and makefile that support building a basic application
+  for any target supported by MicroMonitor.  
+
+For a quick introduction refer to:
+	http://www.umonfw.com/docs/white_paper.pdf
+For a lot more than you'll ever care to read about it refer to:
+	http://www.umonfw.com/docs/umon_user_manual.pdf
+OR...
+
+To get started, refer to umon_main/README.
+
+-----------------------------------------------------------------------
+
+Re-release of Micromonitor (aka uMon) under the Apache 2.0 license...
+
+Starting with the original umon1.19 code I referred to
+
+http://www.apache.org/dev/apply-license.html#new
+
+to do what was necessary to re-release a new smaller version of the
+uMon code under the Apache 2.0 license.  This was originally motivated
+by a request from a GSOC (Google Summer of Code) student wanting to
+port uMon to the BeagleBone Black board as an alternative bootloader
+for use by the RTEMS embedded operating system.
+
+I copied http://www.apache.org/licenses/LICENSE-2.0.txt
+to this local LICENSE file.
+
+I started with https://www.apache.org/licenses/example-NOTICE.txt
+to create an appropriate NOTICE file.
+
+This README file was last modified on Mar 28, 2015.
+
+Primary contact:
+Ed Sutter ed.sutter@alcatel-lucent.com
+
+-----------------------------------------------------------------------

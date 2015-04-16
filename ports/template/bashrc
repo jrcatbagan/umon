@@ -1,0 +1,16 @@
+# Set prompt to reflect the target:
+PS1=TEMPLATE:
+
+# TITLE may be used by the 'title' tool in umon_setup
+export TITLE="TEMPLATE Monitor Development"
+
+# If UMONTOP is not set, then set it to the default:
+if [ "$UMONTOP" == "" ]
+then
+	export UMONTOP=../../umon_main
+fi
+
+# The umon_setup script looks for the presence of the EXT_UMON_SETUP
+# as a shell variable.  If it is present it assumes it is the fullpath
+# of a user-defined script that will be run as part of the umon setup.
+. $UMONTOP/host/bin/umon_setup

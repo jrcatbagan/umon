@@ -1,0 +1,12 @@
+Subject: Re: copies of zlib source code
+Date: Thu, 16 Dec 1999 13:29:34 -0800
+From: Mark Adler <Mark.Adler@quest.jpl.nasa.gov>
+To: esutter@lucent.com
+
+At 4:04 PM -0500 12/16/99, Ed Sutter wrote:
+>Is there any license associated with zlib?
+
+It is simply the copyright notice, which is in zlib.h, and repeated
+in the README file.  That gives you license to use the code.
+
+mark

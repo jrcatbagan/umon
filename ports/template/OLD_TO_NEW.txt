@@ -1,0 +1,100 @@
+##################################################################
+#
+# Converting an old-style (pre uMon1.0) monitor port over to the new
+# uMon1.0 structure...
+#
+1.	Copy old to new, remove vssver.scc and make all files writeable.
+2.	Run d2u on all files and change all .s files to .S.
+3.	Using a bashrc file from another port directory as a reference,
+	convert the old file over to the new format.  Also, if necessary,
+	change the name from ".bashrc" to "bashrc".
+4.	Remove the obj directory.
+5.	Move makefile to omakefile.
+6.  Create a new target_version.h file... Copy from some other target
+    and start with version 1.
+7.	Create new makefile...
+
+	TOPDIR			= $(UMONTOP)
+	PLATFORM		= copy from omakefile
+	TGTDIR			= copy from omakefile
+	FILETYPE		= elf | coff | aout
+	CPUTYPE			= arm | m68k | mips | ppc | sh
+	CUSTOM_CFLAGS	= -mcpu=XXX (at least)
+	CUSTOM_AFLAGS	= -mcpu=XXX (at least)
+
+8.	Establish the memory map.  For each hard-coded address in the
+	.lnk files... create a variable name and set up the variable
+	to equal the hard-coded value in the makefile.  In the .lnk file
+	replace the hard-coded address with the variable name.  For example,
+	replace the following lines in the .lnk file...
+
+	flash	:	ORIGIN = 0xFF800000, LENGTH = 0x0007FFFF
+	ram	: 		ORIGIN = 0x00000400, LENGTH = 0x0001FBFF
+
+	with:
+
+	flash	:	ORIGIN = FLASHBASE, LENGTH = FLASHLEN
+	ram	: 		ORIGIN = RAMBASE, LENGTH = RANLEN
+
+	and then add these variable initializations to the makefile:
+
+	FLASHBASE	= 0xFF800000
+	FLASHLEN	= 0x0007FFFF
+	RAMBASE		= 0x00000400
+	RANLEN		= 0x0001FBFF
+
+	then change the name of the .lnk file from *.lnk to *.ldt. This
+	file will be used as the loader template (.ldt) file and the actual
+	linker map file (*.ld) will be created at build time by the vsub
+	tool.
+	Also, if there are any references to object files in the .lnk file,
+	remove the "obj/" directory path prefix.  That isn't used anymore.
+	Finally, the filenames should be "PLATFORM_rule.ldt", where "PLATFORM"
+	is the value assigned to the PLATFORM variable in the makefile and "rule"
+	is the rule in the makefile that uses that map file.  So, if "boot" is
+	the rule and its for the CSB337, then the filename would be
+	CSB337_boot.ldt.  This naming convention must be followed for the 
+	makefile to use the pre-defined variables and rules provided by the
+	xxx.make files that come with the main tree.
+
+9.	Include the common.make file...
+	
+	include	$(TOPDIR)/target/make/common.make
+
+10.	Establish the directory that is the base location of the flash 
+	device driver source.  In most cases this will be $(COMBASE)/flash/devices
+	for the newer device driver model; however, the directories under
+	$(COMBASE)/flash/boards does have valid drivers as well.
+
+	FLASHDIR		= $(COMBASE)/flash/devices
+
+11. Now convert the OBJS list to several smaller lists as follows
+    (refer to some similar target makefile for reference).  Note
+	that there are a few new files as of uMon1.0, so also refer to
+	the list in this template makefile:
+	
+	LOCSSRC: local assembler source (.S files)
+	LOCCSRC: local C source code.
+	CPUSSRC: CPU-specific assembler source which is found under the
+			 directory specified by the $(CPUTYPE) variable above. 
+	COMSRC:  all of the source that is to be pulled in from the core
+             code directory.
+	CPUCSRC: CPU-specific C source code.
+	IODEVSRC:Device driver code found under $(COMBASE)/iodev
+	COMCSRC: Common C code found under $(COMBASE)/core
+	FLASHSRC: Flash driver C source files in the FLASHDIR.
+
+12. Include the common objects.make file...
+
+include $(TOPDIR)/target/make/objects.make
+
+13. Build the objects list...
+
+OBJS	= 	$(LOCSOBJ) $(CPUSOBJ) $(LOCCOBJ) $(CPUCOBJ) $(COMCOBJ) \
+			$(FLASHOBJ) $(IODEVOBJ)
+
+14. Use the new cpuio.c and config.h files in this directory as an
+    example of the rework needed to the current files.
+
+15. Make sure that the stack uses the MonStack array and the MONSTACKSIZE
+	specified in config.h.
