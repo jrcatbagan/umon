@@ -8,7 +8,7 @@
 #
 # Various relative directories used to build the monitor:
 #
-BASE		= $(TOPDIR)/target
+BASE		= $(TOPDIR)
 CPUDIR		= $(BASE)/cpu/$(CPUTYPE)
 ZLIBDIR		= $(BASE)/zlib
 GLIBDIR		= $(BASE)/glib
