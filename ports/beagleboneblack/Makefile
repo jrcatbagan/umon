@@ -89,7 +89,7 @@ ramtst:	$(BUILDDIR)/ramtst.$(FILETYPE)
 	@ls $(BUILDDIR)/ramtst*
 
 $(BUILDDIR)/boot.$(FILETYPE): $(BUILDDIR) $(OBJS) libz.a \
-		libg.a makefile
+		libg.a Makefile
 	$(CC) $(ASMFLAGS) -o rom_reset.o rom_reset.S
 	$(MAKE_MONBUILT)
 	sed -e s/ROMBASE/$(BOOTROMBASE)/ -e s/ROMLEN/$(BOOTROMLEN)/ \
@@ -101,7 +101,7 @@ $(BUILDDIR)/boot.$(FILETYPE): $(BUILDDIR) $(OBJS) libz.a \
 	$(MAKE_GNUSYMS)
 
 $(BUILDDIR)/ramtst.$(FILETYPE): $(BUILDDIR) $(OBJS) libz.a \
-		libg.a makefile
+		libg.a Makefile
 	$(CC) $(ASMFLAGS) -o ram_reset.o ram_reset.S
 	$(MAKE_MONBUILT)
 	sed -e s/RAMTSTROMBASE/$(RAMTSTROMBASE)/ \
