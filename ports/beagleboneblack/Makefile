@@ -1,11 +1,11 @@
 ###############################################################################
 #
-# CSB740 board makefile.
+# Beaglebone Black makefile
 #
 #
-PLATFORM		= CSB740
+PLATFORM		= BEAGLEBONEBLACK
 TOPDIR			= $(UMONTOP)
-TGTDIR			= csb740
+TGTDIR			= beagleboneblack
 CPUTYPE			= arm
 FILETYPE		= elf
 
@@ -36,7 +36,7 @@ ATAGSIZE=0x1000
 MACADDRBASE=0x08000020
 ALTTFSDEVTBLBASE=0x08000040
 
-include	$(TOPDIR)/target/make/common.make
+include	$(TOPDIR)/make/common.make
 
 # Build each variable from a list of individual filenames...
 #
@@ -58,7 +58,7 @@ IODEVSRC	= smsc911x.c uart16550.c fb_draw.c
 FLASHSRC	= s29gl512n_16x1.c
 
 
-include $(TOPDIR)/target/make/objects.make
+include $(TOPDIR)/make/objects.make
 
 OBJS	= 	$(LOCSOBJ) $(CPUSOBJ) $(LOCCOBJ) $(CPUCOBJ) $(COMCOBJ) \
 			$(FLASHOBJ) $(IODEVOBJ)
@@ -113,7 +113,7 @@ $(BUILDDIR)/ramtst.$(FILETYPE): $(BUILDDIR) $(OBJS) libz.a \
 	$(MAKE_BINARY)
 	$(MAKE_GNUSYMS)
 
-include $(TOPDIR)/target/make/rules.make
+include $(TOPDIR)/make/rules.make
 
 
 #########################################################################
