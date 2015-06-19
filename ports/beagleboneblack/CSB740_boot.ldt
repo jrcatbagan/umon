@@ -1,0 +1,63 @@
+/* CSB740_boot.ld:
+ * This is the memory map file used for the boot-flash based version
+ * of MicroMonitor.  The only value that should be considered adjustable
+ * here is the base address of the 'dram' memory block.
+ *
+ */
+MEMORY 
+{
+	rom :	org = ROMBASE, 	len = ROMLEN
+	dram :	org = DRAMBASE,	len = DRAMLEN
+}
+
+SECTIONS
+{
+	.text	:
+	{
+		boot_base = .;
+		rom_reset.o(.text)
+		*(.glue_7t)
+		*(.glue_7)
+	} >rom
+
+	.data	:
+	{
+		*(.data)
+	} >rom
+
+	.sdata	:
+	{
+		*(.sdata)
+	} >rom
+
+	.sdata2	:
+	{
+		*(.sdata2)
+	} >rom
+
+	.rodata	:
+	{
+		*(.rodata)
+		*(.rodata.str1.4)
+	} >rom
+
+	.got	:
+	{
+		*(.got)
+	} >rom
+
+	.bss	:
+	{
+		bss_start = .;
+		atag_space = .;
+		. += ATAGSIZE;
+		end_atag_space = .;
+		*(.bss) *(COMMON)
+	} >dram
+
+	.sbss	:
+	{
+		*(.sbss)
+		bss_end = .;
+	} >dram
+}

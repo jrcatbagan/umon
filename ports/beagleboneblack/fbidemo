@@ -1,0 +1,163 @@
+# This is a useful demo script to show off some of the functionality
+# of uMon's FBI interface...
+# It expects to find two files: fb/splash.bin and fb/umon1 that are
+# assumed to be two frame-buffer formatted images.
+#
+echo "Image file \#1: \c"
+read IMAGEFILE1
+echo "Image file \#2: \c"
+read IMAGEFILE2
+set FBICOLOR 0x005500
+
+fbi font 0 1 1 0xf0f0f0 0x101010
+fbi consolemode off
+fbi fill $IMAGEFILE1
+sleep 2
+
+fbi -t1 color $FBICOLOR
+fbi font 0 4 4 -- transparent
+fbi -o 1,0 print "MicroMonitor"
+fbi font 0 2 2 -- --
+fbi -o 7,3 print "(aka uMon)"
+fbi -o 2,5 print "FBI:"
+fbi -o 2,6 print "Frame Buffer Interface"
+fbi -o 2,7 print "*****    Demo    *****"
+sleep 2
+
+fbi -t2 color $FBICOLOR
+fbi font 0 1 1 -- --
+fbi -o 5,1 print "print small"
+sleep 1
+fbi font 0 3 3 -- --
+fbi -o 5,1 print "or..."
+sleep 1
+fbi font 0 7 7 -- --
+fbi -o 1,1 print "large"
+sleep 2
+
+fbi -t3 color $FBICOLOR
+fbi font 0 2 4 -- --
+sleep 1
+fbi -o 8,1 print "Independent"
+fbi -o 8,2 print "  x & y"
+fbi -o 8,3 print "dimensions..."
+sleep 1
+
+fbi -t1 color $FBICOLOR
+fbi font 0 5 1 -- --
+fbi -o 1,1 print "print wide"
+sleep 1
+fbi font 0 3 3 -- --
+fbi -o 3,3 print "or..."
+sleep 1
+fbi font 0 2 18 -- --
+fbi -o 15,0 print "tall"
+sleep 2
+
+fbi -t2 color $FBICOLOR
+fbi font 0 3 3 -- --
+fbi -o 3,2 print "or"
+sleep 1
+fbi -o 3,4 print "mix it up..."
+sleep 1
+
+fbi -t3 color $FBICOLOR
+fbi font 0 1 1 -- --
+fbi -o 0,1 print 1
+fbi font 0 1 2 -- --
+fbi print 2
+fbi font 0 1 3 -- --
+fbi print 3
+fbi font 0 1 4 -- --
+fbi print 4
+fbi font 0 1 5 -- --
+fbi print 5
+fbi font 0 1 6 -- --
+fbi print 6
+fbi font 0 1 7 -- --
+fbi print 7
+fbi font 0 1 8 -- --
+fbi print 8
+fbi font 0 1 9 -- --
+fbi print 9
+fbi font 0 2 9 -- --
+fbi -o 5,1 print 0
+fbi font 0 2 8 -- --
+fbi -o 6,1 print 9
+fbi font 0 3 7 -- --
+fbi -o 5,1 print 8
+fbi font 0 4 6 -- --
+fbi -o 5,1 print 7
+fbi font 0 5 5 -- --
+fbi -o 5,1 print 6
+fbi font 0 6 4 -- --
+fbi -o 5,1 print 5
+fbi font 0 7 3 -- --
+fbi -o 5,1 print 4
+fbi font 0 8 2 -- --
+fbi -o 5,1 print 3
+fbi font 0 9 1 -- --
+fbi -o 5,1 print 2
+fbi font 0 10 1 -- --
+fbi -o 5,0 print 1
+sleep 4
+
+fbi -t1 color $FBICOLOR
+fbi font 0 3 3 -- --
+fbi -o 3,1 print "or"
+sleep 1
+fbi -o 3,3 print "console mode..."
+fbi -o 3,4 print "(normal font)"
+sleep 2
+
+fbi font 0 1 1 -- --
+fbi consolemode on
+echo uMON\>
+sleep 1
+tfs ls
+echo uMON\>
+sleep 1
+tfs cat monrc
+echo uMON\>
+sleep 1
+fbi consolemode off
+
+fbi -t2 color $FBICOLOR
+fbi font 0 3 3 -- --
+fbi consolemode on
+fbi -o 3,1 print "or"
+sleep 1
+fbi -o 3,3 print "console mode..."
+fbi -o 3,4 print "(taller font)"
+sleep 2
+fbi consolemode off
+
+fbi font 0 1 2 -- --
+fbi consolemode on
+echo uMON\>
+sleep 1
+tfs ls
+echo uMON\>
+sleep 1
+tfs cat monrc
+echo uMON\>
+sleep 1
+fbi font 0 1 1 -- --
+fbi consolemode off
+
+
+# SPLASHLOOPINIT:
+set TTYPE 1
+
+# SPLASHLOOP:
+if $TTYPE gt 3 goto SPLASHLOOPINIT
+if -tgc exit
+fbi -t $TTYPE fill $IMAGEFILE1
+if -tgc exit
+sleep 2
+if -tgc exit
+fbi -t $TTYPE fill $IMAGEFILE2
+set TTYPE=$TTYPE+1
+sleep 2
+if -tgc exit
+goto SPLASHLOOP
