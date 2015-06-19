@@ -1,6 +1,6 @@
-PS1=CSB740:
-export TITLE="COGENT CSB740 ARM Monitor Development"
-export UMONTOP=../../umon_main
+PS1=BEAGLEBONEBLACK:
+export TITLE="Beaglebone Black"
+export UMONTOP=../../main
 export tools=$UMONTOP/host
 export target=$UMONTOP/target
 export cpu=$target/cpu
