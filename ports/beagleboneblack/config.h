@@ -19,13 +19,15 @@
  * phone:   908-582-2351
  */
 
+#include "am335x.h"
+
 /*
  * The target_putchar() function also drops the character at the
  * LCD...
  */
 //#define MORE_PUTCHAR lcd_putchar
 //#define CONSOLE_UART_BASE (OMAP35XX_L4_IO_BASE+0x6C000)
-#define CONSOLE_UART_BASE 0x4806C000
+#define CONSOLE_UART_BASE UART0_BASE
 
 #define SIO_STEP 4
 #define IEN_DEFAULT 0x40
