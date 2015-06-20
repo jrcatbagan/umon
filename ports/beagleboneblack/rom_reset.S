@@ -21,7 +21,7 @@
   */
 
 #include "warmstart.h"
-#include "omap3530.h"
+#include "am335x.h"
 #include "config.h"
 
     /*
