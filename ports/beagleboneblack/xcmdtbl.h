@@ -8,7 +8,6 @@
 /* For example:
     "dummy",    dummycmd,   dummyHelp,
 */
-{"ads",			ads,		adsHelp,},
 //{"i2c",			i2c,		i2cHelp,},
 #if INCLUDE_LCD
 {"lcd_tst",		lcd_tst,	lcd_tstHelp,},

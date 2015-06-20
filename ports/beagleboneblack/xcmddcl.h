@@ -27,8 +27,5 @@ extern char *lcd_tstHelp[];
 extern int nandCmd();
 extern char *nandHelp[];
 
-extern int ads();
-extern char *adsHelp[];
-
 extern int ldatags();
 extern char *ldatagsHelp[];
