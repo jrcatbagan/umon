@@ -1,9 +1,10 @@
-/* CSB740_boot.ld:
- * This is the memory map file used for the boot-flash based version
- * of MicroMonitor.  The only value that should be considered adjustable
- * here is the base address of the 'dram' memory block.
+/* BEAGLEBONEBLACK_boot.ld:
  *
+ * This is the memory map file used for the boot version of Umon.  The only value 
+ * that should be considered adjustable here is the base address of the 'dram' 
+ * memory block.
  */
+
 MEMORY 
 {
 	rom :	org = ROMBASE, 	len = ROMLEN
