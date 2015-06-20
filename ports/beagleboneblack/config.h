@@ -1,8 +1,8 @@
 /*
- * Monitor configuration file for CSB740
+ * Monitor configuration file for the Beaglebone Black
  *
- * Adapted by Luis Torrico, Cogent Computer Systems, Inc.
- *			email: luis@cogcomp.com
+ * Adapted by Jarielle Catbagan
+ * email: jcatbagan93@gmail.com
  *
  *
  * General notice:
@@ -134,67 +134,67 @@
  * The 'TYPE' definition is used for ifdefs in the code and the 'NAME'
  * is used for printfs in the code.
  */
-#define CPU_TYPE        OMAP3530
-#define CPU_NAME        "TI OMAP3530 Cortex-A8"
-#define PLATFORM_TYPE   CSB740
-#define PLATFORM_NAME   "Cogent CSB740"
+#define CPU_TYPE        AM3358
+#define CPU_NAME        "TI AM3358 Cortex-A8"
+#define PLATFORM_TYPE   BEAGLEBONEBLACK
+#define PLATFORM_NAME   "Beaglebone Black"
 
 /* Specify the size of the memory block (in monitor space) that is to be
  * allocated to malloc in the monitor.  Note that this size can be dynamically
  * increased using the heap extension option in the heap command.
  */
-#define ALLOCSIZE		(64*1024)
+#define ALLOCSIZE	1024 	// (64*1024)
 #define MONSTACKSIZE	(16*1024)
 
 // Cogent specific options
 #define INCLUDE_I2C				0
-#define	INCLUDE_LCD				1
+#define	INCLUDE_LCD				0
 
 /* Specify inclusion of subsystems within the monitor here.
  * Refer to comments in common/monitor/inc_check.h for details on
  * each of these macros.
  */
 						
-#define INCLUDE_MEMTRACE		1
-#define INCLUDE_MEMCMDS         1
-#define INCLUDE_EDIT            1
+#define INCLUDE_MEMTRACE	0
+#define INCLUDE_MEMCMDS         0
+#define INCLUDE_EDIT            0
 #define INCLUDE_DISASSEMBLER    0
-#define INCLUDE_UNZIP           1
-#define INCLUDE_ETHERNET        1
-#define INCLUDE_ICMP			1
-#define INCLUDE_TFTP            1
-#define INCLUDE_DHCPBOOT        1
-#define INCLUDE_TFS             1
-#define INCLUDE_TFSCLI          1
-#define INCLUDE_TFSAPI          1
-#define INCLUDE_TFSSCRIPT       1
-#define INCLUDE_TFSSYMTBL       1
-#define INCLUDE_XMODEM          1
-#define INCLUDE_LINEEDIT        1
+#define INCLUDE_UNZIP           0
+#define INCLUDE_ETHERNET        0
+#define INCLUDE_ICMP		0
+#define INCLUDE_TFTP            0
+#define INCLUDE_DHCPBOOT        0
+#define INCLUDE_TFS             0
+#define INCLUDE_TFSCLI          0
+#define INCLUDE_TFSAPI          0
+#define INCLUDE_TFSSCRIPT       0
+#define INCLUDE_TFSSYMTBL       0
+#define INCLUDE_XMODEM          0
+#define INCLUDE_LINEEDIT        0
 #define INCLUDE_EE              0
-#define INCLUDE_FLASH           1
-#define INCLUDE_STRACE          1
+#define INCLUDE_FLASH           0
+#define INCLUDE_STRACE          0
 #define INCLUDE_CAST            0
-#define INCLUDE_STRUCT          1
-#define INCLUDE_REDIRECT        1
-#define INCLUDE_QUICKMEMCPY     1
-#define INCLUDE_PROFILER        1
+#define INCLUDE_STRUCT          0
+#define INCLUDE_REDIRECT        0
+#define INCLUDE_QUICKMEMCPY     0
+#define INCLUDE_PROFILER        0
 #define INCLUDE_BBC             0
-#define INCLUDE_STOREMAC        1
-#define INCLUDE_SHELLVARS		1
-#define INCLUDE_MALLOC			1
+#define INCLUDE_STOREMAC        0
+#define INCLUDE_SHELLVARS	0
+#define INCLUDE_MALLOC		0
 #define INCLUDE_PORTCMD	        0
-#define INCLUDE_SYSLOG	        1
-#define INCLUDE_HWTMR	        1
-#define INCLUDE_VERBOSEHELP     1
-#define INCLUDE_GDB			    1
-#define INCLUDE_USRLVL			0
-#define INCLUDE_JFFS2			0
-#define INCLUDE_JFFS2ZLIB		0
-#define INCLUDE_FBI				1
-#define INCLUDE_TSI				1
-#define INCLUDE_SD				0
-#define INCLUDE_DNS				1
+#define INCLUDE_SYSLOG	        0
+#define INCLUDE_HWTMR	        0
+#define INCLUDE_VERBOSEHELP     0
+#define INCLUDE_GDB		0
+#define INCLUDE_USRLVL		0
+#define INCLUDE_JFFS2		0
+#define INCLUDE_JFFS2ZLIB	0
+#define INCLUDE_FBI		0
+#define INCLUDE_TSI		0
+#define INCLUDE_SD		0
+#define INCLUDE_DNS		0
 
 /* Inclusion of this next file will make sure that all of the above
  * inclusions are legal; and warn/adjust where necessary.
