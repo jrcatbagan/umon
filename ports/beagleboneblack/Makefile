@@ -42,7 +42,7 @@ include	$(TOPDIR)/make/common.make
 #
 LOCSSRC		= 
 CPUSSRC		= vectors_arm.S
-LOCCSRC		= ad7843.c cpuio.c etherdev.c nand740.c 
+LOCCSRC		= cpuio.c etherdev.c nand740.c 
 COMCSRC		= arp.c cast.c cache.c chario.c cmdtbl.c \
 			  docmd.c dhcp_00.c dhcpboot.c dns.c edit.c env.c ethernet.c \
 			  flash.c gdb.c icmp.c if.c ledit_vt100.c monprof.c \
