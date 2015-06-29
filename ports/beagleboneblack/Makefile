@@ -8,12 +8,23 @@ TOPDIR			= $(UMONTOP)
 TGTDIR			= beagleboneblack
 CPUTYPE			= arm
 FILETYPE		= elf
+TOOLSET			= RTEMS
 
+ifeq ($(TOOLSET),RTEMS)
+#
+# Using tools built by RTEMS Source Builder:
+#
+ABIDIR          = $(HOME)/development/rtems/4.11/lib/gcc/arm-rtems4.11/4.9.2
+TOOL_PREFIX     = arm-rtems4.11
+else
+#
 # Using tools installed by "sudo apt-get install gcc-arm-none-eabi"...
+#
 ABIDIR          = /usr/lib/gcc/arm-none-eabi/4.8.2
-LIBABIDIR       = -L $(ABIDIR) 
 TOOL_PREFIX     = /usr/bin/arm-none-eabi
+endif
 
+LIBABIDIR       = -L $(ABIDIR)
 COMMON_AFLAGS	= -c -D PLATFORM_$(PLATFORM)=1 -D ASSEMBLY_ONLY 
 CUSTOM_CFLAGS	= -mcpu=cortex-a8 -O2 -isystem $(ABIDIR)/include -Wno-char-subscripts
 
