@@ -345,12 +345,14 @@ Call(int argc,char *argv[])
 {
 	char	*varname;
 	long	args[10];
-	int		i, j, ret, opt, useargc, quiet, monargs;
+	int		i, j, ret, opt, useargc, quiet;
 	int		(*func)(long,long,long,long,long,long,long,long,long,long);
+#if INCLUDE_SHELLVARS
+	int		monargs = 0;
+#endif
 
 	quiet = 0;
 	useargc = 0;
-	monargs = 0;
 	varname = (char *)0;
 	while((opt=getopt(argc,argv,"Aaqv:")) != -1) {
 		switch(opt) {
