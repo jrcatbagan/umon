@@ -37,9 +37,6 @@
 #include "term.h"
 #include <ctype.h>
 
-const char    *__ctype_ptr;
-const char    *__ctype_ptr__;
-
 /* appCmdlist:
  * 	This is a pointer to a list of commands that can be added to the 
  * 	monitor's list by the application using addcommand().
