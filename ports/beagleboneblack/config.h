@@ -45,10 +45,6 @@
 
 #define CPU_LE
 
-// override the app ram base to set it to 2Mbyte.  This reserves space
-// for umon and the LCD controller buffer
-#define APPRAMBASE_OVERRIDE 0x80400000
-
 // Establish a user defined function to be called when uMon
 // prints out the startup banner...
 // If this is defined, then the output similar to the following will
@@ -159,6 +155,8 @@
 						
 #define INCLUDE_MEMTRACE	0
 #define INCLUDE_MEMCMDS         0
+#define INCLUDE_DM				1
+#define INCLUDE_PM				1
 #define INCLUDE_EDIT            0
 #define INCLUDE_DISASSEMBLER    0
 #define INCLUDE_UNZIP           0
