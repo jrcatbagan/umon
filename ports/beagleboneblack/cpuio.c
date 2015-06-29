@@ -60,7 +60,7 @@ target_console_empty(void)
 ulong
 intsoff(void)
 {
-	ulong status;
+	ulong status = 0;
 
 	/* ADD_CODE_HERE */
 	return(status);
