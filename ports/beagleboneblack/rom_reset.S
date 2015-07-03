@@ -93,43 +93,6 @@ coldstart_1:
 	orr	r0,r0,#0xd3			// Set mode to supervisor, IRQ FIQ disabled.
 	msr	cpsr,r0
 
-	/* store the address of the custom exception handlers in the exception vector space
-	   of the AM335x Public RAM */
-	ldr r1, =undefined_instruction
-	movw r2, #0xce24
-	movt r2, #0x4030
-	str r1, [r2]
-
-	ldr r1, =software_interrupt
-	movw r2, #0xce28
-	movt r2, #0x4030
-	str r1, [r2]
-
-	ldr r1, =abort_prefetch
-	movw r2, #0xce2c
-	movt r2, #0x4030
-	str r1, [r2]
-
-	ldr r1, =abort_data
-	movw r2, #0xce30
-	movt r2, #0x4030
-	str r1, [r2]
-
-	ldr r1, =not_assigned
-	movw r2, #0xce34
-	movt r2, #0x4030
-	str r1, [r2]
-
-	ldr r1, =interrupt_request
-	movw r2, #0xce38
-	movt r2, #0x4030
-	str r1, [r2]
-
-	ldr r1, =fast_interrupt_request
-	movw r2, #0xce3c
-	movt r2, #0x4030
-	str r1, [r2]
-
 //	bl cache_init
 
 /********************************************************************/

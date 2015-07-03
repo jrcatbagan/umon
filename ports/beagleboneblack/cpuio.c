@@ -109,11 +109,34 @@ target_reset(void)
 	monrestart(INITIALIZE);
 }
 
+/* Override the default exception handlers provided by the AM335x
+ * internal ROM code with uMon's custom exception handlers
+ */
+void
+ram_vector_install(void)
+{
+	extern unsigned long abort_data;
+	extern unsigned long abort_prefetch;
+	extern unsigned long undefined_instruction;
+	extern unsigned long software_interrupt;
+	extern unsigned long interrupt_request;
+	extern unsigned long fast_interrupt_request;
+	extern unsigned long not_assigned;
+
+	*(ulong **)0x4030ce24 = &undefined_instruction;
+	*(ulong **)0x4030ce28 = &software_interrupt;
+	*(ulong **)0x4030ce2c = &abort_prefetch;
+	*(ulong **)0x4030ce30 = &abort_data;
+	*(ulong **)0x4030ce34 = &not_assigned;
+	*(ulong **)0x4030ce38 = &interrupt_request;
+	*(ulong **)0x4030ce3c = &fast_interrupt_request;
+}
+
 /* If any CPU IO wasn't initialized in reset.S, do it here...
  * This just provides a "C-level" IO init opportunity. 
  */
 void
 initCPUio(void)
 {
-	/* ADD_CODE_HERE */
+	ram_vector_install();
 }
