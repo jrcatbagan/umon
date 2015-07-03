@@ -1,48 +1,56 @@
-//==========================================================================
-//
-// am335x.h
-//
-// Author(s): Jarielle Catbagan
-// email: jcatbagan93@gmail.com
-//
-// Description:  This file was modified from omap3530.h. This file containes
-//			register base addresses and offsets as well as access macros
-//			for the AM335x/Beaglebone Black on-chip peripherals. 
-//			Peripherals not used by UMON have not been tested (and
-//			may not be defined). Use these defines with caution!!
-//
+/**
+ * @file
+ *
+ * @brief AM335x Register Base Addresses and Offsets
+ *
+ * @ingroup am335x
+ */
 
-#ifndef _AM335X_H_
-#define _AM335X_H_
+/*
+ * Copyright (C) 2015 Jarielle Catbagan <jcatbagan93@gmail.com>
+ *
+ * The license and distribution terms for this file may be
+ * found in the file LICENSE in this distribution or at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *
+ * Description: This file contains register base addresses and offsets as
+ * well as access macros for the AM335x on-chip peripherals.  Peripherals
+ * not used by Umon have not been test (and may not be defined). Use
+ * these defines with caution!
+ */
+
+#ifndef AM335X_H
+#define AM335X_H
 
 #include "bits.h"
 
 
-/*=====================================================================================*/
+/*===========================================================================*/
 /* AM335x device identification and feature enumeration */
-/*=====================================================================================*/
+/*===========================================================================*/
 #define AM335X_DEVICE_IDENTIFICATION	0x44E10600
 #define AM335X_DEVICE_FEATURE		0x44E10604
-/*=====================================================================================*/
+/*===========================================================================*/
 
 
-/*=====================================================================================*/
+/*===========================================================================*/
 /* L3 and L4 Interconnects */
-/*=====================================================================================*/
+/*===========================================================================*/
 #define L3F_CFG_REGS_BASE		0x44000000
 #define L3S_CFG_REGS_BASE		0x44800000
 #define L4_WKUP_BASE			0x44C00000
 #define L4_PER_BASE			0x48000000
 #define L4_FAST_BASE			0x4A000000
-/*=====================================================================================*/
+/*===========================================================================*/
 
 
-/*=====================================================================================*/
+/*===========================================================================*/
 /* EMIF0 Configuration Registers */
-/*=====================================================================================*/
+/*===========================================================================*/
 #define EMIF0_BASE			0x4C000000
 #define EMIFO_REG(_x_)			*(vulong *)(EMIFO_BASE + _x_)
-/*-------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 /* EMIFO Register offsets */
 #define EMIF_MOD_ID_REV			0x0000
 #define STATUS				0x0004
@@ -82,20 +90,20 @@
 #define CONN_ID_TO_CLASS_SRVC_1_MAP	0x0104
 #define CONN_ID_TO_CLASS_SRVC_2_MAP	0x0108
 #define RW_EXEC_THRESHOLD		0x0120
-/*=====================================================================================*/
+/*===========================================================================*/
 
 
-/*=====================================================================================*/
+/*===========================================================================*/
 /* McASPx Data Registers */
-/*=====================================================================================*/
+/*===========================================================================*/
 #define MCASP0_DATA_REGS_BASE		0x46000000
 #define MCASP1_DATE_REGS_BASE		0x46400000
-/*=====================================================================================*/
+/*===========================================================================*/
 
 
-/*=====================================================================================*/
+/*===========================================================================*/
 /* L4_WKUP Peripherals */
-/*=====================================================================================*/
+/*===========================================================================*/
 /* Clock Module Peripheral Registers */
 #define CM_PER_BASE			(L4_WKUP_BASE + 0x00200000)
 #define CM_PER_REG(_x_)			*(vulong *)(CM_PER_BASE + _x_)
@@ -174,14 +182,104 @@
 #define RTCSS_BASE			(L4_WKUP_BASE + 0x0023E000)
 #define RTCSS_REG(_x_)			*(vulong *)(RTCSS_BASE + _x_)
 /* Debug Registers */
-#define DEBUGSS_HWMASTER1_BASE		(L4_WKUP_BASE + 0x00240000)
-#define DEBUGSS_HWMASTER1_REG(_x_)	*(vulong *)(DEBUGSS_HWMASTER1_BASE + _x_)
-/*=====================================================================================*/
+#define DEBUGSS_HWMSTR1_BASE		(L4_WKUP_BASE + 0x00240000)
+#define DEBUGSS_HWMSTR1_REG(_x_)	*(vulong *)(DEBUGSS_HWMSTR1_BASE + _x_)
+/*===========================================================================*/
 
 
-/*=====================================================================================*/
+/*===========================================================================*/
+/* CM_WKUP Registers */
+/*===========================================================================*/
+#define CM_WKUP_CLKSTCTRL               0x00
+#define CM_WKUP_CONTROL_CLKCTRL         0x04
+#define CM_WKUP_GPIO0_CLKCTRL           0x08
+#define CM_WKUP_L4WKUP_CLKCTRL          0x0C
+#define CM_WKUP_TIMER0_CLKCTRL          0x10
+#define CM_WKUP_DEBUGSS_CLKCTRL         0x14
+#define CM_L3_AON_CLKSTCTRL             0x18
+#define CM_AUTOIDLE_DPLL_MPU            0x1C
+#define CM_IDLEST_DPLL_MPU              0x20
+#define CM_SSC_DELTAMSTEP_DPLL_MPU      0x24
+#define CM_SSC_MODFREQDIV_DPLL_MPU      0x28
+#define CM_CLKSEL_DPLL_MPU              0x2C
+#define CM_AUTOIDLE_DPLL_DDR            0x30
+#define CM_IDLEST_DPLL_DDR              0x34
+#define CM_SSC_DELTAMSTEP_DPLL_DDR      0x38
+#define CM_SSC_MODFREQDIV_DPLL_DDR      0x3C
+#define CM_CLKSEL_DPLL_DDR              0x40
+#define CM_AUTOIDLE_DPLL_DISP           0x44
+#define CM_IDLEST_DPLL_DISP             0x48
+#define CM_SSC_DELTAMSTEP_DPLL_DISP     0x4C
+#define CM_SSC_MODFREQDIV_DPLL_DISP     0x50
+#define CM_CLKSEL_DPLL_DISP             0x54
+#define CM_AUTOIDLE_DPLL_CORE           0x58
+#define CM_IDLEST_DPLL_CORE             0x5C
+#define CM_SSC_DELTAMSTEP_DPLL_CORE     0x60
+#define CM_SSC_MODFREQDIV_DPLL_CORE     0x64
+#define CM_CLKSEL_DPLL_CORE             0x68
+#define CM_AUTOIDLE_DPLL_PER            0x6C
+#define CM_IDLEST_DPLL_PER              0x70
+#define CM_SSC_DELTAMSTEP_DPLL_PER      0x74
+#define CM_SSC_MODFREQDIV_DPLL_PER      0x78
+#define CM_CLKDCOLDO_DPLL_PER           0x7C
+#define CM_DIV_M4_DPLL_CORE             0x80
+#define CM_DIV_M5_DPLL_CORE             0x84
+#define CM_CLKMODE_DPLL_MPU             0x88
+#define CM_CLKMODE_DPLL_PER             0x8C
+#define CM_CLKMODE_DPLL_CORE            0x90
+#define CM_CLKMODE_DPLL_DDR             0x94
+#define CM_CLKMODE_DPLL_DISP            0x98
+#define CM_CLKSEL_DPLL_PERIPH           0x9C
+#define CM_DIV_M2_DPLL_DDR              0xA0
+#define CM_DIV_M3_DPLL_DISP             0xA4
+#define CM_DIV_M3_DPLL_MPU              0xA8
+#define CM_DIV_M3_DPLL_PER              0xAC
+#define CM_WKUP_WKUP_M3_CLKCTRL         0xB0
+#define CM_WKUP_UART0_CLKCTRL           0xB4
+#define CM_WKUP_I2C0_CLKCTRL            0xB8
+#define CM_WKUP_ADC_TSC_CLKCTRL         0xBC
+#define CM_WKUP_SMARTREFLEX0_CLKCT      0xC0
+#define CM_WKUP_TIMER1_CLKCTRL          0xC4
+#define CM_WKUP_SMARTREFLEX1_CLKCT      0xC8
+#define CM_L4_WKUP_AON_CLKSTCTRL        0xCC
+#define CM_WKUP_WDT1_CLKCTRL            0xD4
+#define CM_DIV_M6_DPLL_CORE             0xD8
+/*===========================================================================*/
+
+
+/*===========================================================================*/
+/* Control Module Registers */
+/*===========================================================================*/
+#define CONF_UART0_RXD                  0x0970
+#define CONF_UART0_TXD                  0x0974
+/*===========================================================================*/
+
+
+/*===========================================================================*/
+/* Pad control bits: */
+/*===========================================================================*/
+#define SLEWSLOW                        (1 << 6)
+#define SLEWFAST                        0
+#define RX_ON                           (1 << 5)
+#define RX_OFF                          0
+#define PULLUP                          (1 << 4)
+#define PULLDOWN                        0
+#define PULL_OFF                        (1 << 3)
+#define PULL_ON                         0
+#define MUXMODE_0                       (0 & 7)
+#define MUXMODE_1                       (1 & 7)
+#define MUXMODE_2                       (2 & 7)
+#define MUXMODE_3                       (3 & 7)
+#define MUXMODE_4                       (4 & 7)
+#define MUXMODE_5                       (5 & 7)
+#define MUXMODE_6                       (6 & 7)
+#define MUXMODE_7                       (7 & 7)
+/*===========================================================================*/
+
+
+/*===========================================================================*/
 /* L4_PER Peripherals */
-/*=====================================================================================*/
+/*===========================================================================*/
 /* UART1 Registers */
 #define UART1_BASE			(L4_PER_BASE + 0x00022000)
 #define UART1_REG(_x_)			*(vulong *)(UART1_BASE + _x_)
@@ -299,12 +397,12 @@
 /* LCD Contoller Registers */
 #define LCD_CNTLR_BASE			(L4_PER_BASE + 0x0030E000)
 #define LCD_CNTLR_REG(_x_)		*(vulong *)(LCD_CNTLR_BASE + _x_)
-/*=====================================================================================*/
+/*===========================================================================*/
 
 
-/*=====================================================================================*/
+/*===========================================================================*/
 /* L4_FAST Peripherals */
-/*=====================================================================================*/
+/*===========================================================================*/
 #define L4_FAST_BASE			0x4A000000
 /* Ethernet Switch Subsystem Registers */
 #define CPSW_SS_BASE			(LF_FAST_BASE + 0x00100000)
@@ -339,68 +437,115 @@
 /* Ethernet Subsystem Wrapper for RMII/RGMII Registers */
 #define CPSW_WR_BASE			(LF_FAST_BASE + 0x00101200)
 #define CPSW_WR_REG(_x_)		*(vulong *)(CPSW_WR_BASE + _x_)
-/*=====================================================================================*/
+/*===========================================================================*/
 
 
-/*=====================================================================================*/
+/*===========================================================================*/
 /* UART Register offsets */
-/*=====================================================================================*/
-#define UART_THR			0x00	// Transmit Holding Register (write only)
-#define UART_RHR			0x00	// Receive Holding Register (read only)
-#define UART_DLL      			0x00	// Baud divisor lower byte (read/write)     
-#define UART_IER			0x04	// Interrupt Enable Register (read/write) 		
-#define UART_DLH      			0x04 	// Baud divisor higher byte (read/write)     
-#define UART_EFR			0x08	// Enhanced Feature Register 			
-#define UART_IIR			0x08	// Interrupt Identification Register (read only) 	
-#define UART_FCR			0x08	// FIFO Control Register (write only) 	
-#define UART_LCR			0x0C	// Line Control Register (read/write)  		
-#define UART_MCR			0x10	// Modem Control Register (read/write) 	
-#define UART_XON1_ADDR1			0x10	// XON1/ADDR1 Register
-#define UART_XON2_ADDR2			0x14	// XON2/ADDR2 Register
-#define UART_LSR			0x14	// Line Status Register (read only) 		
-#define UART_TCR			0x18	// Transmission Control Register
-#define UART_MSR			0x18	// Modem Status Register (read only) 
-#define UART_XOFF1			0x18	// XOFF1 Register
-#define UART_SPR			0x1C	// Scratch Pad Register (read/write) 		
-#define UART_TLR			0x1C	// Trigger Level Register
-#define UART_XOFF2			0x1C	// XOFF2 Register
-#define UART_MDR1			0x20	// Mode Definition Register 1 		
-#define UART_MDR2			0x24	// Mode Definition Register 2 		
-#define UART_TXFLL			0x28	// Transmit Frame Length Register Low (IrDA modes only)	
-#define UART_SFLSR			0x28	// Status FIFO Line Status Register (IrDA modes only) 	
-#define UART_RESUME			0x2C	// Resume Register (IR-IrDA and IR-CIR modes only) 	
-#define UART_TXFLH			0x2C	// Transmit Frame Length Register High (IrDA modes only
-#define UART_RXFLL			0x30	// Receive Frame Length Register Low (IrDA modes only) 
-#define UART_SFREGL			0x30	// Status FIFO Register Low (IrDA modes only) 
-#define UART_SFREGH			0x34	// Status FIFO Register High (IrDA modes only)
-#define UART_RXFLH			0x34	// Receive Frame Length Register High (IrDA modes only)
-#define UART_BLR			0x38	// BOF Control Register (IrDA modes only) 	
-#define UART_UASR			0x38	// UART Autobauding Status Register 
-						// (UART autobauding mode only) 		
-#define UART_ACREG			0x3C	// Auxiliary Control Register (IrDA-CIR modes only)
-#define UART_SCR			0x40	// Supplementary Control Register 		
-#define UART_SSR			0x44	// Supplementary Status Register 	
-#define UART_EBLR			0x48	// BOF Length Register (IR-IrDA and IR-CIR modes only) 
-#define UART_MVR			0x50	// Module Version Register
-#define UART_SYSC			0x54	// System Configuration Register 		
-#define UART_SYSS			0x58	// System Status Register 			
-#define UART_WER			0x5C	// Wake-up Enable Register 			
-#define UART_CFPS			0x60	// Carrier Frequency Prescaler Register
-#define UART_RXFIFO_LVL			0x64	// Received FIFO Level Register
-#define UART_TXFIFO_LVL			0x68	// Transmit FIFO Level Register
-#define UART_IER2			0x6C	// IER2 Register
-#define UART_ISR2			0x70	// ISR2 Register
-#define UART_FREQ_SEL			0x74	// FREQ_SEL Register
-#define UART_MDR3			0x80	// Mode Definition Register 3
-#define UART_TX_DMA_THRESHOLD		0x84	// TX DMA Threshold Register
-/*=====================================================================================*/
+/*===========================================================================*/
+	/* Transmit Holding Register (write only) */
+#define UART_THR		0x00
+	/* Receive Holding Register (read only) */
+#define UART_RHR		0x00
+	/* Baud divisor lower byte (read/write) */
+#define UART_DLL      		0x00
+	/* Interrupt Enable Register (read/write) */
+#define UART_IER		0x04
+	/* Baud divisor higher byte (read/write) */
+#define UART_DLH      		0x04
+	/* Enhanced Feature Register */
+#define UART_EFR		0x08
+	/* Interrupt Identification Register (read only) */
+#define UART_IIR		0x08
+	/* FIFO Control Register (write only) */
+#define UART_FCR		0x08
+	/* Line Control Register (read/write) */
+#define UART_LCR		0x0C
+	/* Modem Control Register (read/write) */
+#define UART_MCR		0x10
+	/* XON1/ADDR1 Register */
+#define UART_XON1_ADDR1		0x10
+	/* XON2/ADDR2 Register */
+#define UART_XON2_ADDR2		0x14
+	/* Line Status Register (read only) */
+#define UART_LSR		0x14
+	/* Transmission Control Register */
+#define UART_TCR		0x18
+	/* Modem Status Register (read only) */
+#define UART_MSR		0x18
+	/* XOFF1 Register */
+#define UART_XOFF1		0x18
+	/* Scratch Pad Register (read/write) */
+#define UART_SPR		0x1C
+	/* Trigger Level Register */
+#define UART_TLR		0x1C
+	/* XOFF2 Register */
+#define UART_XOFF2		0x1C
+	/* Mode Definition Register 1 */
+#define UART_MDR1		0x20
+	/* Mode Definition Register 2 */
+#define UART_MDR2		0x24
+	/* Transmit Frame Length Register Low (IrDA modes only) */
+#define UART_TXFLL		0x28
+	/* Status FIFO Line Status Register (IrDA modes only) */
+#define UART_SFLSR		0x28
+	/* Resume Register (IR-IrDA and IR-CIR modes only) */
+#define UART_RESUME		0x2C
+	/* Transmit Frame Length Register High (IrDA modes only) */
+#define UART_TXFLH		0x2C
+	/* Receive Frame Length Register Low (IrDA modes only) */
+#define UART_RXFLL		0x30
+	/* Status FIFO Register Low (IrDA modes only) */
+#define UART_SFREGL		0x30
+	/* Status FIFO Register High (IrDA modes only) */
+#define UART_SFREGH		0x34
+	/* Receive Frame Length Register High (IrDA modes only) */
+#define UART_RXFLH		0x34
+	/* BOF Control Register (IrDA modes only_ */
+#define UART_BLR		0x38
+	/* UART Autobauding Status Register (UART autobauding
+	   mode only */
+#define UART_UASR		0x38
+	/* Auxiliary Control Register (IrDA-CIR modes only) */
+#define UART_ACREG		0x3C
+	/* Supplementary Control Register */
+#define UART_SCR		0x40
+	/* Supplementary Status Register */
+#define UART_SSR		0x44
+	/* BOF Length Register (IR-IrDA and IR-CIR modes only) */
+#define UART_EBLR		0x48
+	/* Module Version Register */
+#define UART_MVR		0x50
+	/* System Configuration Register */
+#define UART_SYSC		0x54
+	/* System Status Register */
+#define UART_SYSS		0x58
+	/* Wake-up Enable Register */
+#define UART_WER		0x5C
+	/* Carrier Frequency Prescalar Register */
+#define UART_CFPS		0x60
+	/* Received FIFO Level Register */
+#define UART_RXFIFO_LVL		0x64
+	/* Transmit FIFO Level Register */
+#define UART_TXFIFO_LVL		0x68
+	/* IER2 Register */
+#define UART_IER2		0x6C
+	/* ISR2 Register */
+#define UART_ISR2		0x70
+	/* FREQ_SEL Register */
+#define UART_FREQ_SEL		0x74
+	/* Mode Definition Register 3 */
+#define UART_MDR3		0x80
+	/* TX DMA Threshold Register */
+#define UART_TX_DMA_THRESHOLD	0x84
+/*===========================================================================*/
 
 
-/*=====================================================================================*/
+/*===========================================================================*/
 /* USB */
-/*=====================================================================================*/
+/*===========================================================================*/
 #define USB_SUBSYS_BASE_ADDR		0x47400000
-/*-------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 /* USB Subsystem Registers offset */
 #define USBSS_BASE_REG_OFFSET		0x0000
 #define USBSS_REVREG			0x0000
@@ -445,7 +590,7 @@
 #define USBSS_IRQFRAMETHOLDRX13		0x023C
 #define USBSS_IRQFRAMEENABLE0		0x0240
 #define USBSS_IRQFRAMEENABLE1		0x0244
-/*-------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 /* USB Controller Registers offset  */
 #define USBCNTLR_USB0_BASE_REG_OFFSET	0x1000 /* USB0 */
 #define USBCNTLR_USB1_BASE_REG_OFFSET	0x1800 /* USB1 */
@@ -484,7 +629,7 @@
 #define USBCNTLR_UTMI			0x00E0
 #define USBCNTLR_MGCUTMILB		0x00E4
 #define USBCNTLR_MODE			0x00E8
-/*-------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 /* USB PHY Registers offset */
 #define USBPHY_USB0_BASE_REG_OFFSET	0x1300 /* USB0 */
 #define USBPHY_USB1_BASE_REG_OFFSET	0x1B00 /* USB1 */
@@ -506,11 +651,11 @@
 #define USBPHY_AD_INTERFACE_REG2	0x0048
 #define USBPHY_AD_INTERFACE_REG3	0x004C
 #define USBPHY_ANA_CONFIG2		0x0054
-/*-------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 /* USB Core Registers offset */
 #define USBCORE_USB0_BASE_REG_OFFSET	0x1400
 #define USBCORE_USB1_BASE_REG_OFFSET	0x1C00
-/*-------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 /* USB CPPI DMA Controller Registers offset */
 #define USBCPPIDMACNTLR_BASE_REG_OFFSET 0x2000
 #define USBCPPIDMACNTLR_DMAREVID	0x0000
@@ -636,11 +781,11 @@
 #define USBCPPIDMACNTLR_RXGCR29		0x0BA8
 #define USBCPPIDMACNTLR_RXHPCRA29	0x0BAC
 #define USBCPPIDMACNTLR_RXHPCRB29	0x0BB0
-/*-------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 /* USB CPPI DMA Scheduler Registers offset */
 #define USBCPPIDMASCHED_BASE_REG_OFFSET	0x3000
 #define USBCPPIDMASCHED_CNTL		0x0000
-/*-------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 /* USB Queue Manager Registers offset */
 #define USBQUEUEMNGER_BASEREG_OFFSET	0x4000
 #define USBQUEUEMNGER_QMGRREVID		0x0000
@@ -677,24 +822,28 @@
 #define USBQUEUEMNGER_QMEMCNTL6		0x1064
 #define USBQUEUEMNGER_QMEMRBASE7	0x1070
 #define USBQUEUEMNGER_QMEMCNTL7		0x1074
-/*=====================================================================================*/
+/*===========================================================================*/
 
 
-/*=====================================================================================*/
+/*===========================================================================*/
 /* SPI */
-/*=====================================================================================*/
-#define MCSPI_REVISION			0x0000	// Revision Register
-#define MCSPI_SYSCONFIG			0x0110	// System Configuration Register
-#define MCSPI_SYSSTATUS			0x0114	// System Status Register
-#define MCSPI_IRQSTATUS			0x0118	// Interrupt Status Register offset
-/*-------------------------------------------------------------------------------------*/
+/*===========================================================================*/
+	/* Revision Register */
+#define MCSPI_REVISION			0x0000
+	/* System Configuration Register */
+#define MCSPI_SYSCONFIG			0x0110
+	/* System Status Register */
+#define MCSPI_SYSSTATUS			0x0114
+	/* Interrupt Status Register offset */
+#define MCSPI_IRQSTATUS			0x0118
+/*---------------------------------------------------------------------------*/
 /* Interrupt Status Register bit defines */
 #define MCSPI_IRQSTATUS_RX3_FULL	BIT14
 #define MCSPI_IRQSTATUS_TX3_UNDERFLOW	BIT13
-#define MCSPI_IRQSTATUS_TX3_EMPTY	BIT12				  
+#define MCSPI_IRQSTATUS_TX3_EMPTY	BIT12
 #define MCSPI_IRQSTATUS_RX2_FULL	BIT10
 #define MCSPI_IRQSTATUS_TX2_UNDERFLOW	BIT9
-#define MCSPI_IRQSTATUS_TX2_EMPTY	BIT8				  
+#define MCSPI_IRQSTATUS_TX2_EMPTY	BIT8
 #define MCSPI_IRQSTATUS_RX1_FULL	BIT6
 #define MCSPI_IRQSTATUS_TX1_UNDERFLOW	BIT5
 #define MCSPI_IRQSTATUS_TX1_EMPTY	BIT4
@@ -702,58 +851,95 @@
 #define MCSPI_IRQSTATUS_RX0_FULL	BIT2
 #define MCSPI_IRQSTATUS_TX0_UNDERFLOW	BIT1
 #define MCSPI_IRQSTATUS_TX0_EMPTY	BIT0
-#define MCSPI_IRQENABLE			0x011C	// Interrupt Enable Register offset
-#define MCSPI_SYST			0x0124	// System Register offset
-#define MCSPI_MODULCTRL			0x0128	// Module Control Register offset
-/*-------------------------------------------------------------------------------------*/
+	/* Interrupt Enable Register offset */
+#define MCSPI_IRQENABLE			0x011C
+	/* System Register offset */
+#define MCSPI_SYST			0x0124
+	/* Module Control Register offset */
+#define MCSPI_MODULCTRL			0x0128
+/*---------------------------------------------------------------------------*/
 /* Configuration Registers offset */
-#define MCSPI_CH0CONF			0x012C		// Channel 0 Configuration Register offset
-#define MCSPI_CH1CONF			0x0140		// Channel 1 Configuration Register offset
-#define MCSPI_CH2CONF			0x0154		// Channel 2 Configuration Register offset
-#define MCSPI_CH3CONF			0x0168		// Channel 3 Configuration Register offset
+
+	/* Channel 0 Configuration Register offset */
+#define MCSPI_CH0CONF			0x012C
+	/* Channel 1 Configuration Register offset */
+#define MCSPI_CH1CONF			0x0140
+	/* Channel 2 Configuration Register offset */
+#define MCSPI_CH2CONF			0x0154
+	/* Channel 3 Configuration Register offset */
+#define MCSPI_CH3CONF			0x0168
+
+
 /* Configuration Register bit defines */
-#define MCSPI_CHXCONF_CLKG		BIT29		// 1 = One clock cycle granularity
-#define MCSPI_CHXCONF_FFER		BIT28		// 1 = FIFO buffer is used to Receive data
-#define MCSPI_CHXCONF_FFEW		BIT27		// 1 = FIFO buffer is used to Transmit data
-#define MCSPI_CHXCONF_TCS_0_5		(0x00 << 25)	// 0.5 clock cycles between CS toggling and 
-							// first (or last) edge of SPI clock
-#define MCSPI_CHXCONF_TCS_1_5		(0x01 << 25)	// 1.5 clock cycles between CS toggling and 
-							// first (or last) edge of SPI clock
-#define MCSPI_CHXCONF_TCS_2_5		(0x02 << 25)	// 2.5 clock cycles between CS toggling and 
-							// first (or last) edge of SPI clock
-#define MCSPI_CHXCONF_TCS_3_5		(0x03 << 25)	// 3.5 clock cycles between CS toggling and 
-							// first (or last) edge of SPI clock
-#define MCSPI_CHXCONF_SBPOL		BIT24		// 1 = Start bit polarity is held to 1 during 
-							// SPI transfer
-#define MCSPI_CHXCONF_SBE		BIT23		// 1 = Start bit added before SPI transfer, 
-							// 0 = default length specified by WL
-#define MCSPI_CHXCONF_SPIENSLV_0	(0x00 << 21)	// Slave select detection enabled on CS0
-#define MCSPI_CHXCONF_SPIENSLV_1	(0x01 << 21)	// Slave select detection enabled on CS1
-#define MCSPI_CHXCONF_SPIENSLV_2	(0x02 << 21)	// Slave select detection enabled on CS2
-#define MCSPI_CHXCONF_SPIENSLV_3	(0x03 << 21)	// Slave select detection enabled on CS3
-#define MCSPI_CHXCONF_FORCE		BIT20		// 1 = CSx high when EPOL is 0 and low 
-							// when EPOL is 1 
-#define MCSPI_CHXCONF_TURBO		BIT19		// 1 = Turbo is activated
-#define MCSPI_CHXCONF_IS		BIT18		// 1 = spim_simo selected for reception, 
-							// 0 = spim_somi selected for reception
-#define MCSPI_CHXCONF_DPE1		BIT17		// 1 = no transmission on spim_simo, 
-							// 0 = spim_simo selected for transmission
-#define MCSPI_CHXCONF_DPE0		BIT16		// 1 = no transmission on spim_somi, 
-							// 0 = spim_somi selected for transmission
-#define MCSPI_CHXCONF_DMAR		BIT15		// 1 = DMA read request enabled
-#define MCSPI_CHXCONF_DMAW		BIT14		// 1 = DMA write request enabled
-#define MCSPI_CHXCONF_TRM_TR		(0x00 << 12)	// Transmit and receive mode
-#define MCSPI_CHXCONF_TRM_RO		(0x01 << 12)	// Receive-only mode
-#define MCSPI_CHXCONF_TRM_TO		(0x02 << 12)	// Transmit-only mode
-#define MCSPI_CHXCONF_WL(_x_)		((_x_ & 0x1f) << 7) 	// SPI word length, 0x7 = 8-bit
-#define MCSPI_CHxCONF_EPOL		BIT6		// 1 = SPIM_CSx is low during active state, 
-							// 0 = high during active state
-#define MCSPI_CHXCONF_CLKD(_x_)		((_x_ & 0xf) << 2) 	// Frequency divider for spim_clk
-#define MCSPI_CHXCONF_POL		BIT1   		// 1 = spim_clk is low during active state, 
-							// 0 = high during active state
-#define MCSPI_CHXCONF_PHA		BIT0   		// 1 = data latched on even-numbered edges, 
-							// 0 = data latched on odd-numbered edges	
-/*-------------------------------------------------------------------------------------*/
+
+	/* 1 = One clock cycle granularity */
+#define MCSPI_CHXCONF_CLKG		BIT29
+	/* 1 = FIFO buffer is used to Receive data */
+#define MCSPI_CHXCONF_FFER		BIT28
+	/* 1 = FIFO buffer is used to Transmit data */
+#define MCSPI_CHXCONF_FFEW		BIT27
+	/* 0.5 clock cycles between CS toggling and first (or last) edge
+	   of SPI clock */
+#define MCSPI_CHXCONF_TCS_0_5		(0x00 << 25)
+	/* 1.5 clock cycles between CS toggling and first (or last) edge
+	   of SPI clock */
+#define MCSPI_CHXCONF_TCS_1_5		(0x01 << 25)
+	/* 2.5 clock cycles between CS toggling and first (or last) edge
+	   of SPI clock */
+#define MCSPI_CHXCONF_TCS_2_5		(0x02 << 25)
+	/* 3.5 clock cycles between CS toggling and first (or last) edge
+	   of SPI clock */
+#define MCSPI_CHXCONF_TCS_3_5		(0x03 << 25)
+	/* 1 = Start bit polarity is held to 1 during SPI transfer */
+#define MCSPI_CHXCONF_SBPOL		BIT24
+	/* 1 = Start bit added before SPI transfer
+	   0 = default length specified by WL */
+#define MCSPI_CHXCONF_SBE		BIT23
+	/* Slave select detection enabled on CS0 */
+#define MCSPI_CHXCONF_SPIENSLV_0	(0x00 << 21)
+	/* Slave select detection enabled on CS1 */
+#define MCSPI_CHXCONF_SPIENSLV_1	(0x01 << 21)
+	/* Slave select detection enabled on CS2 */
+#define MCSPI_CHXCONF_SPIENSLV_2	(0x02 << 21)
+	/* Slave select detection enabled on CS3 */
+#define MCSPI_CHXCONF_SPIENSLV_3	(0x03 << 21)
+	/* 1 = CSx high when EPOL is 0 and low whel EPOL is 1 */
+#define MCSPI_CHXCONF_FORCE		BIT20
+	/* Turbo is activated */
+#define MCSPI_CHXCONF_TURBO		BIT19
+	/* 1 = spim_simo selected for reception
+	   0 = spim_somi selected for reception */
+#define MCSPI_CHXCONF_IS		BIT18
+	/* 1 = no transmission on spim_simo
+	   0 = spim_simo selected for transmission */
+#define MCSPI_CHXCONF_DPE1		BIT17
+	/* 1 = no transmission on spim_somi
+	   0 = spim_somi selected for transmission */
+#define MCSPI_CHXCONF_DPE0		BIT16
+	/* 1 = DMA read request enabled */
+#define MCSPI_CHXCONF_DMAR		BIT15
+	/* 1 = DMA write request enabled */
+#define MCSPI_CHXCONF_DMAW		BIT14
+	/* Transmit and receive mode */
+#define MCSPI_CHXCONF_TRM_TR		(0x00 << 12)
+	/* Receive-only mode */
+#define MCSPI_CHXCONF_TRM_RO		(0x01 << 12)
+	/* Transmit-only mode */
+#define MCSPI_CHXCONF_TRM_TO		(0x02 << 12)
+	/* SPI word length, 0x7 = 8-bit */
+#define MCSPI_CHXCONF_WL(_x_)		((_x_ & 0x1f) << 7)
+	/* 1 = SPIM_CSx is low during active state,
+	   0 = high during active state */
+#define MCSPI_CHxCONF_EPOL		BIT6
+	/* Frequency divider for spim_clk */
+#define MCSPI_CHXCONF_CLKD(_x_)		((_x_ & 0xf) << 2)
+	/* 1 = spim_clk is low during active state
+	   0 = high during active state */
+#define MCSPI_CHXCONF_POL		BIT1
+	/* 1 = data latched on even-numbered edges
+	   0 = data latched on odd-numbered edges */
+#define MCSPI_CHXCONF_PHA		BIT0
+/*---------------------------------------------------------------------------*/
 /* Status Registers offset */
 #define MCSPI_CH0STAT			0x0130	// Channel 0 Status Register
 #define MCSPI_CH1STAT			0x0144	// Channel 1 Status Register
@@ -767,32 +953,44 @@
 #define MCSPI_CHXSAT_EOT		BIT2
 #define MCSPI_CHXSAT_TX0_EMPTY		BIT1
 #define MCSPI_CHXSAT_RX0_FULL		BIT0
-/*-------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 /* Control Registers offset */
 #define MCSPI_CH0CTRL		0x0134	// Channel 0 Control Register offset
 #define MCSPI_CH1CTRL		0x0148	// Channel 1 Control Register offset
 #define MCSPI_CH2CTRL		0x015C	// Channel 2 Control Register offset
 #define MCSPI_CH3CTRL		0x0170	// Channel 3 Control Register offset
-/*-------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 /* FIFO Buffer Registers offset */
-#define MCSPI_TX0		0x0138	// Channel 0 FIFO Transmit Buffer Register offset
-#define MCSPI_RX0		0x013C	// Channel 0 FIFO Receive Buffer Register offset
-#define MCSPI_TX1		0x014C	// Channel 1 FIFO Transmit Buffer Register offset
-#define MCSPI_RX1		0x0150	// Channel 1 FIFO Receive Buffer Register offset
-#define MCSPI_TX2		0x0160	// Channel 2 FIFO Transmit Buffer Register offset
-#define MCSPI_RX2		0x0164	// Channel 2 FIFO Receive Buffer Register offset
-#define MCSPI_TX3		0x0174	// Channel 3 FIFO Transmit Buffer Register offset
-#define MCSPI_RX3		0x0178	// Channel 3 FIFO Receive Buffer Register offset
-/*-------------------------------------------------------------------------------------*/
-#define MCSPI_XFERLEVEL		0x017C	// Transfer Levels Register
-#define MCSPI_DAFTX		0x0180	// DMA Address Aligned FIFO Transmitter Register
-#define MCSPI_DAFRX		0x01A0	// DMA Address Aligned FIFO Receiver Register
-/*=====================================================================================*/
+
+	/* Channel 0 FIFO Transmit Buffer Register offset */
+#define MCSPI_TX0		0x0138
+	/* Channel 0 FIFO Receive Buffer Register offset */
+#define MCSPI_RX0		0x013C
+	/* Channel 1 FIFO Transmit Buffer Register offset */
+#define MCSPI_TX1		0x014C
+	/* Channel 1 FIFO Receive Buffer Register offset */
+#define MCSPI_RX1		0x0150
+	/* Channel 2 FIFO Transmit Buffer Register offset */
+#define MCSPI_TX2		0x0160
+	/* Channel 2 FIFO Receive Buffer Register offset */
+#define MCSPI_RX2		0x0164
+	/* Channel 3 FIFO Transmit Buffer Register offset */
+#define MCSPI_TX3		0x0174
+	/* Channel 3 FIFO Receive Buffer Register offset */
+#define MCSPI_RX3		0x0178
+/*---------------------------------------------------------------------------*/
+	/* Transfer Levels Register */
+#define MCSPI_XFERLEVEL		0x017C
+	/* DMA Address Aligned FIFO Transmitter Register */
+#define MCSPI_DAFTX		0x0180
+	/* DMA Address Aligned FIFO Receiver Register */
+#define MCSPI_DAFRX		0x01A0
+/*===========================================================================*/
 
 
-/*=====================================================================================*/
-/* General Purpose I/O */ 
-/*=====================================================================================*/
+/*===========================================================================*/
+/* General Purpose I/O */
+/*===========================================================================*/
 /* GPIO0 Registers */
 #define GPIO0_BASE			(L4_WKUP_BASE + 0x00207000)
 #define GPIO0_REG(_x_)			*(vulong *)(GPIO0_BASE + _x_)
@@ -805,7 +1003,7 @@
 /* GPIO3 Registers */
 #define GPIO3_BASE			(L4_PER_BASE + 0x001AE000)
 #define GPIO3_REG(_x_)			*(vulong *)(GPIO3_BASE + _x_)
-/*-------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 /* GPIOx Register offsets */
 #define GPIOX_REVISION			0x0000
 #define GPIOX_SYSCONFIG			0x0010
@@ -833,73 +1031,120 @@
 #define GPIOX_DEBOUNCINGTIME		0x0154
 #define GPIOX_CLEARDATAOUT		0x0190
 #define GPIOX_SETDATAOUT		0x0194
-/*=====================================================================================*/
+/*===========================================================================*/
 
 
-/*=====================================================================================*/
+/*===========================================================================*/
 /* Watchdog Timer */
-/*=====================================================================================*/
+/*===========================================================================*/
 /* Watchdog Timer Registers offset*/
 #define WDT1_BASE			(L4_WKUP_BASE + 0x00235000)
 #define WDT1_REG(_x_)			*(vulong *)(WDT1_BASE + _x_)
-/*-------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 /* WatchDog Timer Register offsets */
-#define WDT1_WIDR			0x00	// Watchdog Identification Register
-#define WDT1_WDSC			0x10	// Watchdog System Control Register
-#define WDT1_WDST			0x14	// Watchdog Status Register
-#define WDT1_WISR			0x18	// Watchdog Interrupt Status Register
-#define WDT1_WIER			0x1C	// Watchdog Interrupt Enable Register
-#define WDT1_WCLR			0x24	// Watchdog Control Register
-#define WDT1_WCRR			0x28	// Watchdog Counter Register
-#define WDT1_WLDR			0x2C	// Watchdog Load Register
-#define WDT1_WTGR			0x30	// Watchdog Trigger Register
-#define WDT1_WWPS			0x34	// Watchdog Write Posting Bits Register
-#define WDT1_WDLY			0x44	// Watchdog Delay Configuration Register
-#define WDT1_WSPR			0x48	// Watchdog Start/Stop Register
-#define WDT1_WIRQSTATRAW		0x54	// Watchdog Raw Interrupt Status Register
-#define WDT1_WIRQSTAT			0x58	// Watchdog Interrupt Status Register
-#define WDT1_WIRQENSET			0x5C	// Watchdog Interrupt Enable Set Register
-#define WDT1_WIRQENCLR			0x60	// Watchdog Interrupt Enable Clear Register
-/*=====================================================================================*/
+
+	/* Watchdow Identification Register */
+#define WDT1_WIDR			0x00
+	/* Watchdog System Control Register */
+#define WDT1_WDSC			0x10
+	/* Watchdog Status Register */
+#define WDT1_WDST			0x14
+	/* Watchdog Interrupt Status Register */
+#define WDT1_WISR			0x18
+	/* Watchdog Interrupt Enable Register */
+#define WDT1_WIER			0x1C
+	/* Watchdog Control Register */
+#define WDT1_WCLR			0x24
+	/* Watchdog Counter Register */
+#define WDT1_WCRR			0x28
+	/* Watchdog Load Register */
+#define WDT1_WLDR			0x2C
+	/* Watchdog Trigger Register */
+#define WDT1_WTGR			0x30
+	/* Watchdog Write Posting Bits Register */
+#define WDT1_WWPS			0x34
+	/* Watchdog Delay Configuration Register */
+#define WDT1_WDLY			0x44
+	/* Watchdog Start/Stop Register */
+#define WDT1_WSPR			0x48
+	/* Watchdog Raw Interrupt Status Register */
+#define WDT1_WIRQSTATRAW		0x54
+	/* Watchdog Interrupt Status Register */
+#define WDT1_WIRQSTAT			0x58
+	/* Watchdog Interrupt Enable Set Register */
+#define WDT1_WIRQENSET			0x5C
+	/* Watchdog Interrupt Enable Clear Register */
+#define WDT1_WIRQENCLR			0x60
+/*===========================================================================*/
 
 
-/*=====================================================================================*/
+/*===========================================================================*/
 /* MMC */
-/*=====================================================================================*/
+/*===========================================================================*/
 /* MMC Registers offset */
 #define MMC1_BASE			(L4_PER_BASE + 0x001D8000)
 #define MMC1_REG(_x_)			*(vulong *)(MMC1_BASE + _x_)
-/*-------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
 /* MMC Register offsets */
-#define SD_SYSCONFIG			0x0110	// System Configuration
-#define SD_SYSSTATUS			0x0114	// System Status
-#define SD_CSRE				0x0124	// Card Status Response Error
-#define SD_SYSTEST			0x0128	// System Test
-#define SD_CON				0x012C	// Configuration
-#define SD_PWCNT			0x0130	// Power Counter
-#define SD_SDMASA			0x0200	// SDMA System Address
-#define SD_BLK				0x0204	// Transfer Length Configuration
-#define SD_ARG				0x0208	// Command Argument
-#define SD_CMD				0x020C	// Command and Transfer Mode
-#define SD_RSP10			0x0210	// Command Response 0 and 1
-#define SD_RSP32			0x0214	// Command Response 2 and 3
-#define SD_RSP54			0x0218	// Command Response 4 and 5
-#define SD_RSP76			0x021C	// Command Response 6 and 7
-#define SD_DATA				0x0220	// Data
-#define SD_PSTATE			0x0224	// Present State
-#define SD_HCTL				0x0228	// Host Control
-#define SD_SYSCTL			0x022C	// SD System Control
-#define SD_STAT				0x0230	// SD Interrupt Status
-#define SD_IE				0x0234	// SD Interrupt Enable
-#define SD_ISE				0x0238	// SD Interrupt Enable Set
-#define SD_AC12				0x023C	// Auto CMD12 Error Status
-#define SD_CAPA				0x0240	// Capabilities
-#define SD_CUR_CAPA			0x0148	// Maximum Current Capabilities
-#define SD_FE				0x0250	// Force Event
-#define SD_ADMAES			0x0254	// ADMA Error Status
-#define SD_ADMASAL			0x0258	// ADMA System Address Low bits
-#define SD_ADMASAH			0x025C	// ADMA System Address High bits
-#define SD_REV				0x02FC	// Versions
-/*=====================================================================================*/
 
-#endif /* _AM335X_H_ */
+	/* System Configuration */
+#define SD_SYSCONFIG			0x0110
+	/* System Status */
+#define SD_SYSSTATUS			0x0114
+	/* Card Status Response Error */
+#define SD_CSRE				0x0124
+	/* System Test */
+#define SD_SYSTEST			0x0128
+	/* Configuration */
+#define SD_CON				0x012C
+	/* Power Counter */
+#define SD_PWCNT			0x0130
+	/* SDMA System Address */
+#define SD_SDMASA			0x0200
+	/* Transfer Length Configuration */
+#define SD_BLK				0x0204
+	/* Command Argument */
+#define SD_ARG				0x0208
+	/* Command and Transfer Mode */
+#define SD_CMD				0x020C
+	/* Command Response 0 and 1 */
+#define SD_RSP10			0x0210
+	/* Command Response 2 and 3 */
+#define SD_RSP32			0x0214
+	/* Command Response 4 and 5 */
+#define SD_RSP54			0x0218
+	/* Command Response 6 and 7 */
+#define SD_RSP76			0x021C
+	/* Data */
+#define SD_DATA				0x0220
+	/* Present State */
+#define SD_PSTATE			0x0224
+	/* Host Control */
+#define SD_HCTL				0x0228
+	/* SD System Control */
+#define SD_SYSCTL			0x022C
+	/* SD Interrupt Status */
+#define SD_STAT				0x0230
+	/* SD Interrupt Enable */
+#define SD_IE				0x0234
+	/* SD Interrupt Enable Set */
+#define SD_ISE				0x0238
+	/* Auto CMD12 Error Status */
+#define SD_AC12				0x023C
+	/* Capabilities */
+#define SD_CAPA				0x0240
+	/* Maximum Current Capabilities */
+#define SD_CUR_CAPA			0x0148
+	/* Force Event */
+#define SD_FE				0x0250
+	/* ADMA Error Status */
+#define SD_ADMAES			0x0254
+	/* ADMA System Address Low bits */
+#define SD_ADMASAL			0x0258
+	/* ADMA System Address High bits */
+#define SD_ADMASAH			0x025C
+	/* Versions */
+#define SD_REV				0x02FC
+/*===========================================================================*/
+
+#endif /* AM335X_H */
