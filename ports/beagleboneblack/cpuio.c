@@ -20,10 +20,10 @@ getUartDivisor(int baud, unsigned char *hi, unsigned char *lo)
  * As a bare minimum, initialize the console UART here using the
  * incoming 'baud' value as the baud rate.
  */
-void
+int
 devInit(int baud)
 {
-	/* ADD_CODE_HERE */
+        return(0);
 }
 
 /* ConsoleBaudSet():
