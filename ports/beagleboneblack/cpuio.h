@@ -1,3 +1,3 @@
-#define DEFAULT_BAUD_RATE 38400
+#define DEFAULT_BAUD_RATE 115200
 
 #define MONARGV0 "umon"

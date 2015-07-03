@@ -5,6 +5,8 @@
 #include "cache.h"
 #include "warmstart.h"
 #include "timer.h"
+#include "am335x.h"
+#include "uart16550.h"
 
 int
 getUartDivisor(int baud, unsigned char *hi, unsigned char *lo)
@@ -132,6 +134,16 @@ ram_vector_install(void)
 	*(ulong **)0x4030ce3c = &fast_interrupt_request;
 }
 
+void
+pinMuxInit(void)
+{
+        // Set pin mux configuration for UART0 RX/TX pins
+        CNTL_MODULE_REG(CONF_UART0_RXD) = SLEWSLOW | RX_ON |
+                PULL_OFF | MUXMODE_0;
+        CNTL_MODULE_REG(CONF_UART0_TXD) = SLEWSLOW | RX_OFF |
+                PULL_OFF | MUXMODE_0;
+}
+
 /* If any CPU IO wasn't initialized in reset.S, do it here...
  * This just provides a "C-level" IO init opportunity. 
  */
@@ -139,4 +151,17 @@ void
 initCPUio(void)
 {
 	ram_vector_install();
+
+        // Enable the control module:
+        CM_WKUP_REG(CM_WKUP_CONTROL_CLKCTRL) |= 2;
+
+        // Enable clock for UART0:
+        CM_WKUP_REG(CM_WKUP_UART0_CLKCTRL) |= 2;
+
+        pinMuxInit();
+
+        InitUART(DEFAULT_BAUD_RATE);
+
+        // Set UART0 mode to 16x
+        UART0_REG(UART_MDR1) &= ~7;
 }
