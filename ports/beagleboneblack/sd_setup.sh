@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 #
 # This script automates the process of setting up an SD card for
 # either "raw" or FAT mode booting for the Beaglebone Black.
@@ -41,7 +41,7 @@ FAT)
 	dd if=/dev/zero of=${SDDEV} bs=1M count=1
 
 	# Create the FAT16 primary partition and mark it bootable
-	echo -e "n\np\n1\n\n+3M\nt\n6\na\nw\n" | fdisk ${SDDEV}
+	echo -e "n\np\n1\n\n+3M\nt\n6\na\n1\nw\n" | fdisk ${SDDEV}
 
 	# Wait for some time to allow the partition to register under /dev
 	sleep 1
@@ -51,7 +51,9 @@ FAT)
 	mkdir mnt
 	mount ${SDDEV}1 mnt
 	cp ./build_BEAGLEBONEBLACK/MLO mnt
+	sync
 	umount mnt
+	sync
 	rm -rf mnt
 	;;
 *)
