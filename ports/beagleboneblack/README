@@ -1,0 +1,218 @@
+Getting Started with uMon for the Beaglebone Black
+
+=======================================================================
+Booting:
+=======================================================================
+
+-----------------------------------------------------------------------
+SD Card:
+-----------------------------------------------------------------------
+The Beaglebone Black can boot uMon from an SD card using two different
+boot modes.  The first boot mode is to boot using "raw" mode.  The
+second boot mode is to boot from a FAT primary partition marked as
+bootable.  The details and the steps required to set up the SD card
+for each of the boot modes are elaborated in the following two sections
+on SD card booting.  For more information on "raw" mode and FAT mode,
+please refer to the AM335s TRM Sections 26.1.7.5.5 "MMC/SD Read Sector
+Procedure in Raw Mode" and 26.1.7.5.6 "MMC/SD Read Sector Procedure
+in FAT Mode" respectively.
+
+In order to boot uMon from an SD card using FAT mode, a GP Header must
+be prepended to the uMon image.  In the case of booting uMon using
+"raw" mode, both a Configuration Header TOC Structure followed by a
+GP Header must be prepended to the uMon image.
+
+The GP Header is 8 bytes long where the first 4 bytes specify the size
+of the uMon image that will be transferred while the last 4 bytes
+specify both the destination address where the uMon image will be
+transferred to and the entry point.
+
+For information on the layout of the Configuration Header TOC Structure
+required for "raw" mode booting, please refer to the AM335x TRM
+Section 26.1.7.5.5.1 "Configuration Header".
+
+One thing worth mentioning is that the Beaglebone Black is connected to
+the SD card using MMC0 and as a result the size of the SD card must not
+be greater than 4GB.  This is indicated in the AM335x TRM Section
+26.1.7.5.2 "System Interconnection".
+
+In order to configure the Beaglebone Black to boot from an SD card,
+a uSD must be inserted and the boot switch held down while the board
+is powered up.  Once the board is powered on, the boot switch can
+be released.  If the attempt to boot from the uSD fails, the
+Beaglebone Black will fall back and attempt to boot using UART.
+As a result, this will provide a way to determine whether the boot
+from SD has succeeded or not.
+
+Before starting, it is recommended that the device that will be
+manipulated is verified to be the right device.  An approach to
+determine the right device name assigned to the SD card is by
+observing the output of
+
+	cat /proc/partitions
+
+before and after inserting the SD card.
+
+
+RAW MODE:
+
+In order to boot from an SD card using "raw" mode, the uMon image
+must be prepended with a Configuration Header TOC Structure and a
+GP Header.  The GP Header is placed right after the Configuration
+Header TOC Structure.
+
+When uMon is built, a uMon image containing the necessary headers
+is already created and is located under ./build_BEAGLEBONEBLACK.
+
+The next step is to setup the SD card.  Fortunately, the script
+./sd_setup.sh can be used to automate the process of setting up
+an SD card for "raw" mode booting.  To do so, invoke the script as
+
+	./sd_setup.sh RAW <device>
+
+<device> shown above and for the remainder of this document will
+refer to the SD card.
+
+The following information specify how to manually set up the SD
+card.
+
+With the proper headers prepended, the image is ready to be booted.
+In order for the Beaglebone Black/AM335x to boot the image, the
+image must be placed at one of the offsets
+0x00000/0x20000/0x40000/0x60000.
+
+As an example, to place the uMon image at the first offset
+
+	# Get the size of the uMon image to transfer into the SD card
+	export UMON_IMG_SIZE=`wc --bytes <uMon image> | cut -f 1 -d ' '`
+
+	# Transfer the uMon image at offset 0x00000
+	dd if=<uMon image> bs=1 count=$UMON_IMG_SIZE of=/dev/<device>
+
+where <uMon image> is the path to the uMon image prepended with a
+Configuration Header TOC Structure and a GP Header.
+
+
+FAT MODE:
+
+In FAT Mode, an "MLO" file is searched for in the root directory of
+a primary partition formatted as FAT12/FAT16 or FAT32 and marked
+bootable.  This "MLO" file must contain a GP Header followed by the
+uMon image.  When uMon is built, an "MLO" file is already created and
+is located in ./build_BEAGLEBONEBLACK.
+
+For convenience, preparing the SD card for FAT Mode booting has
+been automated through the use of the same aforementioned script,
+./sd_setup.sh.
+
+Invoking the script in order to create an SD card for FAT mode booting
+is as follows:
+
+	./sd_setup.sh FAT <device>
+
+The script simply sets up a primary partition on the SD card, marks
+it as bootable, formats it as FAT16 and then transfers the MLO file
+under ./build_BEAGLEBONEBLACK to the root directory of the primary
+partition on the SD card.
+
+The following elaborates the sequence of steps on how exactly an SD
+card is prepared for FAT Mode booting for the Beaglebone Black
+to boot from.
+
+Assuming that the SD card has not been formatted yet...
+
+Just to be safe, clear out the partition table at the base of the SD
+card to start fresh.
+
+	dd if=/dev/zero of=<device> bs=1M count=1
+
+The next step is to create a primary partition with the filesystem
+type set to FAT16.  This primary partition will be placed as an entry
+in an MBR located in the first sector of the SD card.  Fortunately,
+these intial steps are taken care of by the fdisk utility.
+
+To allocate a partition that will be formatted as FAT16 and to create
+an entry for the partition in the MBR,
+
+	fdisk <device>
+
+Suppose the SD card is registered under /dev as "sdc", this would be
+
+	fdisk /dev/sdc
+
+fdisk will then present a command-line dialog.
+
+From here, a new partition must be created using 'n'.  This partition
+must have a type of 0x06 for FAT16 which is set with 't' and with the
+size allocated to the partition to be at least 3MB.  This size is the
+minimum size required and is more than enough to hold a uMon image and
+to allow for future expansion.  It is recommended that not all of the
+sectors of the SD card are allocated to the FAT16 primary partition
+in order to provide room for the possibility of storing user data or
+perhaps a kernel.
+
+Once that is done, the next step is to mark the primary partition as
+bootable.  This is done using the 'a' option.
+
+With all that in place, the partition can be verified before writing
+it to the SD card with 'p'.  Once the partition has been verified,
+it can be written to the SD card using 'w'.
+
+After using fdisk to set up the partition, the new partition can be
+viewed under /dev.  So for example, if the base of the SD card is given
+as /dev/sdc, then the newly created FAT16 partition will be given as
+/dev/sdc1.
+
+The next step is to format this partition as FAT16:
+
+	mkfs.fat -f 2 -F 16 -M 0xF8 -s 1 -S 512 <device>
+
+with <device> set to the primary partition of the SD card.
+
+The final step is to place the "MLO" file in the root directory
+of the FAT16 primary partition.
+
+	cd ~
+	mkdir mnt
+	mount <device> mnt
+	cp <path_to_umon>/ports/beagleboneblack/build_BEAGLEBONEBLACK/MLO mnt
+	umount mnt
+	rmdir mnt
+
+In the previous set of commands, <device> is set to the primary
+partition of the SD card that was recently formatted as FAT16.
+
+The SD card is now ready.
+
+
+-----------------------------------------------------------------------
+UART:
+-----------------------------------------------------------------------
+Unlike booting from SD, booting via UART does not require any GP
+Header, Configuration Header TOC Structure, or both to be prepended to
+the uMon image.  The uMon image that will be booted using UART is
+boot.bin which is located in ./build_BEAGLEBONEBLACK.
+
+In order to boot from UART, a 3.3V USB-to-Serial cable is required,
+e.g. the FTDI USB TTL Serial cable is a possible option.
+
+The last requirement is to have a terminal emulator
+(e.g. minicom/picocom/etc.) set up to perform XMODEM transfers using
+1K packets and 16-bit CRC.
+
+To initiate the UART booting procedure on the Beaglebone Black, ensure
+that there is no uSD card inserted and then hold the boot switch down
+while powering up the board.  Once the board is powered on, the boot
+switch can be released.
+
+If a terminal emulator is set up already and connected to the serial
+port of the Beaglebone Black, the character 'C' will be outputted
+continuously.  This indicates that the UART booting procedure has
+initiated and is waiting for an image to be transferred via UART.
+
+From here, the uMon image can now be transferred using the terminal
+emulator.
+
+For more information on the UART boot procedure, please refer to the
+AM335x TRM Section 26.1.8.5 "UART Boot Procedure".
+=======================================================================
