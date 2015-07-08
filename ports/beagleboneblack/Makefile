@@ -86,12 +86,19 @@ boot:	$(BUILDDIR)/boot.$(FILETYPE)
 	$(CC) $(ASMFLAGS) -D \
 		BIN_SIZE=$(shell wc --bytes build_$(PLATFORM)/boot.bin | cut -f 1 -d ' ') \
 		-o gp_header.o gp_header.S
+	${CC} ${ASMFLAGS} -o config_header.o config_header.S
 	$(OBJCOPY) -O binary gp_header.o build_$(PLATFORM)/gp_header.bin
+	${OBJCOPY} -O binary config_header.o build_${PLATFORM}/config_header.bin
 	@cat build_$(PLATFORM)/gp_header.bin build_$(PLATFORM)/boot.bin > build_$(PLATFORM)/MLO
+	@cat build_$(PLATFORM)/config_header.bin build_$(PLATFORM)/gp_header.bin \
+		build_$(PLATFORM)/boot.bin > build_$(PLATFORM)/rawboot.bin
 	@echo Boot version of uMon built under $(BUILDDIR) ...
 	@ls $(BUILDDIR)/boot*
-	@echo Boot version of uMon attached with GP header build under $(BUILDDIR) ...
+	@echo Boot version of uMon prepended with a GP header built under $(BUILDDIR) ...
 	@ls $(BUILDDIR)/MLO
+	@echo Boot version of uMon prepended with a Configuration header and a GP header built
+	@echo under $(BUILDDIR) ...
+	@ls $(BUILDDIR)/rawboot.bin
 
 # ramtst:
 # A shortcut to $(BUILDDIR)/ramtst.$(FILETYPE).  This is a version of uMon
