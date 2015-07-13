@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/bin/sh
 #
 # This script automates the process of setting up an SD card for
 # either "raw" or FAT mode booting for the Beaglebone Black.
 
 if [ $# -ne 2 ]; then
-	echo -e  "Please specify both the boot mode and the SD card to set up\n"
-	echo -e "Usage: ./sd_setup.sh <boot mode> /dev/<device>\n"
-	echo -e "where <boot mode> is either RAW or FAT and <device> is the SD card"
+	printf  "Please specify both the boot mode and the SD card to set up\n"
+	printf "Usage: ./sd_setup.sh <boot mode> /dev/<device>\n"
+	printf "where <boot mode> is either RAW or FAT and <device> is the SD card"
 	exit 1
 fi
 
@@ -16,8 +16,8 @@ SDDEV=$2
 case $1 in
 RAW)
 	if [ ! -e ./build_BEAGLEBONEBLACK/rawboot.bin ]; then
-		echo -e "rawboot.bin does not exist in ./build_BEAGLEBONEBLACK\n"
-		echo -e "Please build uMon before proceeding"
+		printf "rawboot.bin does not exist in ./build_BEAGLEBONEBLACK\n"
+		printf "Please build uMon before proceeding"
 		exit 1
 	fi
 
@@ -32,8 +32,8 @@ RAW)
 	;;
 FAT)
 	if [ ! -e ./build_BEAGLEBONEBLACK/MLO ]; then
-		echo -e "MLO does not exist in ./build_BEAGLEBONEBLACK\n"
-		echo -e "Please build uMon before proceeding"
+		printf "MLO does not exist in ./build_BEAGLEBONEBLACK\n"
+		printf "Please build uMon before proceeding"
 		exit 1
 	fi
 
@@ -41,7 +41,7 @@ FAT)
 	dd if=/dev/zero of=${SDDEV} bs=1M count=1
 
 	# Create the FAT16 primary partition and mark it bootable
-	echo -e "n\np\n1\n\n+3M\nt\n6\na\n1\nw\n" | fdisk ${SDDEV}
+	printf "n\np\n1\n\n+3M\nt\n6\na\n1\nw\n" | fdisk ${SDDEV}
 
 	# Wait for some time to allow the partition to register under /dev
 	sleep 1
@@ -57,7 +57,7 @@ FAT)
 	rm -rf mnt
 	;;
 *)
-	echo -e "Invalid boot mode specified.  Valid boot modes are RAW/FAT."
+	printf "Invalid boot mode specified.  Valid boot modes are RAW/FAT."
 	exit 1
 	;;
 esac
