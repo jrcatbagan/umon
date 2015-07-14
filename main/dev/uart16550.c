@@ -185,6 +185,11 @@ target_getchar(void)
 int
 target_gotachar(void)
 {
+#if	INCLUDE_BLINKLED
+	extern void TARGET_BLINKLED(void);
+
+	TARGET_BLINKLED();
+#endif
 	if (CONSOLE(SIO_LSTAT) & SIO_LSTAT_RRDY)
 		return(1);
 #ifdef MORE_GOTACHAR

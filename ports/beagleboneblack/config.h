@@ -144,9 +144,6 @@
 #define ALLOCSIZE	1024 	// (64*1024)
 #define MONSTACKSIZE	(16*1024)
 
-// Cogent specific options
-#define INCLUDE_I2C				0
-#define	INCLUDE_LCD				0
 
 /* Specify inclusion of subsystems within the monitor here.
  * Refer to comments in common/monitor/inc_check.h for details on
@@ -195,6 +192,8 @@
 #define INCLUDE_TSI		0
 #define INCLUDE_SD		0
 #define INCLUDE_DNS		0
+#define INCLUDE_BLINKLED	1
+#define TARGET_BLINKLED target_blinkled
 
 /* Inclusion of this next file will make sure that all of the above
  * inclusions are legal; and warn/adjust where necessary.

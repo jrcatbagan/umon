@@ -7,6 +7,7 @@
 #include "timer.h"
 #include "am335x.h"
 #include "uart16550.h"
+#include "cli.h"
 
 int
 getUartDivisor(int baud, unsigned char *hi, unsigned char *lo)
@@ -137,11 +138,38 @@ ram_vector_install(void)
 void
 pinMuxInit(void)
 {
-        // Set pin mux configuration for UART0 RX/TX pins
-        CNTL_MODULE_REG(CONF_UART0_RXD) = SLEWSLOW | RX_ON |
-                PULL_OFF | MUXMODE_0;
-        CNTL_MODULE_REG(CONF_UART0_TXD) = SLEWSLOW | RX_OFF |
-                PULL_OFF | MUXMODE_0;
+    // Set pin mux configuration for UART0 RX/TX pins
+    CNTL_MODULE_REG(CONF_UART0_RXD) = SLEWSLOW | RX_ON |
+        PULL_OFF | MUXMODE_0;
+    CNTL_MODULE_REG(CONF_UART0_TXD) = SLEWSLOW | RX_OFF |
+        PULL_OFF | MUXMODE_0;
+
+    // Configure GPIO pins tied to four USR LEDS...
+    // GPIO1_21: USER0 LED (D2)
+    CNTL_MODULE_REG(CONF_GPMC_A5) = SLEWSLOW | RX_ON |
+        PULL_OFF | MUXMODE_7;
+    // GPIO1_22: USER1 LED (D3)
+    CNTL_MODULE_REG(CONF_GPMC_A6) = SLEWSLOW | RX_ON |
+        PULL_OFF | MUXMODE_7;
+    // GPIO1_23: USER2 LED (D4)
+    CNTL_MODULE_REG(CONF_GPMC_A7) = SLEWSLOW | RX_ON |
+        PULL_OFF | MUXMODE_7;
+    // GPIO1_24: USER3 LED (D5)
+    CNTL_MODULE_REG(CONF_GPMC_A8) = SLEWSLOW | RX_ON |
+        PULL_OFF | MUXMODE_7;
+}
+
+void
+InitGPIO1(void)
+{
+    // GPIO_CTRL: Enable GPIO1 module
+	GPIO1_REG(0x130) = 0;
+
+    // GPIO_OE: 25-24 are outputs...
+	GPIO1_REG(0x134) &= ~(USR0_LED | USR1_LED | USR2_LED | USR3_LED);
+
+    // All LEDs off...
+	GPIO1_REG(0x13c) &= ~(USR0_LED | USR1_LED | USR2_LED | USR3_LED);
 }
 
 /* If any CPU IO wasn't initialized in reset.S, do it here...
@@ -152,16 +180,88 @@ initCPUio(void)
 {
 	ram_vector_install();
 
-        // Enable the control module:
-        CM_WKUP_REG(CM_WKUP_CONTROL_CLKCTRL) |= 2;
+    // Enable the control module:
+    CM_WKUP_REG(CM_WKUP_CONTROL_CLKCTRL) |= 2;
 
-        // Enable clock for UART0:
-        CM_WKUP_REG(CM_WKUP_UART0_CLKCTRL) |= 2;
+    // Enable clock for UART0:
+    CM_WKUP_REG(CM_WKUP_UART0_CLKCTRL) |= 2;
 
-        pinMuxInit();
+    // Enable clock for GPIO1:
+    CM_PER_REG(CM_DIV_M3_DPLL_PER) |= 2;
 
-        InitUART(DEFAULT_BAUD_RATE);
+    pinMuxInit();
 
-        // Set UART0 mode to 16x
-        UART0_REG(UART_MDR1) &= ~7;
+    InitUART(DEFAULT_BAUD_RATE);
+	InitGPIO1();
+
+    // Set UART0 mode to 16x
+    UART0_REG(UART_MDR1) &= ~7;
+}
+
+int
+led(int num, int on)
+{
+	unsigned long bit;
+
+	switch(num) {
+		case 0:	// D0
+			bit = USR0_LED;
+			break;
+		case 1:	// D1
+			bit = USR1_LED;
+			break;
+		case 2:	// D2
+			bit = USR2_LED;
+			break;
+		case 3:	// D3
+			bit = USR3_LED;
+			break;
+		default:
+			return(-1);
+	}
+
+    // GPIO21-24:
+	if (on)
+	    GPIO1_REG(0x13c) |= bit;
+	else
+	    GPIO1_REG(0x13c) &= ~bit;
+	return(0);
+}
+
+void
+target_blinkled(void)
+{
+#if INCLUDE_BLINKLED
+	static uint8_t ledstate;
+	static struct elapsed_tmr tmr;
+
+#define STATLED_ON()	led(0,1)
+#define STATLED_OFF()	led(0,0)
+#ifndef BLINKON_MSEC
+#define BLINKON_MSEC 10000
+#define BLINKOFF_MSEC 10000
+#endif
+
+	switch(ledstate) {
+		case 0:
+			startElapsedTimer(&tmr,BLINKON_MSEC);
+			STATLED_ON();
+			ledstate = 1;
+			break;
+		case 1:
+			if(msecElapsed(&tmr)) {
+				STATLED_OFF();
+				ledstate = 2;
+				startElapsedTimer(&tmr,BLINKOFF_MSEC);
+			}
+			break;
+		case 2:
+			if(msecElapsed(&tmr)) {
+				STATLED_ON();
+				ledstate = 1;
+				startElapsedTimer(&tmr,BLINKON_MSEC);
+			}
+			break;
+	}
+#endif
 }

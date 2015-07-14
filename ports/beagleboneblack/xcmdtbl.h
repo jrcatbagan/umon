@@ -6,5 +6,5 @@
 /* It is the entry in the command table representing the new command being */
 /* added to the cmdtbl[] array. */
 /* For example:
-    "dummy",    dummycmd,   dummyHelp,
+    { "dummy",    dummycmd,   dummyHelp,    0 },
 */
