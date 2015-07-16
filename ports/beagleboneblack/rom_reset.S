@@ -171,8 +171,13 @@ warmstart:
     bic r0, r0, #0x1f           /* clear all mode bits */
     orr r0, r0, #0x13           /* set System mode bits */
     msr CPSR_c, r0              /* move back to CPSR */
-    /* Reset the stack pointer for the SVC mode (our current mode) */
-    ldr sp, =(MonStack + MONSTACKSIZE - 4)
+
+    /* Initialize the SP at the top of SRAM outside of the uMon code
+     * space so that the following two C functions can be invoked
+     * properly to take care of PLL and DDR3 initialization.
+     */
+    movw sp, #0x5e00
+    movt sp, #0x4030
 
     /* Initialize the MPU, Core, DDR, and Per PLLs.  Furthermore,
      * initialize the external DDR3 memory as well.
@@ -180,6 +185,9 @@ warmstart:
 dev_init:
     bl pll_init
     bl ddr_init
+
+    /* Reset the stack pointer for the SVC mode (our current mode) */
+    ldr sp, =(MonStack + MONSTACKSIZE - 4)
 
     /*
      * Restore argument which was saved to r11 and jump to
