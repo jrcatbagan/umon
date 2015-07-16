@@ -187,7 +187,7 @@ initCPUio(void)
 	CM_WKUP_REG(CM_WKUP_UART0_CLKCTRL) |= 2;
 
 	// Enable clock for GPIO1:
-	CM_PER_REG(CM_DIV_M3_DPLL_PER) |= 2;
+	CM_PER_REG(CM_PER_GPIO1_CLKCTRL) |= 2;
 
 	pinMuxInit();
 
