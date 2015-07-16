@@ -138,37 +138,37 @@ ram_vector_install(void)
 void
 pinMuxInit(void)
 {
-    // Set pin mux configuration for UART0 RX/TX pins
-    CNTL_MODULE_REG(CONF_UART0_RXD) = SLEWSLOW | RX_ON |
-        PULL_OFF | MUXMODE_0;
-    CNTL_MODULE_REG(CONF_UART0_TXD) = SLEWSLOW | RX_OFF |
-        PULL_OFF | MUXMODE_0;
+	// Set pin mux configuration for UART0 RX/TX pins
+	CNTL_MODULE_REG(CONF_UART0_RXD) = SLEWSLOW | RX_ON |
+		PULL_OFF | MUXMODE_0;
+	CNTL_MODULE_REG(CONF_UART0_TXD) = SLEWSLOW | RX_OFF |
+		PULL_OFF | MUXMODE_0;
 
-    // Configure GPIO pins tied to four USR LEDS...
-    // GPIO1_21: USER0 LED (D2)
-    CNTL_MODULE_REG(CONF_GPMC_A5) = SLEWSLOW | RX_ON |
-        PULL_OFF | MUXMODE_7;
-    // GPIO1_22: USER1 LED (D3)
-    CNTL_MODULE_REG(CONF_GPMC_A6) = SLEWSLOW | RX_ON |
-        PULL_OFF | MUXMODE_7;
-    // GPIO1_23: USER2 LED (D4)
-    CNTL_MODULE_REG(CONF_GPMC_A7) = SLEWSLOW | RX_ON |
-        PULL_OFF | MUXMODE_7;
-    // GPIO1_24: USER3 LED (D5)
-    CNTL_MODULE_REG(CONF_GPMC_A8) = SLEWSLOW | RX_ON |
-        PULL_OFF | MUXMODE_7;
+	// Configure GPIO pins tied to four USR LEDS...
+	// GPIO1_21: USER0 LED (D2)
+	CNTL_MODULE_REG(CONF_GPMC_A5) = SLEWSLOW | RX_ON |
+		PULL_OFF | MUXMODE_7;
+	// GPIO1_22: USER1 LED (D3)
+	CNTL_MODULE_REG(CONF_GPMC_A6) = SLEWSLOW | RX_ON |
+		PULL_OFF | MUXMODE_7;
+	// GPIO1_23: USER2 LED (D4)
+	CNTL_MODULE_REG(CONF_GPMC_A7) = SLEWSLOW | RX_ON |
+		PULL_OFF | MUXMODE_7;
+	// GPIO1_24: USER3 LED (D5)
+	CNTL_MODULE_REG(CONF_GPMC_A8) = SLEWSLOW | RX_ON |
+		PULL_OFF | MUXMODE_7;
 }
 
 void
 InitGPIO1(void)
 {
-    // GPIO_CTRL: Enable GPIO1 module
+	// GPIO_CTRL: Enable GPIO1 module
 	GPIO1_REG(0x130) = 0;
 
-    // GPIO_OE: 25-24 are outputs...
+	// GPIO_OE: 25-24 are outputs...
 	GPIO1_REG(0x134) &= ~(USR0_LED | USR1_LED | USR2_LED | USR3_LED);
 
-    // All LEDs off...
+	// All LEDs off...
 	GPIO1_REG(0x13c) &= ~(USR0_LED | USR1_LED | USR2_LED | USR3_LED);
 }
 
@@ -180,22 +180,22 @@ initCPUio(void)
 {
 	ram_vector_install();
 
-    // Enable the control module:
-    CM_WKUP_REG(CM_WKUP_CONTROL_CLKCTRL) |= 2;
+	// Enable the control module:
+	CM_WKUP_REG(CM_WKUP_CONTROL_CLKCTRL) |= 2;
 
-    // Enable clock for UART0:
-    CM_WKUP_REG(CM_WKUP_UART0_CLKCTRL) |= 2;
+	// Enable clock for UART0:
+	CM_WKUP_REG(CM_WKUP_UART0_CLKCTRL) |= 2;
 
-    // Enable clock for GPIO1:
-    CM_PER_REG(CM_DIV_M3_DPLL_PER) |= 2;
+	// Enable clock for GPIO1:
+	CM_PER_REG(CM_DIV_M3_DPLL_PER) |= 2;
 
-    pinMuxInit();
+	pinMuxInit();
 
-    InitUART(DEFAULT_BAUD_RATE);
+	InitUART(DEFAULT_BAUD_RATE);
 	InitGPIO1();
 
-    // Set UART0 mode to 16x
-    UART0_REG(UART_MDR1) &= ~7;
+	// Set UART0 mode to 16x
+	UART0_REG(UART_MDR1) &= ~7;
 }
 
 int
@@ -220,7 +220,7 @@ led(int num, int on)
 			return(-1);
 	}
 
-    // GPIO21-24:
+	// GPIO21-24:
 	if (on)
 	    GPIO1_REG(0x13c) |= bit;
 	else
