@@ -265,3 +265,251 @@ target_blinkled(void)
 	}
 #endif
 }
+
+void
+mpu_pll_init(void)
+{
+	uint32_t cm_clkmode_dpll_mpu;
+	uint32_t cm_clksel_dpll_mpu;
+	uint32_t cm_div_m2_dpll_mpu;
+
+	// Put MPU PLL in MN Bypass mode
+	cm_clkmode_dpll_mpu = CM_WKUP_REG(CM_CLKMODE_DPLL_MPU);
+	cm_clkmode_dpll_mpu &= ~0x00000007;
+	cm_clkmode_dpll_mpu |= 0x00000004;
+	CM_WKUP_REG(CM_CLKMODE_DPLL_MPU) = cm_clkmode_dpll_mpu;
+	// Wait for MPU PLL to enter MN Bypass mode
+	while ((CM_WKUP_REG(CM_IDLEST_DPLL_MPU) & 0x00000101) != 0x00000100);
+
+	// Set the ARM core frequency to 1 GHz
+	cm_clkmode_dpll_mpu = CM_WKUP_REG(CM_CLKSEL_DPLL_MPU);
+	cm_clksel_dpll_mpu &= ~0x0007FF7F;
+	cm_clksel_dpll_mpu |= 1000 << 8;
+	cm_clksel_dpll_mpu |= 23;
+	CM_WKUP_REG(CM_CLKSEL_DPLL_MPU) = cm_clksel_dpll_mpu;
+	cm_div_m2_dpll_mpu = CM_WKUP_REG(CM_DIV_M2_DPLL_MPU);
+	cm_div_m2_dpll_mpu &= ~0x0000001F;
+	cm_div_m2_dpll_mpu |= 0x00000001;
+	CM_WKUP_REG(CM_DIV_M2_DPLL_MPU) = cm_div_m2_dpll_mpu;
+
+	// Lock MPU PLL
+	cm_clkmode_dpll_mpu = CM_WKUP_REG(CM_CLKMODE_DPLL_MPU);
+	cm_clkmode_dpll_mpu &= ~0x00000007;
+	cm_clkmode_dpll_mpu |= 0x00000007;
+	CM_WKUP_REG(CM_CLKMODE_DPLL_MPU) = cm_clkmode_dpll_mpu;
+	// Wait for MPU PLL to lock
+	while ((CM_WKUP_REG(CM_IDLEST_DPLL_MPU) & 0x00000001) != 0x00000001);
+}
+
+void
+core_pll_init(void)
+{
+	uint32_t cm_clkmode_dpll_core;
+	uint32_t cm_clksel_dpll_core;
+	uint32_t cm_div_m4_dpll_core;
+	uint32_t cm_div_m5_dpll_core;
+	uint32_t cm_div_m6_dpll_core;
+
+	// Put Core PLL in MN Bypass mode
+	cm_clkmode_dpll_core = CM_WKUP_REG(CM_CLKMODE_DPLL_CORE);
+	cm_clkmode_dpll_core &= ~0x00000007;
+	cm_clkmode_dpll_core |= 0x00000004;
+	CM_WKUP_REG(CM_CLKMODE_DPLL_CORE) = cm_clkmode_dpll_core;
+	// Wait for Core PLL to enter MN Bypass mode
+	while ((CM_WKUP_REG(CM_IDLEST_DPLL_CORE) & 0x00000101) != 0x00000100);
+
+	// Configure the multiplier and divider
+	cm_clksel_dpll_core = CM_WKUP_REG(CM_CLKSEL_DPLL_CORE);
+	cm_clksel_dpll_core &= ~0x0007FF7F;
+	cm_clksel_dpll_core |= 1000 << 8;
+	cm_clksel_dpll_core |= 23;
+	CM_WKUP_REG(CM_CLKSEL_DPLL_CORE) = cm_clksel_dpll_core;
+	// Configure the M4, M5, and M6 dividers
+	cm_div_m4_dpll_core = CM_WKUP_REG(CM_DIV_M4_DPLL_CORE);
+	cm_div_m4_dpll_core &= ~0x0000001F;
+	cm_div_m4_dpll_core |= 10;
+	CM_WKUP_REG(CM_DIV_M4_DPLL_CORE) = cm_div_m4_dpll_core;
+	cm_div_m5_dpll_core = CM_WKUP_REG(CM_DIV_M5_DPLL_CORE);
+	cm_div_m5_dpll_core &= ~0x0000001F;
+	cm_div_m5_dpll_core |= 8;
+	CM_WKUP_REG(CM_DIV_M5_DPLL_CORE) = cm_div_m5_dpll_core;
+	cm_div_m6_dpll_core = CM_WKUP_REG(CM_DIV_M6_DPLL_CORE);
+	cm_div_m6_dpll_core &= ~0x0000001F;
+	cm_div_m6_dpll_core |= 4;
+	CM_WKUP_REG(CM_DIV_M6_DPLL_CORE) = cm_div_m6_dpll_core;
+
+	// Lock Core PLL
+	cm_clkmode_dpll_core = CM_WKUP_REG(CM_CLKMODE_DPLL_CORE);
+	cm_clkmode_dpll_core &= ~0x00000007;
+	cm_clkmode_dpll_core |= 0x00000007;
+	CM_WKUP_REG(CM_CLKMODE_DPLL_CORE) = cm_clkmode_dpll_core;
+	// Wait for Core PLL to lock
+	while ((CM_WKUP_REG(CM_IDLEST_DPLL_CORE) & 0x00000001) != 0x00000001);
+}
+
+void
+ddr_pll_init(void)
+{
+	uint32_t cm_clkmode_dpll_ddr;
+	uint32_t cm_clksel_dpll_ddr;
+	uint32_t cm_div_m2_dpll_ddr;
+
+	// Put DDR PLL in MN Bypass mode
+	cm_clkmode_dpll_ddr = CM_WKUP_REG(CM_CLKMODE_DPLL_DDR);
+	cm_clkmode_dpll_ddr &= ~0x00000007;
+	cm_clkmode_dpll_ddr |= 0x00000004;
+	CM_WKUP_REG(CM_CLKMODE_DPLL_DDR) = cm_clkmode_dpll_ddr;
+	// Wait for DDR PLL to enter MN Bypass mode
+	while ((CM_WKUP_REG(CM_IDLEST_DPLL_DDR) & 0x00000101) != 0x00000100);
+
+	// Set the DDR frequency to 400 MHz
+	cm_clksel_dpll_ddr = CM_WKUP_REG(CM_CLKSEL_DPLL_DDR);
+	cm_clksel_dpll_ddr &= ~0x0007FF7F;
+	cm_clksel_dpll_ddr |= 400 << 8;
+	cm_clksel_dpll_ddr |= 23;
+	CM_WKUP_REG(CM_CLKSEL_DPLL_DDR) = cm_clksel_dpll_ddr;
+	// Set M2 divider
+	cm_div_m2_dpll_ddr = CM_WKUP_REG(CM_DIV_M2_DPLL_DDR);
+	cm_div_m2_dpll_ddr &= ~0x0000001F;
+	cm_div_m2_dpll_ddr |= 1;
+	CM_WKUP_REG(CM_DIV_M2_DPLL_DDR) = cm_div_m2_dpll_ddr;
+
+	// Lock the DDR PLL
+	cm_clkmode_dpll_ddr = CM_WKUP_REG(CM_CLKMODE_DPLL_DDR);
+	cm_clkmode_dpll_ddr &= ~0x00000007;
+	cm_clkmode_dpll_ddr |= 0x00000007;
+	CM_WKUP_REG(CM_CLKMODE_DPLL_DDR) = cm_clkmode_dpll_ddr;
+	// Wait for DDR PLL to lock
+	while ((CM_WKUP_REG(CM_IDLEST_DPLL_DDR) & 0x00000001) != 0x00000001);
+}
+
+void
+per_pll_init(void)
+{
+	uint32_t cm_clkmode_dpll_per;
+	uint32_t cm_clksel_dpll_per;
+	uint32_t cm_div_m2_dpll_per;
+
+	// Put Per PLL in MN Bypass mode
+	cm_clkmode_dpll_per = CM_WKUP_REG(CM_CLKMODE_DPLL_PER);
+	cm_clkmode_dpll_per &= ~0x00000007;
+	cm_clkmode_dpll_per |= 0x00000004;
+	CM_WKUP_REG(CM_CLKMODE_DPLL_PER) = cm_clkmode_dpll_per;
+	// Wait for Per PLL to enter MN Bypass mode
+	while ((CM_WKUP_REG(CM_IDLEST_DPLL_PER) & 0x00000101) != 0x00000100);
+
+	// Configure the multiplier and divider
+	cm_clksel_dpll_per = CM_WKUP_REG(CM_CLKSEL_DPLL_PER);
+	cm_clksel_dpll_per &= ~0xFF0FFFFF;
+	cm_clksel_dpll_per |= CM_CLKSEL_DPLL_PER_DPLL_SD_DIV | CM_CLKSEL_DPLL_PER_DPLL_MULT |
+		CM_CLKSEL_DPLL_PER_DPLL_DIV;
+	CM_WKUP_REG(CM_CLKSEL_DPLL_PER) = cm_clksel_dpll_per;
+	// Set M2 divider
+	cm_div_m2_dpll_per = CM_WKUP_REG(CM_DIV_M2_DPLL_PER);
+	cm_div_m2_dpll_per &= ~0x0000007F;
+	cm_div_m2_dpll_per |= 5;
+	CM_WKUP_REG(CM_DIV_M2_DPLL_PER) = cm_div_m2_dpll_per;
+
+	// Lock the Per PLL
+	cm_clkmode_dpll_per = CM_WKUP_REG(CM_CLKMODE_DPLL_PER);
+	cm_clkmode_dpll_per &= ~0x00000007;
+	cm_clkmode_dpll_per |= 0x00000007;
+	CM_WKUP_REG(CM_CLKMODE_DPLL_PER) = cm_clkmode_dpll_per;
+	// Wait for Per PLL to lock
+	while ((CM_WKUP_REG(CM_IDLEST_DPLL_PER) & 0x00000001) != 0x00000001);
+}
+
+void
+pll_init(void)
+{
+	mpu_pll_init();
+	core_pll_init();
+	ddr_pll_init();
+	per_pll_init();
+}
+
+void
+ddr_init(void)
+{
+	uint32_t reg;
+
+        // Enable the control module:
+        CM_WKUP_REG(CM_WKUP_CONTROL_CLKCTRL) |= 2;
+
+	// Enable EMIF module
+	reg = CM_PER_REG(CM_PER_EMIF_CLKCTRL);
+	reg &= ~3;
+	reg |= 2;
+	CM_PER_REG(CM_PER_EMIF_CLKCTRL) = reg;
+	while ((CM_PER_REG(CM_PER_L3_CLKSTCTRL) & 0x00000004) != 0x00000004);
+
+	// Configure VTP control
+	CNTL_MODULE_REG(VTP_CTRL) |= 0x00000040;
+	CNTL_MODULE_REG(VTP_CTRL) &= ~1;
+	CNTL_MODULE_REG(VTP_CTRL) |= 1;
+	// Wait for VTP control to be ready
+	while ((CNTL_MODULE_REG(VTP_CTRL) & 0x00000020) != 0x00000020);
+
+	// Configure the DDR PHY CMDx/DATAx registers
+	DDR_PHY_REG(CMD0_REG_PHY_CTRL_SLAVE_RATIO_0) = 0x80;
+	DDR_PHY_REG(CMD0_REG_PHY_INVERT_CLKOUT_0) = 0;
+	DDR_PHY_REG(CMD1_REG_PHY_CTRL_SLAVE_RATIO_0) = 0x80;
+	DDR_PHY_REG(CMD1_REG_PHY_INVERT_CLKOUT_0) = 0;
+	DDR_PHY_REG(CMD2_REG_PHY_CTRL_SLAVE_RATIO_0) = 0x80;
+	DDR_PHY_REG(CMD2_REG_PHY_INVERT_CLKOUT_0) = 0;
+
+	DDR_PHY_REG(DATA0_REG_PHY_RD_DQS_SLAVE_RATIO_0) = 0x3A;
+	DDR_PHY_REG(DATA0_REG_PHY_WR_DQS_SLAVE_RATIO_0) = 0x45;
+	DDR_PHY_REG(DATA0_REG_PHY_WR_DATA_SLAVE_RATIO_0) = 0x7C;
+	DDR_PHY_REG(DATA0_REG_PHY_FIFO_WE_SLAVE_RATIO_0) = 0x96;
+
+	DDR_PHY_REG(DATA1_REG_PHY_RD_DQS_SLAVE_RATIO_0) = 0x3A;
+	DDR_PHY_REG(DATA1_REG_PHY_WR_DQS_SLAVE_RATIO_0) = 0x45;
+	DDR_PHY_REG(DATA1_REG_PHY_WR_DATA_SLAVE_RATIO_0) = 0x7C;
+	DDR_PHY_REG(DATA1_REG_PHY_FIFO_WE_SLAVE_RATIO_0) = 0x96;
+
+	CNTL_MODULE_REG(DDR_CMD0_IOCTRL) = 0x018B;
+	CNTL_MODULE_REG(DDR_CMD1_IOCTRL) = 0x018B;
+	CNTL_MODULE_REG(DDR_CMD2_IOCTRL) = 0x018B;
+	CNTL_MODULE_REG(DDR_DATA0_IOCTRL) = 0x018B;
+	CNTL_MODULE_REG(DDR_DATA1_IOCTRL) = 0x018B;
+
+	CNTL_MODULE_REG(DDR_IO_CTRL) &= ~0x10000000;
+
+	CNTL_MODULE_REG(DDR_CKE_CTRL) |= 0x00000001;
+
+	// Enable dynamic power down when no read is being performed and set read latency
+	// to CAS Latency + 2 - 1
+	EMIF0_REG(DDR_PHY_CTRL_1) = 0x00100007;
+	EMIF0_REG(DDR_PHY_CTRL_1_SHDW) = 0x00100007;
+
+	// Configure the AC timing characteristics
+	EMIF0_REG(SDRAM_TIM_1) = 0x0AAAD4DB;
+	EMIF0_REG(SDRAM_TIM_1_SHDW) = 0x0AAAD4DB;
+	EMIF0_REG(SDRAM_TIM_2) = 0x266B7FDA;
+	EMIF0_REG(SDRAM_TIM_2_SHDW) = 0x266B7FDA;
+	EMIF0_REG(SDRAM_TIM_3) = 0x501F867F;
+	EMIF0_REG(SDRAM_TIM_3_SHDW) = 0x501F867F;
+
+	// Set the refresh rate, 400,000,000 * 7.8 * 10^-6 = 3120 = 0x0C30
+	EMIF0_REG(SDRAM_REF_CTRL) = 0x00000C30;
+	// set the referesh rate shadow register to the same value as previous
+	EMIF0_REG(SDRAM_REF_CTRL_SHDW) = 0x00000C30;
+
+	// Configure the ZQ Calibration
+	EMIF0_REG(ZQ_CONFIG) = 0x50074BE4;
+
+	// Configure the SDRAM characteristics
+	reg |= SDRAM_CONFIG_REG_SDRAM_TYPE_DDR3 | SDRAM_CONFIG_REG_IBANK_POS_0 |
+		SDRAM_CONFIG_REG_DDR_TERM_DDR3_RZQ_4 | SDRAM_CONFIG_REG_DDR2_DDQS_DIFF_DQS |
+		SDRAM_CONFIG_REG_DYN_ODT_RZQ_2 | SDRAM_CONFIG_REG_DDR_DISABLE_DLL_ENABLE |
+		SDRAM_CONFIG_REG_SDRAM_DRIVE_RZQ_6 | SDRAM_CONFIG_REG_CAS_WR_LATENCY_5 |
+		SDRAM_CONFIG_REG_NARROW_MODE_16BIT | SDRAM_CONFIG_REG_CAS_LATENCY_6 |
+		SDRAM_CONFIG_REG_ROWSIZE_15BIT | SDRAM_CONFIG_REG_IBANK_8 |
+		SDRAM_CONFIG_REG_EBANK_1 | SDRAM_CONFIG_REG_PAGESIZE_1024_WORD;
+	EMIF0_REG(SDRAM_CONFIG) = reg;
+	CNTL_MODULE_REG(CONTROL_EMIF_SDRAM_CONFIG) = reg;
+
+	// Set the external bank position to 0
+	EMIF0_REG(SDRAM_CONFIG_2) |= SDRAM_CONFIG_2_REG_EBANK_POS_0;
+}

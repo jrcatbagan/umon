@@ -56,6 +56,8 @@
 /*********************************************************************/
     
     .extern start
+    .extern pll_init
+    .extern ddr_init
 
     .global reset
     .global coldstart
@@ -171,6 +173,13 @@ warmstart:
     msr CPSR_c, r0              /* move back to CPSR */
     /* Reset the stack pointer for the SVC mode (our current mode) */
     ldr sp, =(MonStack + MONSTACKSIZE - 4)
+
+    /* Initialize the MPU, Core, DDR, and Per PLLs.  Furthermore,
+     * initialize the external DDR3 memory as well.
+     */
+dev_init:
+    bl pll_init
+    bl ddr_init
 
     /*
      * Restore argument which was saved to r11 and jump to
