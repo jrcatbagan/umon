@@ -152,8 +152,6 @@
 						
 #define INCLUDE_MEMTRACE	0
 #define INCLUDE_MEMCMDS         1
-#define INCLUDE_DM				1
-#define INCLUDE_PM				1
 #define INCLUDE_EDIT            0
 #define INCLUDE_DISASSEMBLER    0
 #define INCLUDE_UNZIP           0
