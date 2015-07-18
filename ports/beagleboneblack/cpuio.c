@@ -282,7 +282,7 @@ mpu_pll_init(void)
 	while ((CM_WKUP_REG(CM_IDLEST_DPLL_MPU) & 0x00000101) != 0x00000100);
 
 	// Set the ARM core frequency to 1 GHz
-	cm_clkmode_dpll_mpu = CM_WKUP_REG(CM_CLKSEL_DPLL_MPU);
+	cm_clksel_dpll_mpu = CM_WKUP_REG(CM_CLKSEL_DPLL_MPU);
 	cm_clksel_dpll_mpu &= ~0x0007FF7F;
 	cm_clksel_dpll_mpu |= 1000 << 8;
 	cm_clksel_dpll_mpu |= 23;
