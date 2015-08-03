@@ -242,19 +242,172 @@ sdInit(int interface, int verbosity)
 int
 sdRead(int interface, char *buf, int blknum, int blkcount)
 {
-	return(-1);
+	uint32_t cmd, arg, resp[4];
+	uint32_t *wordptr = (uint32_t *) buf;
+	int byteindex;
+
+	/* Get the SD card's status via CMD13 */
+	arg = (sdrca << 16) & 0xFFFF0000;
+	cmd = SD_CMD_CMD13_SEND_STATUS | SD_CMD_CMD_TYPE_NORMAL | SD_CMD_DP_NO_DATA_PRESENT |
+		SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE | SD_CMD_RSP_TYPE_R1;
+	if (sdcmd(cmd, arg, resp) == -1)
+		return(-1);
+
+	/* Ensure that the card is in Transfer State before proceeding */
+	if ((resp[0] & SD_RSP10_R1_CURRENT_STATE) != SD_RSP10_R1_CURRENT_STATE_TRANSFER) {
+		arg = (sdrca << 16) & 0xFFFF0000;
+		cmd = SD_CMD_CMD7_SELECT_DESELECT_CARD | SD_CMD_CMD_TYPE_NORMAL |
+			SD_CMD_DP_NO_DATA_PRESENT | SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE |
+			SD_CMD_RSP_TYPE_R1B;
+		if (sdcmd(cmd, arg, resp) == -1)
+			return(-1);
+
+		/* Wait for the SD card to enter Transfer State */
+		do {
+			arg = (sdrca << 16) & 0xFFFF0000;
+			cmd = SD_CMD_CMD13_SEND_STATUS | SD_CMD_CMD_TYPE_NORMAL |
+				SD_CMD_DP_NO_DATA_PRESENT | SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE |
+				SD_CMD_RSP_TYPE_R1;
+			if (sdcmd(cmd, arg, resp) == -1)
+				return(-1);
+		} while ((resp[0] & SD_RSP10_R1_CURRENT_STATE) != SD_RSP10_R1_CURRENT_STATE_TRANSFER);
+	}
+
+	/* Set the block length and the number of blocks to read */
+	MMCHS0_REG(SD_BLK) = SD_BLKSIZE | (blkcount << 16);
+	/* Send CMD18, i.e. read multiple blocks */
+	arg = blknum;
+	cmd = SD_CMD_CMD18_READ_MULTIPLE_BLOCK | SD_CMD_CMD_TYPE_NORMAL | SD_CMD_DP_DATA_PRESENT |
+		SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE | SD_CMD_RSP_TYPE_R1 | SD_CMD_MSBS_MULTIPLE |
+		SD_CMD_DDIR_READ | SD_CMD_ACEN_CMD12_ENABLE | SD_CMD_BCE_ENABLE;
+	if (sdcmd(cmd, arg, resp) == -1)
+		return(-1);
+
+	/* Check the data buffer to see if there is data to be read */
+	do {
+		while (!(MMCHS0_REG(SD_STAT) & SD_STAT_BRR));
+
+		/* Clear the BRR status bit in SD_STAT */
+		MMCHS0_REG(SD_STAT) |= SD_STAT_BRR;
+
+		for (byteindex = 0; byteindex < (SD_BLKSIZE / 4); byteindex++) {
+			*wordptr = (MMCHS0_REG(SD_DATA));
+			wordptr++;
+		}
+	} while (!(MMCHS0_REG(SD_STAT) & SD_STAT_TC));
+
+	/* Put the SD card into Stand-by State */
+	arg = 0;
+	cmd = SD_CMD_CMD7_SELECT_DESELECT_CARD | SD_CMD_CMD_TYPE_NORMAL | SD_CMD_DP_NO_DATA_PRESENT |
+		SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE | SD_CMD_RSP_TYPE_NO_RESPONSE;
+	if (sdcmd(cmd, arg, resp) == -1)
+		return(-1);
+
+	/* Wait for the SD card to enter Stand-by State */
+	do {
+		arg = (sdrca << 16) & 0xFFFF0000;
+		cmd = SD_CMD_CMD13_SEND_STATUS | SD_CMD_CMD_TYPE_NORMAL | SD_CMD_DP_NO_DATA_PRESENT |
+			SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE | SD_CMD_RSP_TYPE_R1;
+		if (sdcmd(cmd, arg, resp) == -1)
+			return(-1);
+	} while ((resp[0] & SD_RSP10_R1_CURRENT_STATE) != SD_RSP10_R1_CURRENT_STATE_STANDBY);
+
+	return(0);
 }
 
 int
 sdWrite(int interface, char *buf, int blknum, int blkcount)
 {
-	return(-1);
+	uint32_t cmd, arg, resp[4];
+	uint32_t *wordptr = (uint32_t *) buf;
+	int byteindex;
+
+	/* Get the SD card's status by sending CMD13 */
+	arg = (sdrca << 16) & 0xFFFF0000;
+	cmd = SD_CMD_CMD13_SEND_STATUS | SD_CMD_CMD_TYPE_NORMAL | SD_CMD_DP_NO_DATA_PRESENT |
+		SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE | SD_CMD_RSP_TYPE_R1;
+	if (sdcmd(cmd, arg, resp) == -1)
+		return(-1);
+
+	/* Ensure that the card is in the Transfer State before proceeding */
+	if ((resp[0] & SD_RSP10_R1_CURRENT_STATE) != SD_RSP10_R1_CURRENT_STATE_TRANSFER) {
+		arg = (sdrca << 16) & 0xFFFF0000;
+		cmd  = SD_CMD_CMD7_SELECT_DESELECT_CARD | SD_CMD_CMD_TYPE_NORMAL |
+			SD_CMD_DP_NO_DATA_PRESENT | SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE |
+			SD_CMD_RSP_TYPE_R1B;
+		if (sdcmd(cmd, arg, resp) == -1)
+			return(-1);
+
+		/* Wait for SD card to enter Transfer State */
+		do {
+			arg = (sdrca << 16) & 0xFFFF0000;
+			cmd = SD_CMD_CMD13_SEND_STATUS | SD_CMD_CMD_TYPE_NORMAL |
+				SD_CMD_DP_NO_DATA_PRESENT | SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE |
+				SD_CMD_RSP_TYPE_R1;
+			if (sdcmd(cmd, arg, resp) == -1)
+				return(-1);
+		} while ((resp[0] & SD_RSP10_R1_CURRENT_STATE) != SD_RSP10_R1_CURRENT_STATE_TRANSFER);
+	}
+
+	/* Set the block length in bytes and the number of blocks to write to the SD card */
+	MMCHS0_REG(SD_BLK) = SD_BLKSIZE | ( blkcount << 16);
+	/* Send CMD25, that is write the number of blocks specified in 'blkcount' from 'buf' to the
+	 * location that is 512 byte aligned in the SD card specified by the block number 'blknum'
+	 */
+	arg = blknum;
+	cmd = SD_CMD_CMD25_WRITE_MULTIPLE_BLOCK | SD_CMD_CMD_TYPE_NORMAL | SD_CMD_DP_DATA_PRESENT |
+		SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE | SD_CMD_RSP_TYPE_R1 | SD_CMD_MSBS_MULTIPLE |
+		SD_CMD_DDIR_WRITE | SD_CMD_ACEN_CMD12_ENABLE | SD_CMD_BCE_ENABLE;
+	if (sdcmd(cmd, arg, resp) == -1)
+		return(-1);
+
+	/* Write the data */
+	do {
+		/* Wait until data is ready to be written */
+		while (!(MMCHS0_REG(SD_STAT) & (SD_STAT_BWR | SD_STAT_TC)));
+
+		if (MMCHS0_REG(SD_STAT) & SD_STAT_TC)
+			break;
+
+		/* Clear the BWR status bit in SD_STAT */
+		MMCHS0_REG(SD_STAT) |= SD_STAT_BWR;
+
+		for (byteindex = 0; byteindex < (SD_BLKSIZE / 4); byteindex++)
+			MMCHS0_REG(SD_DATA) = *wordptr++;
+	} while (!(MMCHS0_REG(SD_STAT) & SD_STAT_TC));
+
+	/* Put the SD card into Stand-by State */
+	arg = 0x00000000;
+	cmd = SD_CMD_CMD7_SELECT_DESELECT_CARD | SD_CMD_CMD_TYPE_NORMAL | SD_CMD_DP_NO_DATA_PRESENT |
+		SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE | SD_CMD_RSP_TYPE_NO_RESPONSE;
+	if (sdcmd(cmd, arg, resp) == -1)
+		return(-1);
+
+	/* Wait for SD card to enter Stand-by State */
+	do {
+		arg= (sdrca << 16) & 0xFFFF0000;
+		cmd  = SD_CMD_CMD13_SEND_STATUS | SD_CMD_CMD_TYPE_NORMAL | SD_CMD_DP_NO_DATA_PRESENT |
+			SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE | SD_CMD_RSP_TYPE_R1;
+		if (sdcmd(cmd, arg, resp) == -1)
+			return(-1);
+	} while ((resp[0] & SD_RSP10_R1_CURRENT_STATE) != SD_RSP10_R1_CURRENT_STATE_STANDBY);
+
+	return(0);
 }
 
 int
 sdInstalled(int interface)
 {
-	return(-1);
+	if ((MMCHS0_REG(SD_CON) & SD_CON_CDP) == SD_CON_CDP_ACTIVE_HIGH)
+		if (MMCHS0_REG(SD_PSTATE) & SD_PSTATE_CINS)
+			return(1);
+		else
+			return(0);
+	else
+		if (MMCHS0_REG(SD_PSTATE) & SD_PSTATE_CINS)
+			return(0);
+		else
+			return(1);
 }
 
 int
