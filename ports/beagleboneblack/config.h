@@ -188,7 +188,7 @@
 #define INCLUDE_JFFS2ZLIB	0
 #define INCLUDE_FBI		0
 #define INCLUDE_TSI		0
-#define INCLUDE_SD		0
+#define INCLUDE_SD		1
 #define INCLUDE_DNS		0
 #define INCLUDE_BLINKLED	1
 #define TARGET_BLINKLED target_blinkled
