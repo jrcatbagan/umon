@@ -176,8 +176,9 @@ Xmodem(int argc,char *argv[])
 {
 	int	opt, xop;
 	struct	xinfo xi;
-	char	*info, *flags;
 #if INCLUDE_TFS
+	char	*info = (char *)0;
+    char    *flags = (char *)0;
 	TFILE	*tfp;
 #endif
 #if INCLUDE_FLASH
@@ -188,8 +189,6 @@ Xmodem(int argc,char *argv[])
 #endif
 
 	xop = XNULL;
-	info = (char *)0;
-	flags = (char *)0;
 	xi.fname[0] = 0;
 	xi.size = 0;
 	xi.flags = 0;
