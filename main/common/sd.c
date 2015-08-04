@@ -90,7 +90,7 @@ char *SdHelp[] = {
 	" init [prefix]",
 	" cmd {cmdnum} [arg]",
 	" read {dest} {blk} {blktot}",
-	" write {blk} {dest} {blktot}",
+	" write {src} {blk} {blktot}",
 #endif
 	0
 };
