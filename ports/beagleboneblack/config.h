@@ -164,7 +164,7 @@
 #define INCLUDE_TFSAPI          0
 #define INCLUDE_TFSSCRIPT       0
 #define INCLUDE_TFSSYMTBL       0
-#define INCLUDE_XMODEM          0
+#define INCLUDE_XMODEM          1
 #define INCLUDE_LINEEDIT        0
 #define INCLUDE_EE              0
 #define INCLUDE_FLASH           0
