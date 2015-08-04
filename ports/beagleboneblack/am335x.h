@@ -264,12 +264,15 @@
 /*===========================================================================*/
 /* CM_PER Registers */
 /*===========================================================================*/
-#define CM_PER_L3_CLKSTCTRL		0x0C
-#define CM_PER_EMIF_CLKCTRL		0x28
-#define CM_PER_MMC0_CLKCTRL		0x3C
+#define CM_PER_L3_CLKSTCTRL			0x0C
+#define CM_PER_EMIF_CLKCTRL			0x28
+#define CM_PER_MMC0_CLKCTRL			0x3C
 #define CM_PER_MMC0_CLKCTRL_MODULEMODE_ENABLE	0x02
-#define CM_PER_MMC0_CLKCTRL_IDLEST	0x00030000
-#define CM_PER_GPIO1_CLKCTRL		0xAC
+#define CM_PER_MMC0_CLKCTRL_IDLEST		0x00030000
+#define CM_PER_GPIO1_CLKCTRL			0xAC
+#define CM_PER_MMC1_CLKCTRL			0xF4
+#define CM_PER_MMC1_CLKCTRL_MODULEMODE_ENABLE	0x02
+#define CM_PER_MMC1_CLKCTRL_IDLEST		0x00030000
 /*===========================================================================*/
 
 
@@ -343,10 +346,20 @@
 /*===========================================================================*/
 #define CONTROL_STATUS			0x0040
 #define CONTROL_EMIF_SDRAM_CONFIG	0x0110
+#define CONF_GPMC_AD0			0x0800
+#define CONF_GPMC_AD1			0x0804
+#define CONF_GPMC_AD2			0x0808
+#define CONF_GPMC_AD3			0x080C
+#define CONF_GPMC_AD4			0x0810
+#define CONF_GPMC_AD5			0x0814
+#define CONF_GPMC_AD6			0x0818
+#define CONF_GPMC_AD7			0x081C
 #define CONF_GPMC_A5                    0x0854
 #define CONF_GPMC_A6                    0x0858
 #define CONF_GPMC_A7                    0x085c
 #define CONF_GPMC_A8                    0x0860
+#define CONF_GPMC_CSN1			0x0880
+#define CONF_GPMC_CSN2			0x0884
 #define CONF_MMC0_DAT3			0x08F0
 #define CONF_MMC0_DAT2			0x08F4
 #define CONF_MMC0_DAT1			0x08F8
@@ -1426,6 +1439,7 @@
 #define SD_PSTATE			0x0224
 #define SD_PSTATE_CLEV			0x01000000
 #define SD_PSTATE_DLEV			0x00F00000
+#define SD_PSTATE_DLEV_DAT0		0x00100000
 #define SD_PSTATE_WP			0x00080000
 #define SD_PSTATE_CDPL			0x00040000
 #define SD_PSTATE_CSS			0x00020000
