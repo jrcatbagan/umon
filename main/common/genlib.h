@@ -1,7 +1,7 @@
 /**************************************************************************
  *
  * Copyright (c) 2013 Alcatel-Lucent
- * 
+ *
  * Alcatel Lucent licenses this file to You under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License.  A copy of the License is contained the
@@ -95,7 +95,7 @@ extern int getline(char *,int,int);
 extern int getline_t(char *,int,int);
 extern int getline_p(char *,int,int,char *);
 extern int getfullline(char *buf,int max,int ledit,int timeout,\
-	char *prefill, int echo);
+                       char *prefill, int echo);
 extern int stkchk(char *);
 extern int inRange(char *,int);
 extern int More(void);
@@ -192,7 +192,7 @@ extern void getargv(int *argc, char ***argv);
 extern void init0(void), init1(void), init2(void), init3(void);
 extern void EnableBreakInterrupt(void);
 extern void DisableBreakInterrupt(void);
-extern void	ctxMON(void), ctxAPP(void);
+extern void ctxMON(void), ctxAPP(void);
 extern void printMem(unsigned char *,int,int);
 extern void monDelay(int);
 extern void ticktock(void);
@@ -222,24 +222,24 @@ extern unsigned long APPLICATION_RAMSTART, BOOTROM_BASE;
 extern int ConsoleDevice;
 extern int ConsoleBaudRate;
 extern int StateOfMonitor, AppExitStatus, ExceptionType;
-extern int	bss_start, bss_end, boot_base;
-extern int  (*remoterawon)(void), (*remoterawoff)(void);
-extern int  (*remoteputchar)(int), (*remotegetchar)(void);
-extern int	(*remotegotachar)(void);
-extern int  (*dcacheFlush)(char *,int), (*icacheInvalidate)(char *,int);
-extern int	(*extgetUsrLvl)(void);
-extern int	(*moncomptr)(int,void *, void *, void *);
+extern int  bss_start, bss_end, boot_base;
+extern int (*remoterawon)(void), (*remoterawoff)(void);
+extern int (*remoteputchar)(int), (*remotegetchar)(void);
+extern int (*remotegotachar)(void);
+extern int (*dcacheFlush)(char *,int), (*icacheInvalidate)(char *,int);
+extern int (*extgetUsrLvl)(void);
+extern int (*moncomptr)(int,void *, void *, void *);
 
-#define STACK_PREINIT_VAL	0x63636363
+#define STACK_PREINIT_VAL   0x63636363
 
 /* If the watchdog macro is defined, then we also define the
  * WATCHDOG_ENABLED macro so that code can use #ifdef WATCHDOG_ENABLED
  * or simply insert WATCHDOG_MACRO inline...
  * This eliminates the need for the ifdef wrapper if no other code is
- * included with the macro. 
+ * included with the macro.
  */
 #ifdef WATCHDOG_MACRO
-extern int	(*remoteWatchDog)(void);
+extern int (*remoteWatchDog)(void);
 #define WATCHDOG_ENABLED
 #else
 #define WATCHDOG_MACRO
@@ -256,13 +256,13 @@ extern int	(*remoteWatchDog)(void);
 #endif
 
 typedef struct {
-	int quot;
-	int rem;
+    int quot;
+    int rem;
 } div_t;
 
 typedef struct {
-	long int quot;
-	long int rem;
+    long int quot;
+    long int rem;
 } ldiv_t;
 
 extern ldiv_t ldiv(long,long);

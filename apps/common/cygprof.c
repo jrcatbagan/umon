@@ -10,17 +10,17 @@
 int cyg_prof_on;
 
 void
-__cyg_profile_func_enter (void *this_fn, void *call_site)
+__cyg_profile_func_enter(void *this_fn, void *call_site)
 {
-    if (cyg_prof_on) {
+    if(cyg_prof_on) {
         mon_memtrace("IN:  %x %x\n", this_fn, call_site);
     }
 }
 
 void
-__cyg_profile_func_exit (void *this_fn, void *call_site)
+__cyg_profile_func_exit(void *this_fn, void *call_site)
 {
-    if (cyg_prof_on) {
-		mon_memtrace("OUT: %x %x\n", this_fn, call_site);
+    if(cyg_prof_on) {
+        mon_memtrace("OUT: %x %x\n", this_fn, call_site);
     }
 }

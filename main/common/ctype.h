@@ -32,11 +32,11 @@
  * SUCH DAMAGE.
  *
  * $FreeBSD$
- * 
+ *
  * Pulled in this file from: http://fxr.watson.org/fxr/source/sys/ctype.h
- * Modifications (Ed Sutter): 
+ * Modifications (Ed Sutter):
  * - removed ifdef/endif _KERNEL
- * - isidigit() originally was ((c) >= '' && (c) <= '9')  
+ * - isidigit() originally was ((c) >= '' && (c) <= '9')
  */
 
 #ifndef _SYS_CTYPE_H_

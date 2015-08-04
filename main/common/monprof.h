@@ -1,7 +1,7 @@
 /**************************************************************************
  *
  * Copyright (c) 2013 Alcatel-Lucent
- * 
+ *
  * Alcatel Lucent licenses this file to You under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License.  A copy of the License is contained the
@@ -26,14 +26,14 @@
 #ifndef _MONPROF_H_
 #define _MONPROF_H_
 
-#define MONPROF_FUNCLOG		(1 << 0)
-#define MONPROF_TIDLOG		(1 << 1)		
-#define MONPROF_PCLOG		(1 << 2)		
+#define MONPROF_FUNCLOG     (1 << 0)
+#define MONPROF_TIDLOG      (1 << 1)
+#define MONPROF_PCLOG       (1 << 2)
 
 struct monprof {
-	unsigned long	type;
-	unsigned long	pc;
-	unsigned long	tid;
+    unsigned long   type;
+    unsigned long   pc;
+    unsigned long   tid;
 };
 
 #endif

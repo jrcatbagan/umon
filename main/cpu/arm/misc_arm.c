@@ -32,10 +32,10 @@
 void
 putpsr(unsigned long psr)
 {
-	volatile unsigned register reg;
+    volatile unsigned register reg;
 
-	reg = psr;
-	asm volatile ("msr CPSR_c, %0" : "=r" (reg)); 
+    reg = psr;
+    asm volatile("msr CPSR_c, %0" : "=r"(reg));
 }
 
 /*
@@ -46,9 +46,9 @@ putpsr(unsigned long psr)
 unsigned long
 getpsr(void)
 {
-	volatile unsigned register reg;
-	asm volatile ("mrs %0, CPSR" : "=r" (reg)); 
-	return(reg);
+    volatile unsigned register reg;
+    asm volatile("mrs %0, CPSR" : "=r"(reg));
+    return(reg);
 }
 
 /* getsp():
@@ -58,7 +58,7 @@ getpsr(void)
 unsigned long
 getsp(void)
 {
-	volatile unsigned register reg;
-	asm volatile ("mov %0, r13" : "=r" (reg)); 
-	return(reg);
+    volatile unsigned register reg;
+    asm volatile("mov %0, r13" : "=r"(reg));
+    return(reg);
 }

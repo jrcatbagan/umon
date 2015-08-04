@@ -1,7 +1,7 @@
 /**************************************************************************
  *
  * Copyright (c) 2013 Alcatel-Lucent
- * 
+ *
  * Alcatel Lucent licenses this file to You under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License.  A copy of the License is contained the
@@ -29,20 +29,20 @@
 #define _BOARDINFO_H_
 
 struct boardinfo {
-	unsigned char *array;
-	short size;
-	char *varname;
-	char *def;
-	char *prompt;
+    unsigned char *array;
+    short size;
+    char *varname;
+    char *def;
+    char *prompt;
 };
 
 struct boardinfoverify {
-	unsigned short len;
-	unsigned short crc16;
-}; 
+    unsigned short len;
+    unsigned short crc16;
+};
 
-#define BISIZE		sizeof(struct boardinfo)
-#define BIVSIZE		sizeof(struct boardinfoverify)
+#define BISIZE      sizeof(struct boardinfo)
+#define BIVSIZE     sizeof(struct boardinfoverify)
 
 /* boardinfotbl[]:
  * If the "boardinfo" facility in the monitor is to be used, then

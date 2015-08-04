@@ -1,7 +1,7 @@
 /**************************************************************************
  *
  * Copyright (c) 2013 Alcatel-Lucent
- * 
+ *
  * Alcatel Lucent licenses this file to You under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License.  A copy of the License is contained the
@@ -28,62 +28,62 @@
 #ifndef _FLASH_H_
 #define _FLASH_H_
 
-#define FLASH_PROTECT_WINDOW_CLOSED	0
+#define FLASH_PROTECT_WINDOW_CLOSED 0
 #define ALL_SECTORS -1
 
 #ifndef FLASH_LOOP_TIMEOUT
 #define FLASH_LOOP_TIMEOUT 1000000
 #endif
 
-#define FLASH_LOCK			1
-#define FLASH_UNLOCK		2
-#define FLASH_LOCKDWN		3
-#define FLASH_LOCKQRY		4
-#define FLASH_LOCKABLE		5		/* query driver for lock support */
+#define FLASH_LOCK          1
+#define FLASH_UNLOCK        2
+#define FLASH_LOCKDWN       3
+#define FLASH_LOCKQRY       4
+#define FLASH_LOCKABLE      5       /* query driver for lock support */
 
 /* Device ID used for ram that is "pretending" to be a flash bank. */
-#define FLASHRAM	0x9999
+#define FLASHRAM    0x9999
 
-struct	flashdesc {
-	unsigned long	id;			/* manufacturer & device id */
-	char		*desc;			/* ascii string */
+struct  flashdesc {
+    unsigned long   id;         /* manufacturer & device id */
+    char        *desc;          /* ascii string */
 };
 
-struct	sectorinfo {
-	long	size;				/* size of sector */
-	int		snum;			/* number of sector (amongst possibly */
-						/* several devices) */
-	int		protected;		/* if set, sector is protected by window */
-	unsigned char	*begin;			/* base address of sector */
-	unsigned char	*end;			/* end address of sector */
+struct  sectorinfo {
+    long    size;               /* size of sector */
+    int     snum;           /* number of sector (amongst possibly */
+    /* several devices) */
+    int     protected;      /* if set, sector is protected by window */
+    unsigned char   *begin;         /* base address of sector */
+    unsigned char   *end;           /* end address of sector */
 };
 
-struct	flashinfo {
-	unsigned long	id;			/* manufacturer & device id */
-	unsigned char	*base;			/* base address of device */
-	unsigned char	*end;			/* end address of device */
-	int		sectorcnt;		/* number of sectors */
-	int		width;			/* 1, 2, or 4 */
-	int	 	(*fltype)(struct flashinfo *);
-	int	 	(*flerase)(struct flashinfo *, int);
+struct  flashinfo {
+    unsigned long   id;         /* manufacturer & device id */
+    unsigned char   *base;          /* base address of device */
+    unsigned char   *end;           /* end address of device */
+    int     sectorcnt;      /* number of sectors */
+    int     width;          /* 1, 2, or 4 */
+    int (*fltype)(struct flashinfo *);
+    int (*flerase)(struct flashinfo *, int);
 #if INCLUDE_FLASHREAD
-	int	 	(*flread)(struct flashinfo *,unsigned char *,\
-			unsigned char *,long);
+    int (*flread)(struct flashinfo *,unsigned char *,\
+                  unsigned char *,long);
 #endif
-	int	 	(*flwrite)(struct flashinfo *,unsigned char *,\
-			unsigned char *,long);
-	int	 	(*flewrite)(struct flashinfo *,unsigned char *,\
-			unsigned char *,long);
-	int	 	(*fllock)(struct flashinfo *,int,int);
-	struct sectorinfo *sectors;
+    int (*flwrite)(struct flashinfo *,unsigned char *,\
+                   unsigned char *,long);
+    int (*flewrite)(struct flashinfo *,unsigned char *,\
+                    unsigned char *,long);
+    int (*fllock)(struct flashinfo *,int,int);
+    struct sectorinfo *sectors;
 };
 
-extern int 		FlashTrace;
-extern int 		FlashProtectWindow;
-extern int 		FlashCurrentBank;
-extern struct	flashinfo FlashBank[FLASHBANKS];
-extern int		flashopload(unsigned long *begin,unsigned long *end, \
-				unsigned long *copy,int size);
+extern int      FlashTrace;
+extern int      FlashProtectWindow;
+extern int      FlashCurrentBank;
+extern struct   flashinfo FlashBank[FLASHBANKS];
+extern int      flashopload(unsigned long *begin,unsigned long *end, \
+                            unsigned long *copy,int size);
 
 extern int showflashtype(unsigned long, int);
 extern int showflashinfo(char *);
@@ -114,8 +114,8 @@ extern int FlashRamInit(int, int, struct flashinfo *,struct sectorinfo *,int *);
 extern int InFlashSpace(unsigned char *begin, int size);
 extern int FlashOpOverride(void *flashinfo,int get,int bank);
 
-#define NotAligned16(add)	((long)add & 1)
-#define NotAligned32(add)	((long)add & 3)
+#define NotAligned16(add)   ((long)add & 1)
+#define NotAligned32(add)   ((long)add & 3)
 
 #ifdef FLASHRAM_BASE
 extern int ramSectors[];

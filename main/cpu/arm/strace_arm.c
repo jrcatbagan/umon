@@ -53,104 +53,111 @@ char *StraceHelp[] = {
 int
 Strace(int argc,char *argv[])
 {
-	TFILE	*tfp;
-	char	*symfile, *stopat, fname[64];
-	ulong	*framepointer, pc, fp, offset;
-    int		tfd, opt, maxdepth, pass, verbose;
+    TFILE   *tfp;
+    char    *symfile, *stopat, fname[64];
+    ulong   *framepointer, pc, fp, offset;
+    int     tfd, opt, maxdepth, pass, verbose;
 
-	tfd = fp = 0;
-	maxdepth = 20;
-	verbose = 0;
-	stopat = 0;
-	pc = ExceptionAddr;
-    while ((opt=getopt(argc,argv,"d:rs:v")) != -1) {
-		switch(opt) {
-		case 'd':
-			maxdepth = atoi(optarg);
-			break;
-		case 'r':
-			showregs();
-			break;
-		case 's':
-			stopat = optarg;
-			break;
-		case 'v':
-			verbose = 1;
-			break;
-	    default:
-			return(0);
-		}
-	}
-	
-	if (!fp)
-		getreg("R11", &fp);
+    tfd = fp = 0;
+    maxdepth = 20;
+    verbose = 0;
+    stopat = 0;
+    pc = ExceptionAddr;
+    while((opt=getopt(argc,argv,"d:rs:v")) != -1) {
+        switch(opt) {
+        case 'd':
+            maxdepth = atoi(optarg);
+            break;
+        case 'r':
+            showregs();
+            break;
+        case 's':
+            stopat = optarg;
+            break;
+        case 'v':
+            verbose = 1;
+            break;
+        default:
+            return(0);
+        }
+    }
 
-	framepointer = (ulong *)fp;
+    if(!fp) {
+        getreg("R11", &fp);
+    }
 
-	/* Start by detecting the presence of a symbol table file... */
-	symfile = getenv("SYMFILE");
-	if (!symfile)
-		symfile = SYMFILE;
+    framepointer = (ulong *)fp;
 
-	tfp = tfsstat(symfile);
-	if (tfp)  {
-		tfd = tfsopen(symfile,TFS_RDONLY,0);
-		if (tfd < 0)
-			tfp = (TFILE *)0;
-	}
+    /* Start by detecting the presence of a symbol table file... */
+    symfile = getenv("SYMFILE");
+    if(!symfile) {
+        symfile = SYMFILE;
+    }
 
-	/* Show current position: */
-	printf("   0x%08lx",pc);
-	if (tfp) {
-		AddrToSym(tfd,pc,fname,&offset);
-		printf(": %s()",fname);
-		if (offset)
-			printf(" + 0x%lx",offset);
-	}
-	putchar('\n');
+    tfp = tfsstat(symfile);
+    if(tfp)  {
+        tfd = tfsopen(symfile,TFS_RDONLY,0);
+        if(tfd < 0) {
+            tfp = (TFILE *)0;
+        }
+    }
 
-	/* Now step through the stack frame... */
-	pass = 0;
-	while(maxdepth) {
-		if (pass != 0) 
-			framepointer = (ulong *)*(framepointer - 3);
-		
-		pc = *(framepointer - 1);
+    /* Show current position: */
+    printf("   0x%08lx",pc);
+    if(tfp) {
+        AddrToSym(tfd,pc,fname,&offset);
+        printf(": %s()",fname);
+        if(offset) {
+            printf(" + 0x%lx",offset);
+        }
+    }
+    putchar('\n');
 
-		if (verbose) {
-			printf("fp=0x%lx,*fp=0x%lx,pc=%lx\n", (ulong)framepointer,
-				(ulong)*framepointer,pc);
-		}
+    /* Now step through the stack frame... */
+    pass = 0;
+    while(maxdepth) {
+        if(pass != 0) {
+            framepointer = (ulong *)*(framepointer - 3);
+        }
 
-		if (((ulong)framepointer & 3) || (!framepointer) ||
-			(!*framepointer) || (!pc)) {
-			break;
-		}
+        pc = *(framepointer - 1);
 
-		printf("   0x%08lx",pc);
-		if (tfp) {
-			int match;
+        if(verbose) {
+            printf("fp=0x%lx,*fp=0x%lx,pc=%lx\n", (ulong)framepointer,
+                   (ulong)*framepointer,pc);
+        }
 
-			match = AddrToSym(tfd,pc,fname,&offset);
-			printf(": %s()",fname);
-			if (offset)
-				printf(" + 0x%lx",offset);
-			if ((!match) || ((stopat != 0) && (strcmp(fname,stopat) == 0))) {
-				putchar('\n');
-				break;
-			}
-		}
-		putchar('\n');
-		maxdepth--;
-		pass++;
-	}
+        if(((ulong)framepointer & 3) || (!framepointer) ||
+                (!*framepointer) || (!pc)) {
+            break;
+        }
 
-	if (!maxdepth)
-		printf("Max depth termination\n");
-	
-	if (tfp) {
-		tfsclose(tfd,0);
-	}
+        printf("   0x%08lx",pc);
+        if(tfp) {
+            int match;
+
+            match = AddrToSym(tfd,pc,fname,&offset);
+            printf(": %s()",fname);
+            if(offset) {
+                printf(" + 0x%lx",offset);
+            }
+            if((!match) || ((stopat != 0) && (strcmp(fname,stopat) == 0))) {
+                putchar('\n');
+                break;
+            }
+        }
+        putchar('\n');
+        maxdepth--;
+        pass++;
+    }
+
+    if(!maxdepth) {
+        printf("Max depth termination\n");
+    }
+
+    if(tfp) {
+        tfsclose(tfd,0);
+    }
     return(0);
 }
 #endif

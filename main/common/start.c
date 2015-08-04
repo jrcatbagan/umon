@@ -1,7 +1,7 @@
 /**************************************************************************
  *
  * Copyright (c) 2013 Alcatel-Lucent
- * 
+ *
  * Alcatel Lucent licenses this file to You under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License.  A copy of the License is contained the
@@ -22,7 +22,7 @@
  *
  * This is typically the first 'C' code executed by the processor after a
  * reset.
- * 
+ *
  * Original author:     Ed Sutter (ed.sutter@alcatel-lucent.com)
  *
  */
@@ -49,42 +49,42 @@ extern void PRE_COMMANDLOOP_HOOK();
 #define EXCEPTION_HEADING "EXCEPTION"
 #endif
 
-extern	void vinit(void);
-extern	int addcommand(struct monCommand *cmdlist, char *cmdlvl);
+extern  void vinit(void);
+extern  int addcommand(struct monCommand *cmdlist, char *cmdlvl);
 
 /* StateOfMonitor:
  * The StateOfMonitor variable is used throughout the code to determine
- * how the monitor started up.  In general, the three most common 
+ * how the monitor started up.  In general, the three most common
  * startup types are: INITIALIZE, APP_EXIT and EXCEPTION.
  */
-int		StateOfMonitor;
+int     StateOfMonitor;
 
 /* MonStack:
  * The monitor's stack is declared within the monitor's own .bss space.
  * This keeps the memory map simple, the only thing that needs to be
  * accounted for is that in the bss init loop, this section should not
- * be initialized.  MONSTACKSIZE must be defined in config.h.  
+ * be initialized.  MONSTACKSIZE must be defined in config.h.
  */
-ulong	MonStack[MONSTACKSIZE/4];
+ulong   MonStack[MONSTACKSIZE/4];
 
 /* APPLICATION_RAMSTART:
  * Loaded with the address after which the application can be loaded.
  */
-ulong	APPLICATION_RAMSTART;
+ulong   APPLICATION_RAMSTART;
 
 /* BOOTROM_BASE:
  * Loaded with the address considered to be the base address at which
  * the monitor is burned into flash.
  */
-ulong	BOOTROM_BASE;
+ulong   BOOTROM_BASE;
 
 /* LoopsPerMillisecond:
  * Loaded with a count (established in config.h) that is an estimation of
  * one second of elapsed time.  It is NOT an accurate value, but serves the
- * purpose of providing a hardware-independent mechanism for establishing 
+ * purpose of providing a hardware-independent mechanism for establishing
  * a reasonable estimation of one second's worth of elapsed time.
  */
-ulong	LoopsPerMillisecond;
+ulong   LoopsPerMillisecond;
 
 /* init0():
  * The code in this function was originally part of start().  It has been
@@ -96,33 +96,33 @@ init0(void)
 {
     /* Store the base address of memory that is used by application.
      * Start it off on the next 4K boundary after the end of monitor ram.
-	 * Usually APPRAMBASE and BOOTROMBASE can be retrieved from bss_end and
-	 * boot_base; but they can be overridden with values specified in the
-	 * target-specific config.h file.
-	 */
+     * Usually APPRAMBASE and BOOTROMBASE can be retrieved from bss_end and
+     * boot_base; but they can be overridden with values specified in the
+     * target-specific config.h file.
+     */
 #ifdef APPRAMBASE_OVERRIDE
-	APPLICATION_RAMSTART = APPRAMBASE_OVERRIDE;
+    APPLICATION_RAMSTART = APPRAMBASE_OVERRIDE;
 #else
-	APPLICATION_RAMSTART = (((ulong)&bss_end) | 0xfff) + 1;
+    APPLICATION_RAMSTART = (((ulong)&bss_end) | 0xfff) + 1;
 #endif
 
 #ifdef BOOTROMBASE_OVERRIDE
-	BOOTROM_BASE = BOOTROMBASE_OVERRIDE;
+    BOOTROM_BASE = BOOTROMBASE_OVERRIDE;
 #else
-	BOOTROM_BASE = (ulong)&boot_base;
+    BOOTROM_BASE = (ulong)&boot_base;
 #endif
 
-	/* Load bottom of stack with 0xdeaddead to be used by stkchk().
-	 */
-	MonStack[0] = 0xdeaddead;
+    /* Load bottom of stack with 0xdeaddead to be used by stkchk().
+     */
+    MonStack[0] = 0xdeaddead;
 
-	/* Set up default loops-per-millisecond count.
-	 */
-	LoopsPerMillisecond = LOOPS_PER_SECOND/1000;
+    /* Set up default loops-per-millisecond count.
+     */
+    LoopsPerMillisecond = LOOPS_PER_SECOND/1000;
 
-	/* Clear any user-installed command list.
-	 */
-	addcommand(0,0);
+    /* Clear any user-installed command list.
+     */
+    addcommand(0,0);
 }
 
 /* init1():
@@ -132,17 +132,18 @@ init0(void)
 void
 init1(void)
 {
-	initCPUio();		/* Configure all chip-selects, parallel IO
-						 * direction registers, etc...  This may have
-						 * been done already in reset.s
-						 */
-	vinit();			/* Initialize the CPU's vector table. */
-	InitRemoteIO();		/* Initialize all application-settable IO functions */
+    initCPUio();        /* Configure all chip-selects, parallel IO
+                         * direction registers, etc...  This may have
+                         * been done already in reset.s
+                         */
+    vinit();            /* Initialize the CPU's vector table. */
+    InitRemoteIO();     /* Initialize all application-settable IO functions */
 
-	if (ConsoleBaudRate == 0)
-		ConsoleBaudRate = DEFAULT_BAUD_RATE;
+    if(ConsoleBaudRate == 0) {
+        ConsoleBaudRate = DEFAULT_BAUD_RATE;
+    }
 
-	devInit(ConsoleBaudRate);
+    devInit(ConsoleBaudRate);
 
 }
 
@@ -152,19 +153,21 @@ void
 init2(void)
 {
 #if INCLUDE_FLASH | INCLUDE_TFS
-	int rc = 0;
+    int rc = 0;
 #endif
 
 #if INCLUDE_FBI
-	if (StateOfMonitor == INITIALIZE)
-		fbdev_init();	/* Initialize the frame-buffer device */
+    if(StateOfMonitor == INITIALIZE) {
+        fbdev_init();    /* Initialize the frame-buffer device */
+    }
 #endif
 
 #if INCLUDE_FLASH
-	if (StateOfMonitor == INITIALIZE)
-    	rc = FlashInit();	/* Init flashop data structures and (possibly) */
-							/* the relocatable functions.  This MUST be */
-#endif						/* done prior to turning on cache!!! */
+    if(StateOfMonitor == INITIALIZE) {
+        rc = FlashInit();    /* Init flashop data structures and (possibly) */
+    }
+    /* the relocatable functions.  This MUST be */
+#endif                      /* done prior to turning on cache!!! */
 
     cacheInit();        /* Initialize cache. */
 
@@ -173,32 +176,33 @@ init2(void)
 #endif
 
 #if INCLUDE_TFS
-	if (rc != -1)		/* Start up TFS as long as flash */
-	    tfsstartup();	/* initialization didn't fail. */
+    if(rc != -1) {      /* Start up TFS as long as flash */
+        tfsstartup();    /* initialization didn't fail. */
+    }
 #endif
 }
 
 /* init3():
- *	As each target boots up, it calls init1() and init2() to do multiple
- *	phases of hardware initialization.  This third initialization phase
- *	is always common to all targets...
+ *  As each target boots up, it calls init1() and init2() to do multiple
+ *  phases of hardware initialization.  This third initialization phase
+ *  is always common to all targets...
  *  It is possible that this is being called by AppWarmStart().  In this
- *	case, the user can specify which portions of the monitor code are
- *	to be initialized by specifying them in the startmode mask.
+ *  case, the user can specify which portions of the monitor code are
+ *  to be initialized by specifying them in the startmode mask.
  */
 static void
 _init3(ulong startmode)
 {
-	char *baud;
+    char *baud;
 
 #if INCLUDE_LINEEDIT
-	/* Initialize command line history table. */
-	historyinit();
+    /* Initialize command line history table. */
+    historyinit();
 #endif
 
 #if INCLUDE_SHELLVARS
-	/* Init shell variable table. */
-	ShellVarInit();
+    /* Init shell variable table. */
+    ShellVarInit();
 #endif
 
 #if INCLUDE_USRLVL
@@ -207,91 +211,98 @@ _init3(ulong startmode)
 #endif
 
 #if INCLUDE_BOARDINFO
-	/* Check for board-specific-information in some otherwise unused
-	 * sector.  Also, establish shell variables from this information
-	 * based on the content of the boardinfo structure.
-	 * Note that the second half of the board-specific information setup
-	 * (the call to BoardInfoEnvInit()) must be done AFTER ShellVarInit()
-	 * because shell variables are established here.
-	 */
-	if (startmode & WARMSTART_BOARDINFO) {
-		BoardInfoInit();
-		BoardInfoEnvInit();
-	}
+    /* Check for board-specific-information in some otherwise unused
+     * sector.  Also, establish shell variables from this information
+     * based on the content of the boardinfo structure.
+     * Note that the second half of the board-specific information setup
+     * (the call to BoardInfoEnvInit()) must be done AFTER ShellVarInit()
+     * because shell variables are established here.
+     */
+    if(startmode & WARMSTART_BOARDINFO) {
+        BoardInfoInit();
+        BoardInfoEnvInit();
+    }
 #endif
 
 #ifdef MONCOMPTR
-	/* If MONCOMPTR is defined, then verify that the definition matches
-	 * the location of the actual moncomptr value.  The definition in
-	 * config.h is provided so that outside applications can include that
-	 * header file so that the value passed into monConnect() is defined
-	 * formally. The REAL value of moncomptr is based on the location of
-	 * the pointer in monitor memory space, determined only after the final
-	 * link has been done.  As a result, this check is used to simply verify
-	 * that the definition matches the actual value.
-	 */
-	{
-	if (MONCOMPTR != (ulong)&moncomptr)
-		printf("\nMONCOMPTR WARNING: runtime != definition\n"); 
-	}
+    /* If MONCOMPTR is defined, then verify that the definition matches
+     * the location of the actual moncomptr value.  The definition in
+     * config.h is provided so that outside applications can include that
+     * header file so that the value passed into monConnect() is defined
+     * formally. The REAL value of moncomptr is based on the location of
+     * the pointer in monitor memory space, determined only after the final
+     * link has been done.  As a result, this check is used to simply verify
+     * that the definition matches the actual value.
+     */
+    {
+        if(MONCOMPTR != (ulong)&moncomptr) {
+            printf("\nMONCOMPTR WARNING: runtime != definition\n");
+        }
+    }
 #endif
 
 #if INCLUDE_TFS
-	/* After basic initialization, if the monitor's run-control file
-	 * exists, run it prior to EthernetStartup() so that the
-	 * MAC/IP addresses can be configured based on shell variables
-	 * that would be loaded by the rc file.
-	 */
-	if (startmode & WARMSTART_RUNMONRC)
-		tfsrunrcfile();
+    /* After basic initialization, if the monitor's run-control file
+     * exists, run it prior to EthernetStartup() so that the
+     * MAC/IP addresses can be configured based on shell variables
+     * that would be loaded by the rc file.
+     */
+    if(startmode & WARMSTART_RUNMONRC) {
+        tfsrunrcfile();
+    }
 #endif
 
-	/* After MONRC is run, establish monitor flags...
-	 */
-	InitMonitorFlags();
+    /* After MONRC is run, establish monitor flags...
+     */
+    InitMonitorFlags();
 
-	/* We've run the monrc file at this point, so check for the
-	 * presence of the CONSOLEBAUD shell variable.  If it's set,
-	 * then use the value to re-establish the console baud rate.
-	 * If it isn't set, then establish the CONSOLEBAUD shell variable
-	 * using the default, pre-configured baud rate.
-	 */
-	baud = getenv("CONSOLEBAUD");
-	if (baud) 
-		ChangeConsoleBaudrate(atoi(baud));
-	ConsoleBaudEnvSet();
+    /* We've run the monrc file at this point, so check for the
+     * presence of the CONSOLEBAUD shell variable.  If it's set,
+     * then use the value to re-establish the console baud rate.
+     * If it isn't set, then establish the CONSOLEBAUD shell variable
+     * using the default, pre-configured baud rate.
+     */
+    baud = getenv("CONSOLEBAUD");
+    if(baud) {
+        ChangeConsoleBaudrate(atoi(baud));
+    }
+    ConsoleBaudEnvSet();
 
 #if INCLUDE_ETHERNET
 #if INCLUDE_STOREMAC
-	storeMac(0);
+    storeMac(0);
 #endif
-	if (startmode & WARMSTART_IOINIT)
-		EthernetStartup(0,1);
+    if(startmode & WARMSTART_IOINIT) {
+        EthernetStartup(0,1);
+    }
 #endif
 
-	/* Now that all has been initialized, display the monitor header. */
+    /* Now that all has been initialized, display the monitor header. */
 #ifndef NO_UMON_STARTUP_HDR
-	if (startmode & WARMSTART_MONHEADER) {
-		if (!MFLAGS_NOMONHEADER())
-		    monHeader(1);
-	}
+    if(startmode & WARMSTART_MONHEADER) {
+        if(!MFLAGS_NOMONHEADER()) {
+            monHeader(1);
+        }
+    }
 #endif
 
 #if INCLUDE_FBI
-	if (StateOfMonitor == INITIALIZE)
-		fbi_splash();
+    if(StateOfMonitor == INITIALIZE) {
+        fbi_splash();
+    }
 #endif
 
 #if INCLUDE_TFS
-	if (startmode & WARMSTART_TFSAUTOBOOT)
-		tfsrunboot();
+    if(startmode & WARMSTART_TFSAUTOBOOT) {
+        tfsrunboot();
+    }
 #endif
 }
 
 void
 init3(void)
 {
-	_init3(WARMSTART_ALL);
+    _init3(WARMSTART_ALL);
 }
 
 /* umonBssInit():
@@ -305,17 +316,19 @@ init3(void)
 void
 umonBssInit(void)
 {
-	int *tmp;
-	volatile ulong *bssptr;
+    int *tmp;
+    volatile ulong *bssptr;
 
-	tmp = &bss_start;
-	bssptr = (ulong *)tmp;
-	while(bssptr < MonStack)
-		*bssptr++ = 0;
-	bssptr = (ulong *)MonStack+(MONSTACKSIZE/4);
-	tmp = &bss_end;
-	while(bssptr < (ulong *)tmp)
-		*bssptr++ = 0;
+    tmp = &bss_start;
+    bssptr = (ulong *)tmp;
+    while(bssptr < MonStack) {
+        *bssptr++ = 0;
+    }
+    bssptr = (ulong *)MonStack+(MONSTACKSIZE/4);
+    tmp = &bss_end;
+    while(bssptr < (ulong *)tmp) {
+        *bssptr++ = 0;
+    }
 }
 
 /* AppWarmStart():
@@ -333,34 +346,36 @@ umonBssInit(void)
 void
 AppWarmStart(ulong mask)
 {
-	/* First initialize monitor bss space (skipping over MonStack[]): */
-	if (mask & WARMSTART_BSSINIT) 
-		umonBssInit();
+    /* First initialize monitor bss space (skipping over MonStack[]): */
+    if(mask & WARMSTART_BSSINIT) {
+        umonBssInit();
+    }
 
-	StateOfMonitor = INITIALIZE;
+    StateOfMonitor = INITIALIZE;
 
-	/* Initialize some of the real fundamental stuff regardless of
-	 * the incoming mask.
-	 */
-	init0();
+    /* Initialize some of the real fundamental stuff regardless of
+     * the incoming mask.
+     */
+    init0();
 
-	/* Subset of init1(): */
-	if (mask & WARMSTART_IOINIT) {
-    	initCPUio();
-		InitRemoteIO();
-		if (ConsoleBaudRate == 0)
-			ConsoleBaudRate = DEFAULT_BAUD_RATE;
-    	devInit(ConsoleBaudRate);
-	}
-	init2();
-	_init3(mask);
+    /* Subset of init1(): */
+    if(mask & WARMSTART_IOINIT) {
+        initCPUio();
+        InitRemoteIO();
+        if(ConsoleBaudRate == 0) {
+            ConsoleBaudRate = DEFAULT_BAUD_RATE;
+        }
+        devInit(ConsoleBaudRate);
+    }
+    init2();
+    _init3(mask);
 }
 
 /* start():
  * Called at the end of reset.s as the first C function after processor
  * bootup.  It is passed a state that is used to determine whether or not
  * the CPU is restarting as a result of a warmstart or a coldstart.  If
- * the restart is a coldstart, then state will be INITIALIZE.  if the 
+ * the restart is a coldstart, then state will be INITIALIZE.  if the
  * restart is a warmstart, then there are a few typical values of state,
  * the most common of which are APP_EXIT and EXCEPTION.
  *
@@ -381,92 +396,93 @@ start(int state)
     char    buf[48];
 
 #ifdef FORCE_BSS_INIT
-	state = INITIALIZE;
+    state = INITIALIZE;
 #endif
 
-	/* Based on the incoming value of 'state' we may or may not initialize
-	 * monitor-owned ram.  Ideally, we only want to initialize
-	 * monitor-owned ram when 'state' is INITIALIZE (power-up or reset);
-	 * however, to support the case where the incoming state variable may
-	 * be corrupted, we also initialize monitor-owned ram when 'state'
-	 * is anything unexpected...
-	 */
-	switch(state) {
-		case EXCEPTION:
-		case APP_EXIT:
-			break;
-		case INITIALIZE:
-		default:
-			umonBssInit();
-			break;
-	}
+    /* Based on the incoming value of 'state' we may or may not initialize
+     * monitor-owned ram.  Ideally, we only want to initialize
+     * monitor-owned ram when 'state' is INITIALIZE (power-up or reset);
+     * however, to support the case where the incoming state variable may
+     * be corrupted, we also initialize monitor-owned ram when 'state'
+     * is anything unexpected...
+     */
+    switch(state) {
+    case EXCEPTION:
+    case APP_EXIT:
+        break;
+    case INITIALIZE:
+    default:
+        umonBssInit();
+        break;
+    }
 
-	/* Now that the BSS clear loop has been done, we can copy the
-	 * value of state (either a register or on stack) to the global
-	 * variable (in BSS) StateOfMonitor...
-	 */
-	StateOfMonitor = state;
+    /* Now that the BSS clear loop has been done, we can copy the
+     * value of state (either a register or on stack) to the global
+     * variable (in BSS) StateOfMonitor...
+     */
+    StateOfMonitor = state;
 
-	/* Step through different phases of startup...
-	 */
-	init0();
-	init1();
-	init2();
+    /* Step through different phases of startup...
+     */
+    init0();
+    init1();
+    init2();
 
-	/* Depending on the type of startup, alert the console and do
-	 * further initialization as needed...
-	 */
+    /* Depending on the type of startup, alert the console and do
+     * further initialization as needed...
+     */
     switch(StateOfMonitor) {
-	    case INITIALIZE:
-	        reginit();     
-	        init3();       
-	        break;
-	    case APP_EXIT:
-			EthernetStartup(0,0);  
-			if (!MFLAGS_NOEXITSTATUS()) {
-	        	printf("\nApplication Exit Status: %d (0x%x)\n",
-					AppExitStatus,AppExitStatus);
-			}
-	        break;
-	    case EXCEPTION:
-			EthernetStartup(0,0);  
-	        printf("\n%s: '%s'\n",EXCEPTION_HEADING,
-				ExceptionType2String(ExceptionType));
-	        printf("           Occurred near 0x%lx",ExceptionAddr);
-	        if (AddrToSym(-1,ExceptionAddr,buf,0))
-	            printf(" (within %s)",buf);
-	        printf("\n\n");
-	        exceptionAutoRestart(INITIALIZE);
-	        break;
-	    default:
-	        printf("Unexpected monitor state: 0x%x (sp @ 0x%x)\n",
-				StateOfMonitor, buf);
-			/* To attempt to recover from the bad state, just do
-			 * what INITIALIZE would do...
-			 */
-	        reginit();     
-	        init3();       
-	        break;
+    case INITIALIZE:
+        reginit();
+        init3();
+        break;
+    case APP_EXIT:
+        EthernetStartup(0,0);
+        if(!MFLAGS_NOEXITSTATUS()) {
+            printf("\nApplication Exit Status: %d (0x%x)\n",
+                   AppExitStatus,AppExitStatus);
+        }
+        break;
+    case EXCEPTION:
+        EthernetStartup(0,0);
+        printf("\n%s: '%s'\n",EXCEPTION_HEADING,
+               ExceptionType2String(ExceptionType));
+        printf("           Occurred near 0x%lx",ExceptionAddr);
+        if(AddrToSym(-1,ExceptionAddr,buf,0)) {
+            printf(" (within %s)",buf);
+        }
+        printf("\n\n");
+        exceptionAutoRestart(INITIALIZE);
+        break;
+    default:
+        printf("Unexpected monitor state: 0x%x (sp @ 0x%x)\n",
+               StateOfMonitor, buf);
+        /* To attempt to recover from the bad state, just do
+         * what INITIALIZE would do...
+         */
+        reginit();
+        init3();
+        break;
     }
 
 #ifdef LOCK_FLASH_PROTECT_RANGE
-	/* Issue the command that will cause the range of sectors
-	 * designated by FLASH_PROTECT_RANGE to be locked.  This only
-	 * works if the flash device is capable of being locked.
-	 */
-	sprintf(buf,"flash lock %s",FLASH_PROTECT_RANGE);
-	docommand(buf,0);
+    /* Issue the command that will cause the range of sectors
+     * designated by FLASH_PROTECT_RANGE to be locked.  This only
+     * works if the flash device is capable of being locked.
+     */
+    sprintf(buf,"flash lock %s",FLASH_PROTECT_RANGE);
+    docommand(buf,0);
 #endif
 
 #ifdef PRE_COMMANDLOOP_HOOK
-	PRE_COMMANDLOOP_HOOK();
+    PRE_COMMANDLOOP_HOOK();
 #endif
 
     /* Enter the endless loop of command processing: */
     CommandLoop();
 
-	printf("ERROR: CommandLoop() returned\n");
-	monrestart(INITIALIZE);
+    printf("ERROR: CommandLoop() returned\n");
+    monrestart(INITIALIZE);
 }
 
 /* __eabi():

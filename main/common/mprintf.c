@@ -1,7 +1,7 @@
 /**************************************************************************
  *
  * Copyright (c) 2013 Alcatel-Lucent
- * 
+ *
  * Alcatel Lucent licenses this file to You under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License.  A copy of the License is contained the
@@ -46,50 +46,50 @@ int printf(char *fmt, ...);
 static char *hexdigits = "0123456789abcdef";
 static char *Hexdigits = "0123456789ABCDEF";
 
-#define MAX_NUMBER_SIZE 	18
-#define HDRSIZE				4
-#define NEGATIVE			1
-#define POSITIVE			2
-#define SCREENWIDTH			80
+#define MAX_NUMBER_SIZE     18
+#define HDRSIZE             4
+#define NEGATIVE            1
+#define POSITIVE            2
+#define SCREENWIDTH         80
 
 /* PROCCHARP(), PROCCHAR(), BUFDEC() & BUFINC():
  * Macros used to conveniently distinguish between buffer-bound
  * and console-bound characters during the formatting process.
  */
-#define PROCCHARP(bp,eob,cp) 					\
-	if (bp) {									\
-		if (eob && (bp >= eob)) {				\
-			puts("s_printf buffer overflow");	\
-			return(-1);							\
-		}										\
-		*bp++ = *cp++;							\
-	}											\
-	else {										\
-		putchar(*cp++);							\
-	}											
+#define PROCCHARP(bp,eob,cp)                    \
+    if (bp) {                                   \
+        if (eob && (bp >= eob)) {               \
+            puts("s_printf buffer overflow");   \
+            return(-1);                         \
+        }                                       \
+        *bp++ = *cp++;                          \
+    }                                           \
+    else {                                      \
+        putchar(*cp++);                         \
+    }
 
-#define PROCCHAR(bp,eob,c) 						\
-	if (bp) {									\
-		if (eob && (bp >= eob)) {				\
-			puts("s_printf buffer overflow");	\
-			return(-1);							\
-		}										\
-		*bp++ = c;								\
-	}											\
-	else {										\
-		if (c)									\
-			putchar(c);						\
-	}
+#define PROCCHAR(bp,eob,c)                      \
+    if (bp) {                                   \
+        if (eob && (bp >= eob)) {               \
+            puts("s_printf buffer overflow");   \
+            return(-1);                         \
+        }                                       \
+        *bp++ = c;                              \
+    }                                           \
+    else {                                      \
+        if (c)                                  \
+            putchar(c);                     \
+    }
 
-#define BUFDEC(bp,val)		\
-	if (bp) {				\
-		bp -= val;			\
-	}		
+#define BUFDEC(bp,val)      \
+    if (bp) {               \
+        bp -= val;          \
+    }
 
-#define BUFINC(bp,val)		\
-	if (bp) {				\
-		bp += val;			\
-	}		
+#define BUFINC(bp,val)      \
+    if (bp) {               \
+        bp += val;          \
+    }
 
 
 /* isdigit():
@@ -98,7 +98,7 @@ static char *Hexdigits = "0123456789ABCDEF";
 static int
 isdigit(char ch)
 {
-  return ((ch >= '0') && (ch <= '9'));
+    return ((ch >= '0') && (ch <= '9'));
 }
 
 /* proc_d_prefix():
@@ -108,20 +108,22 @@ isdigit(char ch)
 static int
 proc_d_prefix(char *hdr, char *lbp)
 {
-	char fill;
-	int	minsize, i;
+    char fill;
+    int minsize, i;
 
-	minsize = 0;
-	if (hdr[0]) {
-		if (hdr[0] == '0')
-			fill = '0';
-		else
-			fill = ' ';
-		minsize = (short)atoi(hdr);
-		for(i=0;i<minsize;i++)
-			*lbp++ = fill;
-	}
-	return(minsize);
+    minsize = 0;
+    if(hdr[0]) {
+        if(hdr[0] == '0') {
+            fill = '0';
+        } else {
+            fill = ' ';
+        }
+        minsize = (short)atoi(hdr);
+        for(i=0; i<minsize; i++) {
+            *lbp++ = fill;
+        }
+    }
+    return(minsize);
 }
 
 
@@ -131,53 +133,55 @@ proc_d_prefix(char *hdr, char *lbp)
 int
 long_to_dec(long lval,char *buf,char *bufend,char *hdr)
 {
-	unsigned long	value;
-	short	size, i, minsize;
-	char	lbuf[MAX_NUMBER_SIZE], *lbp;
+    unsigned long   value;
+    short   size, i, minsize;
+    char    lbuf[MAX_NUMBER_SIZE], *lbp;
 
-	lbp = lbuf;
-	minsize = proc_d_prefix(hdr,lbuf);
+    lbp = lbuf;
+    minsize = proc_d_prefix(hdr,lbuf);
 
-	/* First determine how many ascii digits are needed. */
-	value = abs(lval);
-	size = 0;
-	while (value > 0) {
-		size++;
-		value /= 10;
-	}
-	if (lval < 0)
-		size++;
-	if (minsize > size)
-		size = minsize;
-	lbp += size;
+    /* First determine how many ascii digits are needed. */
+    value = abs(lval);
+    size = 0;
+    while(value > 0) {
+        size++;
+        value /= 10;
+    }
+    if(lval < 0) {
+        size++;
+    }
+    if(minsize > size) {
+        size = minsize;
+    }
+    lbp += size;
 
-	/* Now build the string. */
-	value = abs(lval);
-	if (value == 0) {
-		if (minsize==0) {
-			lbuf[0] = '0';
-			size = 1;
-		}
-		else 
-			*--lbp = '0';
-	}
-	else {
-		while (value > 0) {
-			*--lbp = (char)((value % 10) + '0');
-			value /= 10;
-		}
-	}
-	if (lval < 0)
-		*--lbp = '-';
-	lbuf[size] = 0;
+    /* Now build the string. */
+    value = abs(lval);
+    if(value == 0) {
+        if(minsize==0) {
+            lbuf[0] = '0';
+            size = 1;
+        } else {
+            *--lbp = '0';
+        }
+    } else {
+        while(value > 0) {
+            *--lbp = (char)((value % 10) + '0');
+            value /= 10;
+        }
+    }
+    if(lval < 0) {
+        *--lbp = '-';
+    }
+    lbuf[size] = 0;
 
-	/* At this point, lbuf[] contains the ascii decimal string
-	 * so we can now pass it through PROCCHAR...
-	 */
-	for(i=0;i<size;i++) {
-		PROCCHAR(buf,bufend,lbuf[i]);
-	}
-	return((int)size);
+    /* At this point, lbuf[] contains the ascii decimal string
+     * so we can now pass it through PROCCHAR...
+     */
+    for(i=0; i<size; i++) {
+        PROCCHAR(buf,bufend,lbuf[i]);
+    }
+    return((int)size);
 }
 
 /* llong_to_dec():
@@ -187,53 +191,55 @@ long_to_dec(long lval,char *buf,char *bufend,char *hdr)
 static int
 llong_to_dec(int64_t llval,char *buf,char *bufend,char *hdr)
 {
-	uint64_t value;
-	short	size, i, minsize;
-	char	lbuf[MAX_NUMBER_SIZE], *lbp;
+    uint64_t value;
+    short   size, i, minsize;
+    char    lbuf[MAX_NUMBER_SIZE], *lbp;
 
-	lbp = lbuf;
-	minsize = proc_d_prefix(hdr, lbuf);
+    lbp = lbuf;
+    minsize = proc_d_prefix(hdr, lbuf);
 
-	/* First determine how many ascii digits are needed. */
-	value = llval < 0 ? -llval : llval;
-	size = 0;
-	while (value > 0) {
-		size++;
-		value /= 10;
-	}
-	if (llval < 0)
-		size++;
-	if (minsize > size)
-		size = minsize;
-	lbp += size;
+    /* First determine how many ascii digits are needed. */
+    value = llval < 0 ? -llval : llval;
+    size = 0;
+    while(value > 0) {
+        size++;
+        value /= 10;
+    }
+    if(llval < 0) {
+        size++;
+    }
+    if(minsize > size) {
+        size = minsize;
+    }
+    lbp += size;
 
-	/* Now build the string. */
-	value = llval < 0 ? -llval : llval;
-	if (value == 0) {
-		if (minsize==0) {
-			lbuf[0] = '0';
-			size = 1;
-		}
-		else 
-			*--lbp = '0';
-	}
-	else {
-		while (value > 0) {
-			*--lbp = (char)((value % 10) + '0');
-			value /= 10;
-		}
-	}
-	if (llval < 0)
-		*--lbp = '-';
-	lbuf[size] = 0;
+    /* Now build the string. */
+    value = llval < 0 ? -llval : llval;
+    if(value == 0) {
+        if(minsize==0) {
+            lbuf[0] = '0';
+            size = 1;
+        } else {
+            *--lbp = '0';
+        }
+    } else {
+        while(value > 0) {
+            *--lbp = (char)((value % 10) + '0');
+            value /= 10;
+        }
+    }
+    if(llval < 0) {
+        *--lbp = '-';
+    }
+    lbuf[size] = 0;
 
-	/* At this point, lbuf[] contains the ascii decimal string
-	 * so we can now pass it through PROCCHAR...
-	 */
-	for(i=0;i<size;i++) {
-		PROCCHAR(buf,bufend,lbuf[i]);
-	}
-	return((int)size);
+    /* At this point, lbuf[] contains the ascii decimal string
+     * so we can now pass it through PROCCHAR...
+     */
+    for(i=0; i<size; i++) {
+        PROCCHAR(buf,bufend,lbuf[i]);
+    }
+    return((int)size);
 }
 
 /* long_to_ip():
@@ -243,22 +249,22 @@ llong_to_dec(int64_t llval,char *buf,char *bufend,char *hdr)
 static int
 long_to_ip(long lval,char *buf,char *bufend,char *hdr)
 {
-	int	i, j, len;
-	unsigned char *lp;
+    int i, j, len;
+    unsigned char *lp;
 
-	len = 0;
-	lp = (unsigned char *)&lval;
-	for(j=0;j<4;j++) {
-		i = long_to_dec(*lp++,buf,bufend,hdr);
-		BUFINC(buf,i);
-		if (j < 3) {
-			PROCCHAR(buf,bufend,'.');
-		}
-		len += (i + 1);
-	}
-	BUFDEC(buf,1);
-	len--;
-	return(len);
+    len = 0;
+    lp = (unsigned char *)&lval;
+    for(j=0; j<4; j++) {
+        i = long_to_dec(*lp++,buf,bufend,hdr);
+        BUFINC(buf,i);
+        if(j < 3) {
+            PROCCHAR(buf,bufend,'.');
+        }
+        len += (i + 1);
+    }
+    BUFDEC(buf,1);
+    len--;
+    return(len);
 }
 
 /* proc_x_prefix():
@@ -268,22 +274,23 @@ long_to_ip(long lval,char *buf,char *bufend,char *hdr)
 static int
 proc_x_prefix(char *hdr, char *lbp)
 {
-	int i, minsize;
+    int i, minsize;
 
-	minsize = 0;
-	if (hdr[0]) {
-		if (hdr[1]) {
-			minsize = (short)(hdr[1]&0xf);
-			for(i=0;i<minsize;i++)
-				*lbp++ = hdr[0];
-		}
-		else {
-			minsize = (short)(hdr[0]&0xf);
-			for(i=0;i<minsize;i++)
-				*lbp++ = ' ';
-		}
-	}
-	return(minsize);
+    minsize = 0;
+    if(hdr[0]) {
+        if(hdr[1]) {
+            minsize = (short)(hdr[1]&0xf);
+            for(i=0; i<minsize; i++) {
+                *lbp++ = hdr[0];
+            }
+        } else {
+            minsize = (short)(hdr[0]&0xf);
+            for(i=0; i<minsize; i++) {
+                *lbp++ = ' ';
+            }
+        }
+    }
+    return(minsize);
 }
 
 /* long_to_hex():
@@ -292,51 +299,53 @@ proc_x_prefix(char *hdr, char *lbp)
 static int
 long_to_hex(ulong lval,char *buf,char *bufend,char *hdr, char x)
 {
-	ulong	value;
-	short	size, i, minsize;
-	char	lbuf[MAX_NUMBER_SIZE], *lbp;
+    ulong   value;
+    short   size, i, minsize;
+    char    lbuf[MAX_NUMBER_SIZE], *lbp;
 
-	lbp = lbuf;
-	minsize = proc_x_prefix(hdr,lbuf);
+    lbp = lbuf;
+    minsize = proc_x_prefix(hdr,lbuf);
 
-	/* First determine how many ascii digits are needed. */
-	value = lval;
-	size = 0;
-	while (value > 0) {
-		size++;
-		value /= 16;
-	}
-	if (minsize > size)
-		size = minsize;
-	lbp += size;
+    /* First determine how many ascii digits are needed. */
+    value = lval;
+    size = 0;
+    while(value > 0) {
+        size++;
+        value /= 16;
+    }
+    if(minsize > size) {
+        size = minsize;
+    }
+    lbp += size;
 
-	/* Now build the string. */
-	if (lval == 0) {
-		if (size == 0)
-			size = 1;
-		else
-			lbp--;
-		*lbp = '0';
-	}
-	else {
-		while (lval > 0) {
-			if (x == 'X')
-				*--lbp = Hexdigits[(int)(lval % 16)];
-			else
-				*--lbp = hexdigits[(int)(lval % 16)];
-			lval /= 16;
-		}
-	}
-	lbp[size] = 0;
+    /* Now build the string. */
+    if(lval == 0) {
+        if(size == 0) {
+            size = 1;
+        } else {
+            lbp--;
+        }
+        *lbp = '0';
+    } else {
+        while(lval > 0) {
+            if(x == 'X') {
+                *--lbp = Hexdigits[(int)(lval % 16)];
+            } else {
+                *--lbp = hexdigits[(int)(lval % 16)];
+            }
+            lval /= 16;
+        }
+    }
+    lbp[size] = 0;
 
-	/* At this point, lbuf[] contains the ascii hex string
-	 * so we can now pass it through PROCCHAR...
-	 */
-	for(i=0;i<size;i++) {
-		PROCCHAR(buf,bufend,lbuf[i]);
-	}
+    /* At this point, lbuf[] contains the ascii hex string
+     * so we can now pass it through PROCCHAR...
+     */
+    for(i=0; i<size; i++) {
+        PROCCHAR(buf,bufend,lbuf[i]);
+    }
 
-	return((int)size);
+    return((int)size);
 }
 
 /* llong_to_hex():
@@ -345,51 +354,53 @@ long_to_hex(ulong lval,char *buf,char *bufend,char *hdr, char x)
 static int
 llong_to_hex(uint64_t llval,char *buf,char *bufend,char *hdr, char x)
 {
-	uint64_t	value;
-	short	size, i, minsize;
-	char	lbuf[MAX_NUMBER_SIZE], *lbp;
+    uint64_t    value;
+    short   size, i, minsize;
+    char    lbuf[MAX_NUMBER_SIZE], *lbp;
 
-	lbp = lbuf;
-	minsize = proc_x_prefix(hdr,lbuf);
+    lbp = lbuf;
+    minsize = proc_x_prefix(hdr,lbuf);
 
-	/* First determine how many ascii digits are needed. */
-	value = llval;
-	size = 0;
-	while (value > 0) {
-		size++;
-		value /= 16;
-	}
-	if (minsize > size)
-		size = minsize;
-	lbp += size;
+    /* First determine how many ascii digits are needed. */
+    value = llval;
+    size = 0;
+    while(value > 0) {
+        size++;
+        value /= 16;
+    }
+    if(minsize > size) {
+        size = minsize;
+    }
+    lbp += size;
 
-	/* Now build the string. */
-	if (llval == 0) {
-		if (size == 0)
-			size = 1;
-		else
-			lbp--;
-		*lbp = '0';
-	}
-	else {
-		while (llval > 0) {
-			if (x == 'X')
-				*--lbp = Hexdigits[(int)(llval % 16)];
-			else
-				*--lbp = hexdigits[(int)(llval % 16)];
-			llval /= 16;
-		}
-	}
-	lbp[size] = 0;
+    /* Now build the string. */
+    if(llval == 0) {
+        if(size == 0) {
+            size = 1;
+        } else {
+            lbp--;
+        }
+        *lbp = '0';
+    } else {
+        while(llval > 0) {
+            if(x == 'X') {
+                *--lbp = Hexdigits[(int)(llval % 16)];
+            } else {
+                *--lbp = hexdigits[(int)(llval % 16)];
+            }
+            llval /= 16;
+        }
+    }
+    lbp[size] = 0;
 
-	/* At this point, lbuf[] contains the ascii hex string
-	 * so we can now pass it through PROCCHAR...
-	 */
-	for(i=0;i<size;i++) {
-		PROCCHAR(buf,bufend,lbuf[i]);
-	}
+    /* At this point, lbuf[] contains the ascii hex string
+     * so we can now pass it through PROCCHAR...
+     */
+    for(i=0; i<size; i++) {
+        PROCCHAR(buf,bufend,lbuf[i]);
+    }
 
-	return((int)size);
+    return((int)size);
 }
 
 /* bin_to_mac():
@@ -399,222 +410,223 @@ llong_to_hex(uint64_t llval,char *buf,char *bufend,char *hdr, char x)
 static int
 bin_to_mac(uchar *ibin,char *buf,char *bufend)
 {
-	int	i, j, len;
+    int i, j, len;
 
-	len = 0;
-	for(j=0;j<6;j++) {
-		i = long_to_hex(*ibin++,buf,bufend,"02",'x');
-		BUFINC(buf,i);
-		if (j < 5) {
-			PROCCHAR(buf,bufend,':');
-		}
-		len += (i + 1);
-	}
-	BUFDEC(buf,1);
-	len--;
-	return(len);
+    len = 0;
+    for(j=0; j<6; j++) {
+        i = long_to_hex(*ibin++,buf,bufend,"02",'x');
+        BUFINC(buf,i);
+        if(j < 5) {
+            PROCCHAR(buf,bufend,':');
+        }
+        len += (i + 1);
+    }
+    BUFDEC(buf,1);
+    len--;
+    return(len);
 }
 
 /* build_string():
- * 	Build a string from 'src' to 'dest' based on the hdr and sign
- *	values.  Return the size of the string (may include left or right
- *	justified padding).
+ *  Build a string from 'src' to 'dest' based on the hdr and sign
+ *  values.  Return the size of the string (may include left or right
+ *  justified padding).
  */
 static int
 build_string(char *src,char *dest,char *bufend,char *hdr,int sign)
 {
-	char	*cp1;
-	short	minsize, i, j;
+    char    *cp1;
+    short   minsize, i, j;
 
-	if (!src) {
-		cp1 = "NULL_POINTER";
-		while(*cp1) {
-			PROCCHARP(dest,bufend,cp1);
-		}
-		return(12);
-	}
-	if (!*src)
-		return(0);
-	if (!hdr[0]) {
-		j = 0;
-		while(*src) {
-			PROCCHARP(dest,bufend,src);
-			j++;
-		}
-		return(j);
-	}
-	minsize = (short)atoi(hdr);
-	i = 0;
-	cp1 = (char *)src;
-	while(*cp1) {
-		i++;
-		cp1++;
-	}
-	cp1 = (char *)src;
-	j = 0;
-	if (minsize > i) {
-		if (sign == POSITIVE) {
-			while(minsize > i) {
-				j++;
-				PROCCHAR(dest,bufend,' ');
-				minsize--;
-			}
-			while(*cp1) {
-				j++;
-				PROCCHARP(dest,bufend,cp1);
-			}
-		}
-		else {
-			while(*cp1) {
-				j++;
-				PROCCHARP(dest,bufend,cp1);
-			}
-			while(minsize > i) {
-				j++;
-				PROCCHAR(dest,bufend,' ');
-				minsize--;
-			}
-		}
-	}
-	else {
-		while(*cp1) {
-			j++;
-			PROCCHARP(dest,bufend,cp1);
-		}
-	}
-	return(j);
+    if(!src) {
+        cp1 = "NULL_POINTER";
+        while(*cp1) {
+            PROCCHARP(dest,bufend,cp1);
+        }
+        return(12);
+    }
+    if(!*src) {
+        return(0);
+    }
+    if(!hdr[0]) {
+        j = 0;
+        while(*src) {
+            PROCCHARP(dest,bufend,src);
+            j++;
+        }
+        return(j);
+    }
+    minsize = (short)atoi(hdr);
+    i = 0;
+    cp1 = (char *)src;
+    while(*cp1) {
+        i++;
+        cp1++;
+    }
+    cp1 = (char *)src;
+    j = 0;
+    if(minsize > i) {
+        if(sign == POSITIVE) {
+            while(minsize > i) {
+                j++;
+                PROCCHAR(dest,bufend,' ');
+                minsize--;
+            }
+            while(*cp1) {
+                j++;
+                PROCCHARP(dest,bufend,cp1);
+            }
+        } else {
+            while(*cp1) {
+                j++;
+                PROCCHARP(dest,bufend,cp1);
+            }
+            while(minsize > i) {
+                j++;
+                PROCCHAR(dest,bufend,' ');
+                minsize--;
+            }
+        }
+    } else {
+        while(*cp1) {
+            j++;
+            PROCCHARP(dest,bufend,cp1);
+        }
+    }
+    return(j);
 }
 
 /* vsnprintf():
- *	Backend to all the others below it.
- *	Formats incoming argument list based on format string.
- *	Terminates population of buffer if it is to exceed the
- *	specified buffer size.
+ *  Backend to all the others below it.
+ *  Formats incoming argument list based on format string.
+ *  Terminates population of buffer if it is to exceed the
+ *  specified buffer size.
  */
 int
 vsnprintf(char *buf,int bsize, char *fmt, va_list argp)
 {
-	long	arg_l;
-	long long arg_ll;
-	int		i, sign, tot;
-	char	*cp, hdr[HDRSIZE], *base, *bufend, arg_c, *arg_cp, ll;
+    long    arg_l;
+    long long arg_ll;
+    int     i, sign, tot;
+    char    *cp, hdr[HDRSIZE], *base, *bufend, arg_c, *arg_cp, ll;
 
-	ll = 0;
-	tot = 0;
-	base = buf;
+    ll = 0;
+    tot = 0;
+    base = buf;
 
-	if (bsize == 0)
-		bufend = 0;
-	else
-		bufend = base+(bsize-1);
+    if(bsize == 0) {
+        bufend = 0;
+    } else {
+        bufend = base+(bsize-1);
+    }
 
-	cp = fmt;
-	for(i=0;i<HDRSIZE;i++)
-		hdr[i] = 0;
-	while(*cp) {
-		if (*cp != '%') {
-			PROCCHARP(buf,bufend,cp);
-			tot++;
-			continue;
-		}
-		cp++;
-		if (*cp == '%') {
-			PROCCHARP(buf,bufend,cp);
-			tot++;
-			continue;
-		}
-		sign = POSITIVE;
-		if (*cp == '-') {
-			sign = NEGATIVE;
-			cp++;
-		}
-		if (isdigit(*cp)) {
-			for(i=0;i<(HDRSIZE-1);i++) {
-				if (isdigit(*cp))
-					hdr[i] = *cp++;
-				else
-					break;
-			}
-		}
+    cp = fmt;
+    for(i=0; i<HDRSIZE; i++) {
+        hdr[i] = 0;
+    }
+    while(*cp) {
+        if(*cp != '%') {
+            PROCCHARP(buf,bufend,cp);
+            tot++;
+            continue;
+        }
+        cp++;
+        if(*cp == '%') {
+            PROCCHARP(buf,bufend,cp);
+            tot++;
+            continue;
+        }
+        sign = POSITIVE;
+        if(*cp == '-') {
+            sign = NEGATIVE;
+            cp++;
+        }
+        if(isdigit(*cp)) {
+            for(i=0; i<(HDRSIZE-1); i++) {
+                if(isdigit(*cp)) {
+                    hdr[i] = *cp++;
+                } else {
+                    break;
+                }
+            }
+        }
 
-		ll = 0;
-		if (*cp == 'l') {			/* Ignore the 'long' designator */
-			cp++;
-			if (*cp == 'l') {		/* unless its the longlong designator */
-				cp++;
-				ll = 1;
-			}
-		}
+        ll = 0;
+        if(*cp == 'l') {            /* Ignore the 'long' designator */
+            cp++;
+            if(*cp == 'l') {        /* unless its the longlong designator */
+                cp++;
+                ll = 1;
+            }
+        }
 
-		switch(*cp) {
-			case 'c':			/* Character conversion */
-				arg_c = (char)va_arg(argp,int);
-				PROCCHAR(buf,bufend,arg_c);
-				tot++;
-				break;
-			case 's':			/* String conversion */
-				arg_cp = (char *)va_arg(argp,int);
-				i = build_string(arg_cp,buf,bufend,hdr,sign);
-				BUFINC(buf,i);
-				tot += i;
-				break;
-			case 'M':			/* MAC address conversion */
-				arg_cp = (char *)va_arg(argp,int);
-				i = bin_to_mac((uchar *)arg_cp,buf,bufend);
-				BUFINC(buf,i);
-				tot += i;
-				break;
-			case 'I':			/* IP address conversion */
-				arg_l = (long)va_arg(argp,int);
-				i = long_to_ip(arg_l,buf,bufend,hdr);
-				BUFINC(buf,i);
-				tot += i;
-				break;
-			case 'd':			/* Decimal conversion */
-			case 'u':
-				if (ll) {
-					arg_ll = (long long)va_arg(argp,long long);
-					i = llong_to_dec(arg_ll,buf,bufend,hdr);
-				}
-				else {
-					arg_l = (long)va_arg(argp,int);
-					i = long_to_dec(arg_l,buf,bufend,hdr);
-				}
-				BUFINC(buf,i);
-				tot += i;
-				break;
-			case 'p':			/* Hex conversion */
-			case 'x':
-			case 'X':
-				if (*cp == 'p') {
-					PROCCHAR(buf,bufend,'0');
-					PROCCHAR(buf,bufend,'x');
-				}
-				if (ll) {
-					arg_ll = (long long)va_arg(argp,long long);
-					i = llong_to_hex(arg_ll,buf,bufend,hdr,*cp);
-				}
-				else {
-					arg_l = (long)va_arg(argp,int);
-					i = long_to_hex((ulong)arg_l,buf,bufend,hdr,*cp);
-				}
-				BUFINC(buf,i);
-				tot += i;
-				break;
-			default:
-				PROCCHARP(buf,bufend,cp);
-				tot++;
-				break;
-		}
-		cp++;
+        switch(*cp) {
+        case 'c':           /* Character conversion */
+            arg_c = (char)va_arg(argp,int);
+            PROCCHAR(buf,bufend,arg_c);
+            tot++;
+            break;
+        case 's':           /* String conversion */
+            arg_cp = (char *)va_arg(argp,int);
+            i = build_string(arg_cp,buf,bufend,hdr,sign);
+            BUFINC(buf,i);
+            tot += i;
+            break;
+        case 'M':           /* MAC address conversion */
+            arg_cp = (char *)va_arg(argp,int);
+            i = bin_to_mac((uchar *)arg_cp,buf,bufend);
+            BUFINC(buf,i);
+            tot += i;
+            break;
+        case 'I':           /* IP address conversion */
+            arg_l = (long)va_arg(argp,int);
+            i = long_to_ip(arg_l,buf,bufend,hdr);
+            BUFINC(buf,i);
+            tot += i;
+            break;
+        case 'd':           /* Decimal conversion */
+        case 'u':
+            if(ll) {
+                arg_ll = (long long)va_arg(argp,long long);
+                i = llong_to_dec(arg_ll,buf,bufend,hdr);
+            } else {
+                arg_l = (long)va_arg(argp,int);
+                i = long_to_dec(arg_l,buf,bufend,hdr);
+            }
+            BUFINC(buf,i);
+            tot += i;
+            break;
+        case 'p':           /* Hex conversion */
+        case 'x':
+        case 'X':
+            if(*cp == 'p') {
+                PROCCHAR(buf,bufend,'0');
+                PROCCHAR(buf,bufend,'x');
+            }
+            if(ll) {
+                arg_ll = (long long)va_arg(argp,long long);
+                i = llong_to_hex(arg_ll,buf,bufend,hdr,*cp);
+            } else {
+                arg_l = (long)va_arg(argp,int);
+                i = long_to_hex((ulong)arg_l,buf,bufend,hdr,*cp);
+            }
+            BUFINC(buf,i);
+            tot += i;
+            break;
+        default:
+            PROCCHARP(buf,bufend,cp);
+            tot++;
+            break;
+        }
+        cp++;
 
-		if (hdr[0]) {
-			for(i=0;i<HDRSIZE;i++)
-				hdr[i] = 0;
-		}
-	}
-	PROCCHAR(buf,bufend,0);
-	return(tot);
+        if(hdr[0]) {
+            for(i=0; i<HDRSIZE; i++) {
+                hdr[i] = 0;
+            }
+        }
+    }
+    PROCCHAR(buf,bufend,0);
+    return(tot);
 }
 
 /* snprintf(), sprintf(), printf() & cprintf():
@@ -626,66 +638,68 @@ vsnprintf(char *buf,int bsize, char *fmt, va_list argp)
  * - sprintf() formats to a buffer.
  * - printf() formats to stdio.
  * - cprintf() formats to a buffer, then centers the content of
- *		the buffer based on its size and a console screen with of
- *		SCREENWIDTH characters.
+ *      the buffer based on its size and a console screen with of
+ *      SCREENWIDTH characters.
  */
 int
 snprintf(char *buf, int bsize, char *fmt, ...)
 {
-	int	tot;
-	va_list	argp;
+    int tot;
+    va_list argp;
 
-	va_start(argp,fmt);
-	tot = vsnprintf(buf,bsize,fmt,argp);
-	va_end(argp);
-	return(tot);
+    va_start(argp,fmt);
+    tot = vsnprintf(buf,bsize,fmt,argp);
+    va_end(argp);
+    return(tot);
 }
 
 int
 sprintf(char *buf, char *fmt, ...)
 {
-	int	tot;
-	va_list argp;
+    int tot;
+    va_list argp;
 
-	va_start(argp,fmt);
-	tot = vsnprintf(buf,0,fmt,argp);
-	va_end(argp);
-	return(tot);
+    va_start(argp,fmt);
+    tot = vsnprintf(buf,0,fmt,argp);
+    va_end(argp);
+    return(tot);
 }
 
 int
 printf(char *fmt, ...)
 {
-	int	tot;
-	va_list argp;
+    int tot;
+    va_list argp;
 
-	va_start(argp,fmt);
-	tot = vsnprintf(0,0,fmt,argp);
-	va_end(argp);
-	return(tot);
+    va_start(argp,fmt);
+    tot = vsnprintf(0,0,fmt,argp);
+    va_end(argp);
+    return(tot);
 }
 
 int
 cprintf(char *fmt, ...)
 {
-	int	i, tot, spaces;
-	char	pbuf[CMDLINESIZE];
-	va_list argp;
+    int i, tot, spaces;
+    char    pbuf[CMDLINESIZE];
+    va_list argp;
 
-	va_start(argp,fmt);
-	tot = vsnprintf(pbuf,CMDLINESIZE,fmt,argp);
-	va_end(argp);
+    va_start(argp,fmt);
+    tot = vsnprintf(pbuf,CMDLINESIZE,fmt,argp);
+    va_end(argp);
 
-	if (tot < SCREENWIDTH) {
-		spaces = (SCREENWIDTH-tot)/2;
-		for(i=0;i<spaces;i++)
-			putchar(' ');
-	}
-	else
-		spaces = 0;
+    if(tot < SCREENWIDTH) {
+        spaces = (SCREENWIDTH-tot)/2;
+        for(i=0; i<spaces; i++) {
+            putchar(' ');
+        }
+    } else {
+        spaces = 0;
+    }
 
-	for(i=0;i<tot;i++)
-		putchar(pbuf[i]);
+    for(i=0; i<tot; i++) {
+        putchar(pbuf[i]);
+    }
 
-	return(tot+spaces);
+    return(tot+spaces);
 }

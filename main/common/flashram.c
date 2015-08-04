@@ -1,7 +1,7 @@
 /**************************************************************************
  *
  * Copyright (c) 2013 Alcatel-Lucent
- * 
+ *
  * Alcatel Lucent licenses this file to You under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License.  A copy of the License is contained the
@@ -39,22 +39,22 @@
 
 /* Generic Flash RAM configuration information...
  * The assumption is a 16-element array (FLASHRAM_SECTORCOUNT = 16).
- * 
- * This can be included in a monitor build if the build has 
+ *
+ * This can be included in a monitor build if the build has
  * a block of RAM dedicated to TFS file storage.  If some other
  * configuration is required, then copy this to target-specific space
  * and modify a local version.
  */
 int
 ramSectors[FLASHRAM_SECTORCOUNT] = {
-	FLASHRAM_SECTORSIZE, FLASHRAM_SECTORSIZE,
-	FLASHRAM_SECTORSIZE, FLASHRAM_SECTORSIZE,
-	FLASHRAM_SECTORSIZE, FLASHRAM_SECTORSIZE,
-	FLASHRAM_SECTORSIZE, FLASHRAM_SECTORSIZE,
-	FLASHRAM_SECTORSIZE, FLASHRAM_SECTORSIZE,
-	FLASHRAM_SECTORSIZE, FLASHRAM_SECTORSIZE,
-	FLASHRAM_SECTORSIZE, FLASHRAM_SECTORSIZE,
-	FLASHRAM_SECTORSIZE, FLASHRAM_SECTORSIZE,
+    FLASHRAM_SECTORSIZE, FLASHRAM_SECTORSIZE,
+    FLASHRAM_SECTORSIZE, FLASHRAM_SECTORSIZE,
+    FLASHRAM_SECTORSIZE, FLASHRAM_SECTORSIZE,
+    FLASHRAM_SECTORSIZE, FLASHRAM_SECTORSIZE,
+    FLASHRAM_SECTORSIZE, FLASHRAM_SECTORSIZE,
+    FLASHRAM_SECTORSIZE, FLASHRAM_SECTORSIZE,
+    FLASHRAM_SECTORSIZE, FLASHRAM_SECTORSIZE,
+    FLASHRAM_SECTORSIZE, FLASHRAM_SECTORSIZE,
 };
 #endif
 #endif

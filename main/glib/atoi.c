@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 1988, 1993
- *	The Regents of the University of California.  All rights reserved.
+ *  The Regents of the University of California.  All rights reserved.
  *
  * Copyright (c) 2011 The FreeBSD Foundation
  * All rights reserved.
@@ -38,5 +38,5 @@ int
 atoi(str)
 const char *str;
 {
-	return (int)strtol(str, (char **)NULL, 10);
+    return (int)strtol(str, (char **)NULL, 10);
 }

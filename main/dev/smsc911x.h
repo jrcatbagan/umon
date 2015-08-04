@@ -1,10 +1,10 @@
 //==========================================================================
 //
-// smsc911x.h      
+// smsc911x.h
 //
 //
 // Author(s):    Jay Monkman <jtm@lopingdog.com>
-// Contributors: 
+// Contributors:
 // Date:         06-07-2007
 // Description:  This file contains definitions for the SMSC 911x and 912x
 //               families of ethernet controllers.
@@ -17,7 +17,7 @@
 #define SMSC_REG(_x_)         *(vulong *)(SMSC911X_BASE_ADDRESS + _x_)
 
 // ------------------------------------------------------------------------
-// Directly visible registers. 
+// Directly visible registers.
 #define RX_FIFO_PORT                    SMSC_REG(0x00)
 #define TX_FIFO_PORT                    SMSC_REG(0x20)
 #define RX_FIFO_PORT_INC                SMSC_REG(0x100)

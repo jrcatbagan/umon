@@ -1,7 +1,7 @@
 /**************************************************************************
  *
  * Copyright (c) 2013 Alcatel-Lucent
- * 
+ *
  * Alcatel Lucent licenses this file to You under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License.  A copy of the License is contained the
@@ -37,56 +37,57 @@
 static int
 gettermtype(void)
 {
-	char *term = getenv("TERM");
-	int termtype = TERMTYPE_UNDEFINED;
+    char *term = getenv("TERM");
+    int termtype = TERMTYPE_UNDEFINED;
 
-	if (term != 0) {
-		if (strcasecmp(term,"VT100") == 0)
-			termtype = TERMTYPE_VT100;
-	}
+    if(term != 0) {
+        if(strcasecmp(term,"VT100") == 0) {
+            termtype = TERMTYPE_VT100;
+        }
+    }
 
-	return(termtype);
+    return(termtype);
 }
 
 int
 term_settextcolor(int fg)
 {
-	if (gettermtype() == TERMTYPE_VT100) {
-		printf("%c[%dm", 0x1B, fg + 30);
-		return(0);
-	}
-	return(-1);
+    if(gettermtype() == TERMTYPE_VT100) {
+        printf("%c[%dm", 0x1B, fg + 30);
+        return(0);
+    }
+    return(-1);
 }
 
 int
 term_setbgcolor(int bg)
 {
-	if (gettermtype() == TERMTYPE_VT100) {
-		printf("%c[%dm", 0x1B, bg + 40);
-		return(0);
-	}
-	return(-1);
+    if(gettermtype() == TERMTYPE_VT100) {
+        printf("%c[%dm", 0x1B, bg + 40);
+        return(0);
+    }
+    return(-1);
 }
 
 int
 term_settextattribute(int attr)
 {
-	if (gettermtype() == TERMTYPE_VT100) {
-		printf("%c[%dm", 0x1B, attr);
-		return(0);
-	}
-	return(-1);
+    if(gettermtype() == TERMTYPE_VT100) {
+        printf("%c[%dm", 0x1B, attr);
+        return(0);
+    }
+    return(-1);
 }
 
 
 int
 term_resettext(void)
 {
-	if (gettermtype() == TERMTYPE_VT100) {
-		printf("%c[0m",0x1b);
-		return(0);
-	}
-	return(-1);
+    if(gettermtype() == TERMTYPE_VT100) {
+        printf("%c[0m",0x1b);
+        return(0);
+    }
+    return(-1);
 }
 
 /* term_getsize():
@@ -95,66 +96,73 @@ term_resettext(void)
 int
 term_getsize(int *rows, int *cols)
 {
-	int c, i, rtot, ctot;
-	char *semi, buf[16];
-	struct elapsed_tmr tmr;
+    int c, i, rtot, ctot;
+    char *semi, buf[16];
+    struct elapsed_tmr tmr;
 
-	if (gettermtype() == TERMTYPE_UNDEFINED)
-		return(-1);
+    if(gettermtype() == TERMTYPE_UNDEFINED) {
+        return(-1);
+    }
 
-	setenv("ROWS",0);
-	setenv("COLS",0);
+    setenv("ROWS",0);
+    setenv("COLS",0);
 
-	/* Send the "what is your terminal size?" request...
-	 */
-	printf("\E[6n");
-		
-	/* Wait for a response that looks like: "ESC[rrr;cccR"
-	 * where 'rrr' is the number of rows, and 'ccc' is the
- 	 * number of columns.
- 	 */
-	memset(buf,0,sizeof(buf));
- 	startElapsedTimer(&tmr,1000);
-	for(i=0;i<sizeof(buf);i++) {
-    	while (!gotachar()) {
-			if(msecElapsed(&tmr)) {
-				return(-1);
-			}
-		}
-		c = getchar();
-		if ((i == 0) && (c != 0x1b)) {
-			return(-1);
-		}
-		if ((i == 1) && (c != '[')) {
-			return(-1);
-		}
-		if (c == 'R')
-			break;
-		buf[i] = c;
-	}
-	if (i == sizeof(buf)) {
-		return(-1);
-	}
-	semi = strchr(buf,';');
-	if (semi == (char *)0) {
-		return(-1);
-	}
-	*semi = 0;
-	buf[i] = 0;
-	rtot = atoi(buf+2);
-	ctot = atoi(semi+1);
-	shell_sprintf("ROWS","%d",rtot);
-	shell_sprintf("COLS","%d",ctot);
-	if (rows) *rows = rtot;
-	if (cols) *cols = ctot;
-	return(0);
+    /* Send the "what is your terminal size?" request...
+     */
+    printf("\E[6n");
+
+    /* Wait for a response that looks like: "ESC[rrr;cccR"
+     * where 'rrr' is the number of rows, and 'ccc' is the
+     * number of columns.
+     */
+    memset(buf,0,sizeof(buf));
+    startElapsedTimer(&tmr,1000);
+    for(i=0; i<sizeof(buf); i++) {
+        while(!gotachar()) {
+            if(msecElapsed(&tmr)) {
+                return(-1);
+            }
+        }
+        c = getchar();
+        if((i == 0) && (c != 0x1b)) {
+            return(-1);
+        }
+        if((i == 1) && (c != '[')) {
+            return(-1);
+        }
+        if(c == 'R') {
+            break;
+        }
+        buf[i] = c;
+    }
+    if(i == sizeof(buf)) {
+        return(-1);
+    }
+    semi = strchr(buf,';');
+    if(semi == (char *)0) {
+        return(-1);
+    }
+    *semi = 0;
+    buf[i] = 0;
+    rtot = atoi(buf+2);
+    ctot = atoi(semi+1);
+    shell_sprintf("ROWS","%d",rtot);
+    shell_sprintf("COLS","%d",ctot);
+    if(rows) {
+        *rows = rtot;
+    }
+    if(cols) {
+        *cols = ctot;
+    }
+    return(0);
 }
 
 void
 term_clearscreen(void)
 {
-	if (gettermtype() == TERMTYPE_VT100)
-		printf("\E[0J");
+    if(gettermtype() == TERMTYPE_VT100) {
+        printf("\E[0J");
+    }
 }
 
 #endif

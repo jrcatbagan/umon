@@ -5,7 +5,7 @@
  * NO_EXCEPTION_RESTART shell variable is set at the top of
  * strace_demo() below (typically this environment variable would
  * be set during development in the monrc file).
- * 
+ *
  * After the exception has completed, at the uMON> prompt type the
  * "strace" command.  Assuming your monitor is built with INCLUDE_STRACE
  * set (refer to config.h for your monitor's port), then the output
@@ -31,7 +31,7 @@
  * 18:     uMON>
  *
  * Line 1      : shows the invocation of the application 'app'.
- * Lines 2-5   : show the output of the strace.c mon_printf calls. 
+ * Lines 2-5   : show the output of the strace.c mon_printf calls.
  * Lines 7-8   : show uMon catching the exception.
  * Line 10     : shows the invocation of the 'strace' command.
  * Lines 11-16 : show the output of strace giving the user the exact
@@ -49,52 +49,52 @@
 #include "monlib.h"
 
 #if CPU_IS_MIPS
-#define EXCEPTION()		asm("syscall 99");	/* System call */
+#define EXCEPTION()     asm("syscall 99");  /* System call */
 #elif CPU_IS_68K
-#define EXCEPTION()		asm("trap #3");		/* Trap */
+#define EXCEPTION()     asm("trap #3");     /* Trap */
 #elif CPU_IS_SH
-#define EXCEPTION()		asm("trap #3");		/* Trap */
+#define EXCEPTION()     asm("trap #3");     /* Trap */
 #elif CPU_IS_BFIN
-#define EXCEPTION()		asm("excpt 5");		/* Force exception */
+#define EXCEPTION()     asm("excpt 5");     /* Force exception */
 #elif CPU_IS_MICROBLAZE
-#define EXCEPTION()		asm("bralid r15,8");	/* User exception */
+#define EXCEPTION()     asm("bralid r15,8");    /* User exception */
 #elif CPU_IS_PPC
-#define EXCEPTION()		asm("sc");			/* System call */
+#define EXCEPTION()     asm("sc");          /* System call */
 #elif CPU_IS_ARM
-#define EXCEPTION()		asm("swi");			/* Software interrupt */
+#define EXCEPTION()     asm("swi");         /* Software interrupt */
 #else
 #error: Must specify CPU type for exception demo.
 #endif
- 
+
 int
 func3(int i)
 {
-	mon_printf("func3 exception now!\n");
-	EXCEPTION();
-	return(i+5);
+    mon_printf("func3 exception now!\n");
+    EXCEPTION();
+    return(i+5);
 }
 
 int
 func2(int i)
 {
-	mon_printf("func2\n");
-	func3(i+3);
-	return(99);
+    mon_printf("func2\n");
+    func3(i+3);
+    return(99);
 }
 
 int
 func1(void)
 {
-	mon_printf("func1\n");
-	func2(3);
-	return(88);
+    mon_printf("func1\n");
+    func2(3);
+    return(88);
 }
 
 int
 strace_demo(void)
 {
-	mon_printf("strace_demo\n");
-	mon_setenv("NO_EXCEPTION_RESTART","TRUE");
-	func1();
-	return(77);
+    mon_printf("strace_demo\n");
+    mon_setenv("NO_EXCEPTION_RESTART","TRUE");
+    func1();
+    return(77);
 }

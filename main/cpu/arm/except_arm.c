@@ -33,7 +33,7 @@
 #include "warmstart.h"
 
 ulong   ExceptionAddr;
-int	ExceptionType;
+int ExceptionType;
 
 /***********************************************************************
  *
@@ -43,9 +43,9 @@ int	ExceptionType;
 void
 umon_exception(ulong addr, ulong type)
 {
-	ExceptionAddr = addr;
-	ExceptionType = type;
-	monrestart(EXCEPTION);
+    ExceptionAddr = addr;
+    ExceptionType = type;
+    monrestart(EXCEPTION);
 }
 
 /***********************************************************************
@@ -57,35 +57,35 @@ umon_exception(ulong addr, ulong type)
 char *
 ExceptionType2String(int type)
 {
-	char *string;
+    char *string;
 
-	switch(type) {
-		case EXCTYPE_UNDEF:
-			string = "Undefined instruction";
-			break;
-		case EXCTYPE_ABORTP:
-			string = "Abort prefetch";
-			break;
-		case EXCTYPE_ABORTD:
-			string = "Abort data";
-			break;
-		case EXCTYPE_IRQ:
-			string = "IRQ";
-			break;
-		case EXCTYPE_FIRQ:
-			string = "Fast IRQ";
-			break;
-		case EXCTYPE_NOTASSGN:
-			string = "Not assigned";
-			break;
-		case EXCTYPE_SWI:
-			string = "Software Interrupt";
-			break;
-		default:
-			string = "???";
-			break;
-	}
-	return(string);
+    switch(type) {
+    case EXCTYPE_UNDEF:
+        string = "Undefined instruction";
+        break;
+    case EXCTYPE_ABORTP:
+        string = "Abort prefetch";
+        break;
+    case EXCTYPE_ABORTD:
+        string = "Abort data";
+        break;
+    case EXCTYPE_IRQ:
+        string = "IRQ";
+        break;
+    case EXCTYPE_FIRQ:
+        string = "Fast IRQ";
+        break;
+    case EXCTYPE_NOTASSGN:
+        string = "Not assigned";
+        break;
+    case EXCTYPE_SWI:
+        string = "Software Interrupt";
+        break;
+    default:
+        string = "???";
+        break;
+    }
+    return(string);
 }
 
 void

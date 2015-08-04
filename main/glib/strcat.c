@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 1988, 1993
- *	The Regents of the University of California.  All rights reserved.
+ *  The Regents of the University of California.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -36,11 +36,11 @@ __FBSDID("$FreeBSD$");
 #include <string.h>
 
 char *
-strcat(char * __restrict s, const char * __restrict append)
+strcat(char *__restrict s, const char *__restrict append)
 {
-	char *save = s;
+    char *save = s;
 
-	for (; *s; ++s);
-	while ((*s++ = *append++));
-	return(save);
+    for(; *s; ++s);
+    while((*s++ = *append++));
+    return(save);
 }

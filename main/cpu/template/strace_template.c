@@ -48,76 +48,81 @@ char *StraceHelp[] = {
 int
 Strace(int argc,char *argv[])
 {
-	char	*symfile, fname[64];
-	TFILE	*tfp;
-	ulong	*framepointer, pc, fp, offset;
-    int		tfd, opt, maxdepth, pass, verbose, bullseye;
+    char    *symfile, fname[64];
+    TFILE   *tfp;
+    ulong   *framepointer, pc, fp, offset;
+    int     tfd, opt, maxdepth, pass, verbose, bullseye;
 
-	tfd = fp = 0;
-	maxdepth = 20;
-	verbose = 0;
-	pc = ExceptionAddr;
-    while ((opt=getopt(argc,argv,"d:F:P:rs:v")) != -1) {
-		switch(opt) {
-		case 'd':
-			maxdepth = atoi(optarg);
-			break;
-		case 'F':
-			fp = strtoul(optarg,0,0);
-			break;
-		case 'P':
-			pc = strtoul(optarg,0,0);
-			break;
-		case 'r':
-			showregs();
-			break;
-		case 'v':
-			verbose = 1;
-			break;
-	    default:
-			return(0);
-		}
-	}
-	
-	if (!fp)
-		getreg("A6", (ulong *)&framepointer);
-	else
-		framepointer = (ulong *)fp;
+    tfd = fp = 0;
+    maxdepth = 20;
+    verbose = 0;
+    pc = ExceptionAddr;
+    while((opt=getopt(argc,argv,"d:F:P:rs:v")) != -1) {
+        switch(opt) {
+        case 'd':
+            maxdepth = atoi(optarg);
+            break;
+        case 'F':
+            fp = strtoul(optarg,0,0);
+            break;
+        case 'P':
+            pc = strtoul(optarg,0,0);
+            break;
+        case 'r':
+            showregs();
+            break;
+        case 'v':
+            verbose = 1;
+            break;
+        default:
+            return(0);
+        }
+    }
 
-	/* Start by detecting the presence of a symbol table file... */
-	symfile = getenv("SYMFILE");
-	if (!symfile)
-		symfile = SYMFILE;
+    if(!fp) {
+        getreg("A6", (ulong *)&framepointer);
+    } else {
+        framepointer = (ulong *)fp;
+    }
 
-	tfp = tfsstat(symfile);
-	if (tfp)  {
-		tfd = tfsopen(symfile,TFS_RDONLY,0);
-		if (tfd < 0)
-			tfp = (TFILE *)0;
-	}
+    /* Start by detecting the presence of a symbol table file... */
+    symfile = getenv("SYMFILE");
+    if(!symfile) {
+        symfile = SYMFILE;
+    }
 
-	/* Show current position: */
-	printf("   0x%08lx",pc);
-	if (tfp) {
-		AddrToSym(tfd,pc,fname,&offset);
-		printf(": %s()",fname);
-		if (offset)
-			printf(" + 0x%lx",offset);
-	}
-	putchar('\n');
+    tfp = tfsstat(symfile);
+    if(tfp)  {
+        tfd = tfsopen(symfile,TFS_RDONLY,0);
+        if(tfd < 0) {
+            tfp = (TFILE *)0;
+        }
+    }
 
-	/* Now step through the stack frame... */
-	bullseye = pass = 0;
-	while(maxdepth) {
-		/* ADD_CODE_HERE */
-	}
+    /* Show current position: */
+    printf("   0x%08lx",pc);
+    if(tfp) {
+        AddrToSym(tfd,pc,fname,&offset);
+        printf(": %s()",fname);
+        if(offset) {
+            printf(" + 0x%lx",offset);
+        }
+    }
+    putchar('\n');
 
-	if (!maxdepth)
-		printf("Max depth termination\n");
-	
-	if (tfp) {
-		tfsclose(tfd,0);
-	}
+    /* Now step through the stack frame... */
+    bullseye = pass = 0;
+    while(maxdepth) {
+        /* ADD_CODE_HERE */
+    }
+
+    if(!maxdepth) {
+        printf("Max depth termination\n");
+    }
+
+    if(tfp) {
+        tfsclose(tfd,0);
+    }
     return(0);
 }
 

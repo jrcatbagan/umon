@@ -1,7 +1,7 @@
 /**************************************************************************
  *
  * Copyright (c) 2013 Alcatel-Lucent
- * 
+ *
  * Alcatel Lucent licenses this file to You under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License.  A copy of the License is contained the
@@ -24,15 +24,15 @@
  *
  */
 struct bmem {
-	int id;				
-	char *name;
-	int pgsize;
-	int spsize;
-	int ppb;
-	int btot;
-	int	(*bmemerase)(int bkno, int verbose);
-	int	(*bmemread)(char *dest, int bkno, int pgno, int size, int verbose);
-	int	(*bmemwrite)(char *src, int bkno, int pgno, int size, int verbose);
+    int id;
+    char *name;
+    int pgsize;
+    int spsize;
+    int ppb;
+    int btot;
+    int (*bmemerase)(int bkno, int verbose);
+    int (*bmemread)(char *dest, int bkno, int pgno, int size, int verbose);
+    int (*bmemwrite)(char *src, int bkno, int pgno, int size, int verbose);
 };
 
 extern struct bmem bmemtbl[];

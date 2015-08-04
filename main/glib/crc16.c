@@ -43,17 +43,18 @@ ushort xcrc16tab[] = {
 ushort
 xcrc16(uchar *buffer,ulong nbytes)
 {
-	ulong	i;
-	ushort	crc;
+    ulong   i;
+    ushort  crc;
 
-	crc = 0;
-	for(i=0;i<nbytes;i++) {
-		crc = (ushort)((crc << 8) ^ xcrc16tab[(crc>>8) ^ buffer[i]]);
+    crc = 0;
+    for(i=0; i<nbytes; i++) {
+        crc = (ushort)((crc << 8) ^ xcrc16tab[(crc>>8) ^ buffer[i]]);
 #ifdef WATCHDOG_ENABLED
-		/* Every 256 bytes call the watchdog macro... */
-		if ((nbytes & 0xff) == 0)
-			WATCHDOG_MACRO;
+        /* Every 256 bytes call the watchdog macro... */
+        if((nbytes & 0xff) == 0) {
+            WATCHDOG_MACRO;
+        }
 #endif
-	}
-	return(crc);
+    }
+    return(crc);
 }

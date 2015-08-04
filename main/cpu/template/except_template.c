@@ -34,31 +34,31 @@
 #include "stddefs.h"
 #include "warmstart.h"
 
-ulong	ExceptionAddr;
-int		ExceptionType;
+ulong   ExceptionAddr;
+int     ExceptionType;
 
 /* exception():
  * This is the first 'C' function called out of a monitor-installed
- * exception handler. 
+ * exception handler.
  */
 void
 exception(void)
 {
-	/* ADD_CODE_HERE */
+    /* ADD_CODE_HERE */
 
-	/* Populating these two values is target specific.
-	 * Refer to other target-specific examples for details.
- 	 * In some cases, these values are extracted from registers
-	 * already put into the register cache by the lower-level
-	 * portion of the exception handler in vectors_template.s
-	 */
-	ExceptionAddr = 0;
-	ExceptionType = 0;
+    /* Populating these two values is target specific.
+     * Refer to other target-specific examples for details.
+     * In some cases, these values are extracted from registers
+     * already put into the register cache by the lower-level
+     * portion of the exception handler in vectors_template.s
+     */
+    ExceptionAddr = 0;
+    ExceptionType = 0;
 
-	/* Allow the console uart fifo to empty...
-	 */
-	flushconsole();
-	monrestart(EXCEPTION);
+    /* Allow the console uart fifo to empty...
+     */
+    flushconsole();
+    monrestart(EXCEPTION);
 }
 
 /* vinit():
@@ -69,7 +69,7 @@ exception(void)
 void
 vinit()
 {
-	/* ADD_CODE_HERE */
+    /* ADD_CODE_HERE */
 }
 
 /* ExceptionType2String():
@@ -79,9 +79,9 @@ vinit()
 char *
 ExceptionType2String(int type)
 {
-	char *string;
+    char *string;
 
-	/* ADD_CODE_HERE */
-	return(string);
+    /* ADD_CODE_HERE */
+    return(string);
 }
 

@@ -1,7 +1,7 @@
 /**************************************************************************
  *
  * Copyright (c) 2013 Alcatel-Lucent
- * 
+ *
  * Alcatel Lucent licenses this file to You under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License.  A copy of the License is contained the
@@ -20,8 +20,8 @@
  *
  * monbuilt.c:
  *
- *	This file contains all of the monitor code that constructs
- *	the time and date of the build.
+ *  This file contains all of the monitor code that constructs
+ *  the time and date of the build.
  *
  * Original author:     Ed Sutter (ed.sutter@alcatel-lucent.com)
  *
@@ -30,7 +30,7 @@
  * A 'what' string to allow the 'what' tool to query the binary
  * image built with this source code.
  */
-#define WHAT_PREFIX	"@(#)"
+#define WHAT_PREFIX "@(#)"
 
 char *whatbuild = WHAT_PREFIX __DATE__ " @ " __TIME__;
 
@@ -42,5 +42,5 @@ char *whatbuild = WHAT_PREFIX __DATE__ " @ " __TIME__;
 char *
 monBuilt(void)
 {
-	return(whatbuild+sizeof(WHAT_PREFIX)-1);
+    return(whatbuild+sizeof(WHAT_PREFIX)-1);
 }

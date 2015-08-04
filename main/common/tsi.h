@@ -1,7 +1,7 @@
 /**************************************************************************
  *
  * Copyright (c) 2013 Alcatel-Lucent
- * 
+ *
  * Alcatel Lucent licenses this file to You under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License.  A copy of the License is contained the
@@ -31,5 +31,5 @@ extern int tsi_getx(void);
 extern int tsi_gety(void);
 
 #ifndef PEN_MOVE_FILTER
-#define PEN_MOVE_FILTER			15
+#define PEN_MOVE_FILTER         15
 #endif

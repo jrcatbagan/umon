@@ -1,7 +1,7 @@
 /**************************************************************************
  *
  * Copyright (c) 2013 Alcatel-Lucent
- * 
+ *
  * Alcatel Lucent licenses this file to You under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License.  A copy of the License is contained the
@@ -20,7 +20,7 @@
  *
  * aout.h:
  *
- *	Header file for the AOUT file format used by TFS.
+ *  Header file for the AOUT file format used by TFS.
  *
  * Original author:     Ed Sutter (ed.sutter@alcatel-lucent.com)
  *
@@ -29,25 +29,25 @@
 #define _AOUT_H_
 
 struct exec {
-	unsigned short	a_mid;
-	unsigned short	a_magic;
-	unsigned long	a_text;		/* Size of text segment in bytes */
-	unsigned long	a_data;		/* Size of data segment in bytes */
-	unsigned long	a_bss;		/* Size of bss segment in bytes */
-	unsigned long	a_syms;		/* Size of symbol table in bytes */
-	unsigned long	a_entry;	/* Entry point address */
-	unsigned long	a_trsize;	/* Size of text relocation table */
-	unsigned long	a_drsize;	/* Size of data relocation table */
+    unsigned short  a_mid;
+    unsigned short  a_magic;
+    unsigned long   a_text;     /* Size of text segment in bytes */
+    unsigned long   a_data;     /* Size of data segment in bytes */
+    unsigned long   a_bss;      /* Size of bss segment in bytes */
+    unsigned long   a_syms;     /* Size of symbol table in bytes */
+    unsigned long   a_entry;    /* Entry point address */
+    unsigned long   a_trsize;   /* Size of text relocation table */
+    unsigned long   a_drsize;   /* Size of data relocation table */
 };
 
 struct relocation_info {
-	int		r_address;
-	ulong		r_info;
+    int     r_address;
+    ulong       r_info;
 };
 
 /* Fields within r_info: */
-#define SYMNUM_MSK	0xffffff00
-#define PCREL_MSK	0x00000080
-#define LENGTH_MSK	0x00000060
-#define EXTERN_MSK	0x00000010
+#define SYMNUM_MSK  0xffffff00
+#define PCREL_MSK   0x00000080
+#define LENGTH_MSK  0x00000060
+#define EXTERN_MSK  0x00000010
 #endif

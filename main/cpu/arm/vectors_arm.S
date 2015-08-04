@@ -29,37 +29,37 @@
 
 #include "arm.h"
 
-	.global undefined_instruction
+.global undefined_instruction
 undefined_instruction:
-	mov r1, #EXCTYPE_UNDEF
-	b umon_exception
+mov r1, #EXCTYPE_UNDEF
+b umon_exception
 
-	.global software_interrupt
+.global software_interrupt
 software_interrupt:
-	mov r1, #EXCTYPE_SWI
-	b umon_exception
+mov r1, #EXCTYPE_SWI
+b umon_exception
 
-	.global abort_prefetch
+.global abort_prefetch
 abort_prefetch:
-	mov r1, #EXCTYPE_ABORTP
-	b umon_exception
+mov r1, #EXCTYPE_ABORTP
+b umon_exception
 
-	.global abort_data
+.global abort_data
 abort_data:
-	mov r1, #EXCTYPE_ABORTD
-	b umon_exception
+mov r1, #EXCTYPE_ABORTD
+b umon_exception
 
-	.global not_assigned
+.global not_assigned
 not_assigned:
-	mov r1, #EXCTYPE_NOTASSGN
-	b umon_exception
+mov r1, #EXCTYPE_NOTASSGN
+b umon_exception
 
-	.global interrupt_request
+.global interrupt_request
 interrupt_request:
-	mov r1, #EXCTYPE_IRQ
-	b umon_exception
+mov r1, #EXCTYPE_IRQ
+b umon_exception
 
-	.global fast_interrupt_request
+.global fast_interrupt_request
 fast_interrupt_request:
-	mov r1, #EXCTYPE_FIRQ
-	b umon_exception
+mov r1, #EXCTYPE_FIRQ
+b umon_exception

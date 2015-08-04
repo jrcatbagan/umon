@@ -1,6 +1,6 @@
 /*-
  * Copyright (c) 1990, 1993
- *	The Regents of the University of California.  All rights reserved.
+ *  The Regents of the University of California.  All rights reserved.
  *
  * This code is derived from software contributed to Berkeley by
  * Chris Torek.
@@ -42,13 +42,14 @@ __FBSDID("$FreeBSD$");
 void *
 memchr(const void *s, int c, size_t n)
 {
-	if (n != 0) {
-		const unsigned char *p = s;
+    if(n != 0) {
+        const unsigned char *p = s;
 
-		do {
-			if (*p++ == (unsigned char)c)
-				return ((void *)(p - 1));
-		} while (--n != 0);
-	}
-	return (NULL);
+        do {
+            if(*p++ == (unsigned char)c) {
+                return ((void *)(p - 1));
+            }
+        } while(--n != 0);
+    }
+    return (NULL);
 }

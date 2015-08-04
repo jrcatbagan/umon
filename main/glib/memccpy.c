@@ -1,6 +1,6 @@
 /*-
  * Copyright (c) 1990, 1993
- *	The Regents of the University of California.  All rights reserved.
+ *  The Regents of the University of California.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -40,14 +40,15 @@ void *
 memccpy(void *t, const void *f, int c, size_t n)
 {
 
-	if (n) {
-		unsigned char *tp = t;
-		const unsigned char *fp = f;
-		unsigned char uc = c;
-		do {
-			if ((*tp++ = *fp++) == uc)
-				return (tp);
-		} while (--n != 0);
-	}
-	return (0);
+    if(n) {
+        unsigned char *tp = t;
+        const unsigned char *fp = f;
+        unsigned char uc = c;
+        do {
+            if((*tp++ = *fp++) == uc) {
+                return (tp);
+            }
+        } while(--n != 0);
+    }
+    return (0);
 }

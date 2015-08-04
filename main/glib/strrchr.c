@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 1988, 1993
- *	The Regents of the University of California.  All rights reserved.
+ *  The Regents of the University of California.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -39,17 +39,19 @@ __FBSDID("$FreeBSD$");
 char *
 strrchr(const char *p, int ch)
 {
-	char *save;
-	char c;
+    char *save;
+    char c;
 
-	c = ch;
-	for (save = NULL;; ++p) {
-		if (*p == c)
-			save = (char *)p;
-		if (*p == '\0')
-			return (save);
-	}
-	/* NOTREACHED */
+    c = ch;
+    for(save = NULL;; ++p) {
+        if(*p == c) {
+            save = (char *)p;
+        }
+        if(*p == '\0') {
+            return (save);
+        }
+    }
+    /* NOTREACHED */
 }
 
 __weak_reference(strrchr, rindex);

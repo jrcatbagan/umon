@@ -1,6 +1,6 @@
 /*-
  * Copyright (c) 1990, 1993
- *	The Regents of the University of California.  All rights reserved.
+ *  The Regents of the University of California.  All rights reserved.
  *
  * This code is derived from software contributed to Berkeley by
  * Chris Torek.
@@ -45,18 +45,19 @@ __FBSDID("$FreeBSD$");
 char *
 strstr(const char *s, const char *find)
 {
-	char c, sc;
-	size_t len;
+    char c, sc;
+    size_t len;
 
-	if ((c = *find++) != '\0') {
-		len = strlen(find);
-		do {
-			do {
-				if ((sc = *s++) == '\0')
-					return (NULL);
-			} while (sc != c);
-		} while (strncmp(s, find, len) != 0);
-		s--;
-	}
-	return ((char *)s);
+    if((c = *find++) != '\0') {
+        len = strlen(find);
+        do {
+            do {
+                if((sc = *s++) == '\0') {
+                    return (NULL);
+                }
+            } while(sc != c);
+        } while(strncmp(s, find, len) != 0);
+        s--;
+    }
+    return ((char *)s);
 }

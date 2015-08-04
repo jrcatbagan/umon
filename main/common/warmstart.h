@@ -1,7 +1,7 @@
 /**************************************************************************
  *
  * Copyright (c) 2013 Alcatel-Lucent
- * 
+ *
  * Alcatel Lucent licenses this file to You under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License.  A copy of the License is contained the
@@ -26,9 +26,9 @@
 #ifndef _WARMSTART_H_
 
 /* Standard restart (warmstart) definitions used by monitor... */
-#define EXCEPTION	(1<<4)
-#define INITIALIZE	(3<<4)
-#define APPLICATION	(5<<4)
-#define APP_EXIT	(9<<4)
+#define EXCEPTION   (1<<4)
+#define INITIALIZE  (3<<4)
+#define APPLICATION (5<<4)
+#define APP_EXIT    (9<<4)
 
 #endif

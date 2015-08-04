@@ -1,7 +1,7 @@
 /**************************************************************************
  *
  * Copyright (c) 2013 Alcatel-Lucent
- * 
+ *
  * Alcatel Lucent licenses this file to You under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except in
  * compliance with the License.  A copy of the License is contained the
@@ -27,15 +27,15 @@
  */
 #include "config.h"
 
-#if	INCLUDE_FBI
+#if INCLUDE_FBI
 
-#define fbi_putchar(a)	fbi_putchar(a)
+#define fbi_putchar(a)  fbi_putchar(a)
 extern void fbi_putchar(char c);
 
 #ifdef FBI_NO_CURSOR
 #define fbi_cursor()
 #else
-#define fbi_cursor(a)	fbi_cursor(a)
+#define fbi_cursor(a)   fbi_cursor(a)
 extern void fbi_cursor(void);
 #endif
 

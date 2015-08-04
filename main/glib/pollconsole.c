@@ -14,31 +14,34 @@
 int
 pollConsole(char *msg)
 {
-	char	*env;
-	int		pollval, msec;
-	struct elapsed_tmr tmr;
+    char    *env;
+    int     pollval, msec;
+    struct elapsed_tmr tmr;
 
-	env = getenv("POLLTIMEOUT");
-	if (env)
-		msec = strtol(env,0,0);
-	else
-		msec = 2000;
+    env = getenv("POLLTIMEOUT");
+    if(env) {
+        msec = strtol(env,0,0);
+    } else {
+        msec = 2000;
+    }
 
-	pollval = 0;
-	printf("%s",msg);
-	startElapsedTimer(&tmr,msec);
-	while(!msecElapsed(&tmr)) {
-		if (gotachar()) {
-			while(gotachar())
-				pollval = getchar();
-			break;
-		}
-		pollethernet();
-	}
-	putstr("\r\n");
-	
-	if (ELAPSED_TIMEOUT(&tmr))
-		return(0);
+    pollval = 0;
+    printf("%s",msg);
+    startElapsedTimer(&tmr,msec);
+    while(!msecElapsed(&tmr)) {
+        if(gotachar()) {
+            while(gotachar()) {
+                pollval = getchar();
+            }
+            break;
+        }
+        pollethernet();
+    }
+    putstr("\r\n");
 
-	return(pollval);
+    if(ELAPSED_TIMEOUT(&tmr)) {
+        return(0);
+    }
+
+    return(pollval);
 }

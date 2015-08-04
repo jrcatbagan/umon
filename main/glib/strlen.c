@@ -10,9 +10,9 @@
 int
 strlen(register char *s)
 {
-	register char *s0 = s + 1;
+    register char *s0 = s + 1;
 
-	while (*s++ != '\0')
-		;
-	return (s - s0);
+    while(*s++ != '\0')
+        ;
+    return (s - s0);
 }
