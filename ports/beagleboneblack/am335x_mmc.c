@@ -331,13 +331,157 @@ mmcInit(int interface, int verbose)
 int
 mmcRead(int interface, char *buf, int blknum, int blkcnt)
 {
-	return(-1);
+	uint32_t cmd, arg, resp[4];
+	uint32_t *wordptr = (uint32_t *) buf;
+	int byteindex;
+
+	/* Get the SD card's status via CMD13 */
+	arg = (mmcrca << 16) & 0xFFFF0000;
+	cmd = SD_CMD_CMD13_SEND_STATUS | SD_CMD_CMD_TYPE_NORMAL | SD_CMD_DP_NO_DATA_PRESENT |
+		SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE | SD_CMD_RSP_TYPE_R1;
+	if (mmccmd(cmd, arg, resp) == -1)
+		return(-1);
+
+	/* Ensure that the card is in Transfer State before proceeding */
+	if ((resp[0] & SD_RSP10_R1_CURRENT_STATE) != SD_RSP10_R1_CURRENT_STATE_TRANSFER) {
+		arg = (mmcrca << 16) & 0xFFFF0000;
+		cmd = SD_CMD_CMD7_SELECT_DESELECT_CARD | SD_CMD_CMD_TYPE_NORMAL |
+			SD_CMD_DP_NO_DATA_PRESENT | SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE |
+			SD_CMD_RSP_TYPE_R1B;
+		if (mmccmd(cmd, arg, resp) == -1)
+			return(-1);
+
+		/* Wait for the SD card to enter Transfer State */
+		do {
+			arg = (mmcrca << 16) & 0xFFFF0000;
+			cmd = SD_CMD_CMD13_SEND_STATUS | SD_CMD_CMD_TYPE_NORMAL |
+				SD_CMD_DP_NO_DATA_PRESENT | SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE |
+				SD_CMD_RSP_TYPE_R1;
+			if (mmccmd(cmd, arg, resp) == -1)
+				return(-1);
+		} while ((resp[0] & SD_RSP10_R1_CURRENT_STATE) != SD_RSP10_R1_CURRENT_STATE_TRANSFER);
+	}
+
+	/* Set the block length and the number of blocks to read */
+	MMC1_REG(SD_BLK) = 0x200 | (blkcnt << 16);
+	/* Read multiple blocks via CMD18 */
+	arg = blknum;
+	cmd = SD_CMD_CMD18_READ_MULTIPLE_BLOCK | SD_CMD_CMD_TYPE_NORMAL | SD_CMD_DP_DATA_PRESENT |
+		SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE | SD_CMD_RSP_TYPE_R1 | SD_CMD_MSBS_MULTIPLE |
+		SD_CMD_DDIR_READ | SD_CMD_ACEN_CMD12_ENABLE | SD_CMD_BCE_ENABLE;
+	if (mmccmd(cmd, arg, resp) == -1)
+		return(-1);
+
+	/* Check the data buffer to see if there is data to be read */
+	do {
+		while (!(MMC1_REG(SD_STAT) & SD_STAT_BRR));
+
+		/* Clear the BRR status bit in SD_STAT */
+		MMC1_REG(SD_STAT) |= SD_STAT_BRR;
+
+		for (byteindex = 0; byteindex < (0x200 / 4); byteindex++) {
+			*wordptr = MMC1_REG(SD_DATA);
+			wordptr++;
+		}
+	} while (!(MMC1_REG(SD_STAT) & SD_STAT_TC));
+
+	/* Put the eMMC into Stand-by State */
+	arg = 0;
+	cmd = SD_CMD_CMD7_SELECT_DESELECT_CARD | SD_CMD_CMD_TYPE_NORMAL | SD_CMD_DP_NO_DATA_PRESENT |
+		SD_CMD_CICE_DISABLE | SD_CMD_CCCE_DISABLE | SD_CMD_RSP_TYPE_NO_RESPONSE;
+	if (mmccmd(cmd, arg, resp) == -1)
+		return(-1);
+
+	/* Wait for the eMMC to enter Stand-by State */
+	do {
+		arg = (mmcrca << 16) & 0xFFFF0000;
+		cmd = SD_CMD_CMD13_SEND_STATUS | SD_CMD_CMD_TYPE_NORMAL | SD_CMD_DP_NO_DATA_PRESENT |
+			SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE | SD_CMD_RSP_TYPE_R1;
+		if (mmccmd(cmd, arg, resp) == -1)
+			return(-1);
+	} while ((resp[0] & SD_RSP10_R1_CURRENT_STATE) != SD_RSP10_R1_CURRENT_STATE_STANDBY);
+
+	return(0);
 }
 
 int
 mmcWrite(int interface, char *buf, int blknum, int blkcnt)
 {
-	return(-1);
+	uint32_t cmd, arg, resp[4];
+	uint32_t *wordptr = (uint32_t *) buf;
+	int byteindex;
+
+	/* Get the eMMC status by sending CMD13 */
+	arg = (mmcrca << 16) & 0xFFFF0000;
+	cmd = SD_CMD_CMD13_SEND_STATUS | SD_CMD_CMD_TYPE_NORMAL | SD_CMD_DP_NO_DATA_PRESENT |
+		SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE | SD_CMD_RSP_TYPE_R1;
+	if (mmccmd(cmd, arg, resp) == -1)
+		return(-1);
+
+	/* Ensure that the eMMC is in the Transfer State before proceeding */
+	if ((resp[0] & SD_RSP10_R1_CURRENT_STATE) != SD_RSP10_R1_CURRENT_STATE_TRANSFER) {
+		arg = (mmcrca << 16) & 0xFFFF0000;
+		cmd  = SD_CMD_CMD7_SELECT_DESELECT_CARD | SD_CMD_CMD_TYPE_NORMAL |
+			SD_CMD_DP_NO_DATA_PRESENT | SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE |
+			SD_CMD_RSP_TYPE_R1B;
+		if (mmccmd(cmd, arg, resp) == -1)
+			return(-1);
+
+		/* Wait for eMMC to enter Transfer State */
+		do {
+			arg = (mmcrca << 16) & 0xFFFF0000;
+			cmd = SD_CMD_CMD13_SEND_STATUS | SD_CMD_CMD_TYPE_NORMAL |
+				SD_CMD_DP_NO_DATA_PRESENT | SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE |
+				SD_CMD_RSP_TYPE_R1;
+			if (mmccmd(cmd, arg, resp) == -1)
+				return(-1);
+		} while ((resp[0] & SD_RSP10_R1_CURRENT_STATE) != SD_RSP10_R1_CURRENT_STATE_TRANSFER);
+	}
+
+	/* Set the block length in bytes and the number of blocks to write to the SD card */
+	MMC1_REG(SD_BLK) = 0x200 | (blkcnt << 16);
+	/* Send CMD25, that is write the number of blocks specified in 'blkcount' from 'buf' to the
+	 * location that is 512 byte aligned in the SD card specified by the block number 'blknum'
+	 */
+	arg = blknum;
+	cmd = SD_CMD_CMD25_WRITE_MULTIPLE_BLOCK | SD_CMD_CMD_TYPE_NORMAL | SD_CMD_DP_DATA_PRESENT |
+		SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE | SD_CMD_RSP_TYPE_R1 | SD_CMD_MSBS_MULTIPLE |
+		SD_CMD_DDIR_WRITE | SD_CMD_ACEN_CMD12_ENABLE | SD_CMD_BCE_ENABLE;
+	if (mmccmd(cmd, arg, resp) == -1)
+		return(-1);
+
+	/* Write the data */
+	do {
+		/* Wait until data is ready to be written */
+		while (!(MMC1_REG(SD_STAT) & (SD_STAT_BWR | SD_STAT_TC)));
+
+		if (MMC1_REG(SD_STAT) & SD_STAT_TC)
+			break;
+
+		/* Clear the BWR status bit in SD_STAT */
+		MMC1_REG(SD_STAT) |= SD_STAT_BWR;
+
+		for (byteindex = 0; byteindex < (0x200 / 4); byteindex++)
+			MMC1_REG(SD_DATA) = *wordptr++;
+	} while (!(MMC1_REG(SD_STAT) & SD_STAT_TC));
+
+	/* Put the eMMC into Stand-by State */
+	arg = 0x00000000;
+	cmd = SD_CMD_CMD7_SELECT_DESELECT_CARD | SD_CMD_CMD_TYPE_NORMAL | SD_CMD_DP_NO_DATA_PRESENT |
+		SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE | SD_CMD_RSP_TYPE_NO_RESPONSE;
+	if (mmccmd(cmd, arg, resp) == -1)
+		return(-1);
+
+	/* Wait for eMMC to enter Stand-by State */
+	do {
+		arg = (mmcrca << 16) & 0xFFFF0000;
+		cmd  = SD_CMD_CMD13_SEND_STATUS | SD_CMD_CMD_TYPE_NORMAL | SD_CMD_DP_NO_DATA_PRESENT |
+			SD_CMD_CICE_ENABLE | SD_CMD_CCCE_ENABLE | SD_CMD_RSP_TYPE_R1;
+		if (mmccmd(cmd, arg, resp) == -1)
+			return(-1);
+	} while ((resp[0] & SD_RSP10_R1_CURRENT_STATE) != SD_RSP10_R1_CURRENT_STATE_STANDBY);
+
+	return(0);
 }
 
 int
