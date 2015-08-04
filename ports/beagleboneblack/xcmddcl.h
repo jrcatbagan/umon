@@ -11,3 +11,6 @@ extern  int dummycmd();         Function declaration.
 extern  char *dummyHelp[];      Command help array declaration.
 
 */
+
+extern int mmc();
+extern char *mmcHelp[];
