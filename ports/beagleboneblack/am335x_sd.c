@@ -47,10 +47,6 @@ sdInit(int interface, int verbosity)
 {
 	uint32_t cmd, arg, resp[4];
 
-	/* Enable MMC0 clocks */
-	CM_PER_REG(CM_PER_MMC0_CLKCTRL) |= CM_PER_MMC0_CLKCTRL_MODULEMODE_ENABLE;
-	while (CM_PER_REG(CM_PER_MMC0_CLKCTRL) & CM_PER_MMC0_CLKCTRL_IDLEST);
-
 	/* Reset the MMC/SD controller */
 	MMCHS0_REG(SD_SYSCONFIG) = SD_SYSCONFIG_SOFTRESET;
 	while (!(MMCHS0_REG(SD_SYSSTATUS) & SD_SYSSTATUS_RESETDONE));
