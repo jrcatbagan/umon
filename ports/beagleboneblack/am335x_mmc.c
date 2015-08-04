@@ -135,10 +135,6 @@ mmcInit(int interface, int verbose)
 {
 	uint32_t cmd, arg, resp[4];
 
-	/* Enable MMC1 clocks */
-	CM_PER_REG(CM_PER_MMC1_CLKCTRL) |= CM_PER_MMC1_CLKCTRL_MODULEMODE_ENABLE;
-	while (CM_PER_REG(CM_PER_MMC1_CLKCTRL) & CM_PER_MMC0_CLKCTRL_IDLEST);
-
 	/* Reset the MMC1 Controller */
 	MMC1_REG(SD_SYSCONFIG) = SD_SYSCONFIG_SOFTRESET;
 	while (!(MMC1_REG(SD_SYSSTATUS) & SD_SYSSTATUS_RESETDONE));
