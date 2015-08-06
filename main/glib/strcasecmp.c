@@ -30,17 +30,25 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
+ *
+ * Modified (removed locale) for use in Micromonitor.
  */
 
+#if defined(LIBC_SCCS) && !defined(lint)
+static char sccsid[] = "@(#)strcasecmp.c	8.1 (Berkeley) 6/4/93";
+#endif /* LIBC_SCCS and not lint */
+#include <sys/cdefs.h>
+__FBSDID("$FreeBSD$");
+
+#include <strings.h>
 #include <ctype.h>
-#include <stdlib.h>
 
 int
 strcasecmp(const char *s1, const char *s2)
 {
-    const unsigned char
-    *us1 = (const unsigned char *)s1,
-     *us2 = (const unsigned char *)s2;
+    const u_char
+    *us1 = (const u_char *)s1,
+     *us2 = (const u_char *)s2;
 
     while(tolower(*us1) == tolower(*us2++))
         if(*us1++ == '\0') {
@@ -53,9 +61,9 @@ int
 strncasecmp(const char *s1, const char *s2, size_t n)
 {
     if(n != 0) {
-        const unsigned char
-        *us1 = (const unsigned char *)s1,
-         *us2 = (const unsigned char *)s2;
+        const u_char
+        *us1 = (const u_char *)s1,
+         *us2 = (const u_char *)s2;
 
         do {
             if(tolower(*us1) != tolower(*us2++)) {

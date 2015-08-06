@@ -1,49 +1,98 @@
+
+#####
 #
-# This is the original script I used to pull in files from the FreeBsd project:
+# Where did this code come from?
+# Some is home grown, most is straight out of freebsd untouched,
+# some freebsd is touched, and a few are from external sources
+# slightly modified...
+# Note that all files that are untouched are pulled in and assigned
+# the filename;  if they are touched, then the file is pulled in
+# with a different name (to avoid overwriting the modified file).
+
+#####
 #
-export GLIBFILES="abs.c atoi.c crc16.c crc32.c ctypetbl.c div.c getopt.c gmtime.c inrange.c lceil.c ldiv.c little_print.c memccpy.c memchr.c memcmp.c memcpy.c memset.c pollconsole.c prascii.c printmem.c smemcpy.c smemset.c sprnfloat.c strcasecmp.c strcat.c strchr.c strcmp.c strcpy.c strcspn.c strlen.c strncat.c strncmp.c strncpy.c strnlen.c strpbrk.c strrchr.c strspn.c strstr.c strtod.c strtok.c strtol.c strtoul.c strtolower.c strtoupper.c swap.c ticktock.c ulceil.c"
+# libc/string (untouched):
+# bcopy.c:
+wget -O bcopy.c https://svnweb.freebsd.org/base/head/lib/libc/string/bcopy.c?revision=251069&view=co
+# memccpy.c:
+wget -O memccpy.c https://svnweb.freebsd.org/base/head/lib/libc/string/memccpy.c?revision=251069&view=co
+# memchr.c:
+wget -O memchr.c https://svnweb.freebsd.org/base/head/lib/libc/string/memchr.c?revision=251069&view=co
+# memcmp.c:
+wget -O memcmp.chttps://svnweb.freebsd.org/base/head/lib/libc/string/memcmp.c?revision=251069&view=co
+# memcpy.c:
+wget -O memcpy.c https://svnweb.freebsd.org/base/head/lib/libc/string/memcpy.c?revision=92986&view=co
+# memset.c:
+wget -O memset.c https://svnweb.freebsd.org/base/head/lib/libc/string/memset.c?revision=251069&view=co
+# strcat.c:
+wget -O strcat.c https://svnweb.freebsd.org/base/head/lib/libc/string/strcat.c?revision=251069&view=co
+# strchr.c:
+wget -O strchr.c https://svnweb.freebsd.org/base/head/lib/libc/string/strchr.c?revision=251069&view=co
+# strcmp.c:
+wget -O strcmp.c https://svnweb.freebsd.org/base/head/lib/libc/string/strcmp.c?revision=251069&view=co
+# strcpy.c:
+wget -O strcpy.c https://svnweb.freebsd.org/base/head/lib/libc/string/strcpy.c?revision=251069&view=co
+# strlen.c:
+wget -O strlen.c https://svnweb.freebsd.org/base/head/lib/libc/string/strlen.c?revision=92889&view=co
+# strncat.c:
+wget -O strncat.c https://svnweb.freebsd.org/base/head/lib/libc/string/strncat.c?revision=251069&view=co
+# strncmp.c:
+wget -O strncmp.c https://svnweb.freebsd.org/base/head/lib/libc/string/strncmp.c?revision=251069&view=co
+# strncpy.c:
+wget -O strncpy.c https://svnweb.freebsd.org/base/head/lib/libc/string/strncpy.c?revision=251069&view=co
+# strnlen.c:
+wget -O strnlen.c https://svnweb.freebsd.org/base/head/lib/libc/string/strnlen.c?revision=189136&view=co
+# strpbrk.c:
+wget -O strpbrk.c https://svnweb.freebsd.org/base/head/lib/libc/string/strpbrk.c?revision=251069&view=co
+# strrchr.c:
+wget -O strrchr.c https://svnweb.freebsd.org/base/head/lib/libc/string/strrchr.c?revision=251069&view=co
+# strstr.c:
+wget -O strstr.c https://svnweb.freebsd.org/base/head/lib/libc/string/strstr.c?revision=251069&view=co
+# strtok.c:
+wget -O strtok.c https://svnweb.freebsd.org/base/head/lib/libc/string/strtok.c?revision=251069&view=co
 
-export MYFILES="asctime.c inrange.c memcpy.c pollconsole.c prascii.c printmem.c smemcpy.c smemset.c swap.c ticktock.c"
+#####
+#
+# libc/stdlib (untouched):
+# abs.c:
+wget -O abs.c https://svnweb.freebsd.org/base/head/lib/libc/stdlib/abs.c?revision=251069&view=co
+# ldiv.c:
+wget -O ldiv.c https://svnweb.freebsd.org/base/head/lib/libc/stdlib/ldiv.c?revision=251672&view=co
+# div.c:
+wget -O div.c https://svnweb.freebsd.org/base/head/lib/libc/stdlib/div.c?revision=251069&view=co
 
-export BSDPATH=https://raw.githubusercontent.com/freebsd/freebsd/master
+#####
+#
+# Miscellaneous functions modified, but derived from...
+# (we download them here but don't overwrite the active version)
+#
+# crc16.c:
+wget -O base_crc16.c http://www.menie.org/georges/embedded/crc16.c
+# crc32.c:
+wget https://svnweb.freebsd.org/base/stable/10/sys/libkern/crc32.c?revision=256281&view=co
+# atoi.c (removed locale):
+wget  https://svnweb.freebsd.org/base/head/lib/libc/stdlib/atoi.c?revision=251069&view=co
+# strtol.c (removed locale):
+wget https://svnweb.freebsd.org/base/head/lib/libc/stdlib/strtol.c?revision=251672&view=co
+# strtoul.c (removed locale):
+wget https://svnweb.freebsd.org/base/head/lib/libc/stdlib/strtoul.c?revision=251672&view=co
+# strcasecmp.c (removed locale):
+wget https://svnweb.freebsd.org/base/head/lib/libc/string/strcasecmp.c?revision=251069&view=co
+# getopt.c (add getoptinit()):
+wget https://svnweb.freebsd.org/base/head/lib/libc/stdlib/getopt.c?revision=267745&view=co
+# asctime.c:
+# Hand written written, based on http://pubs.opengroup.org/onlinepubs/009695399/functions/asctime.html
 
-export BSD_STRING_FILES="memccpy.c memchr.c memcmp.c memset.c strcasecmp.c strcat.c strchr.c strcmp.c strcpy.c strcspn.c strlen.c strncat.c strncmp.c strncpy.c strnlen.c strpbrk.c strrchr.c strspn.c strstr.c strtok.c"
+#####
+#
+# Homegrown (written by Ed Sutter):
+# inrange.c
+# pollconsole.c
+# prascii.c
+# printmem.c
+# smemcpy.c
+# smemset.c
+# ticktock.c
+# swap.c
+# strtolower.c
 
-export BSD_STDLIB_FILES="abs.c atoi.c div.c getopt.c ldiv.c strtol.c"
-
-rm -f *.c *.1 list
-
-for file in $MYFILES
-do
-  cp orig/$file .
-  echo "myfile: $file" >>list
-done
-
-for file in $BSD_STDLIB_FILES
-do
-  if ! [ -f $file ] 
-  then
-    wget ${BSDPATH}/lib/libc/stdlib/$file
-    if [ $? == 0 ]
-    then
-      echo "stdlib: $file" >>list
-    fi
-  fi
-done
-
-for file in $BSD_STRING_FILES
-do
-  if ! [ -f $file ] 
-  then
-    wget ${BSDPATH}/lib/libc/string/$file
-    if [ $? == 0 ]
-    then
-      echo "string: $file" >>list
-    fi
-  fi
-done
-
-wget ${BSDPATH}/contrib/tzcode/stdtime/asctime.c
-wget https://raw.githubusercontent.com/LADSoft/OrangeC/master/src/clibs/time/gmtime.c
-wget https://raw.githubusercontent.com/freebsd/freebsd-ports/master/converters/ta2as/files/strtolower.c
-wget https://raw.githubusercontent.com/freebsd/freebsd/master/sys/libkern/crc32.c

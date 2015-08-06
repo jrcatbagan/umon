@@ -34,7 +34,6 @@ static char sccsid[] = "@(#)strncmp.c	8.1 (Berkeley) 6/4/93";
 __FBSDID("$FreeBSD$");
 
 #include <string.h>
-#include <stdlib.h>
 
 int
 strncmp(const char *s1, const char *s2, size_t n)

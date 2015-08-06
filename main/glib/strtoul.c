@@ -30,6 +30,8 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
+ *
+ * Modified (removed locale) for use in Micromonitor
  */
 
 #if defined(LIBC_SCCS) && !defined(lint)
@@ -40,7 +42,10 @@ __FBSDID("$FreeBSD$");
 
 #include <limits.h>
 #include <ctype.h>
+#include <errno.h>
 #include <stdlib.h>
+
+#define HAVE_ERRNO 0
 
 /*
  * Convert a string to an unsigned long integer.
@@ -115,11 +120,20 @@ strtoul(const char *__restrict nptr, char **__restrict endptr, int base)
     }
     if(any < 0) {
         acc = ULONG_MAX;
+#if HAVE_ERRNO
+        errno = ERANGE;
+#endif
     } else if(!any) {
+#if HAVE_ERRNO
+noconv:
+        errno = EINVAL;
+#endif
     } else if(neg) {
         acc = -acc;
     }
+#if !HAVE_ERRNO
 noconv:
+#endif
     if(endptr != NULL) {
         *endptr = (char *)(any ? s - 1 : nptr);
     }

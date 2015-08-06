@@ -37,7 +37,6 @@ static char sccsid[] = "@(#)strncat.c	8.1 (Berkeley) 6/4/93";
 __FBSDID("$FreeBSD$");
 
 #include <string.h>
-#include <stdlib.h>
 
 /*
  * Concatenate src on the end of dst.  At most strlen(dst)+n+1 bytes

@@ -37,7 +37,6 @@ static char sccsid[] = "@(#)strstr.c	8.1 (Berkeley) 6/4/93";
 __FBSDID("$FreeBSD$");
 
 #include <string.h>
-#include <stdlib.h>
 
 /*
  * Find the first occurrence of find in s.

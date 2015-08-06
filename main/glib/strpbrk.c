@@ -34,7 +34,6 @@ static char sccsid[] = "@(#)strpbrk.c	8.1 (Berkeley) 6/4/93";
 __FBSDID("$FreeBSD$");
 
 #include <string.h>
-#include <stdlib.h>
 
 /*
  * Find the first occurrence in s1 of a character in s2 (excluding NUL).

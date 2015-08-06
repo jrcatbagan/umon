@@ -37,7 +37,6 @@ static char sccsid[] = "@(#)memchr.c	8.1 (Berkeley) 6/4/93";
 __FBSDID("$FreeBSD$");
 
 #include <string.h>
-#include <stdlib.h>
 
 void *
 memchr(const void *s, int c, size_t n)

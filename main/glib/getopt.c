@@ -1,6 +1,4 @@
 /*  $NetBSD: getopt.c,v 1.29 2014/06/05 22:00:22 christos Exp $ */
-#include <string.h>
-extern int printf(char *fmt,...);
 
 /*
  * Copyright (c) 1987, 1993, 1994
@@ -29,7 +27,21 @@ extern int printf(char *fmt,...);
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
+ *
+ * Modified for use in Micromonitor.
  */
+
+#if defined(LIBC_SCCS) && !defined(lint)
+static char sccsid[] = "@(#)getopt.c	8.3 (Berkeley) 4/27/95";
+#endif /* LIBC_SCCS and not lint */
+#include <sys/cdefs.h>
+__FBSDID("$FreeBSD$");
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
 
 int opterr = 1,     /* if error message should be printed */
     optind = 1,     /* index into parent argv vector */
@@ -70,7 +82,7 @@ getopt(int nargc, char *const nargv[], const char *ostr)
             /* Solitary '-', treat as a '-' option
                if the program (eg su) is looking for it. */
             place = EMSG;
-            if(strchr(ostr, '-') == 0) {
+            if(strchr(ostr, '-') == NULL) {
                 return (-1);
             }
             optopt = '-';
@@ -80,20 +92,20 @@ getopt(int nargc, char *const nargv[], const char *ostr)
     }
 
     /* See if option letter is one the caller wanted... */
-    if(optopt == ':' || (oli = strchr(ostr, optopt)) == 0) {
+    if(optopt == ':' || (oli = strchr(ostr, optopt)) == NULL) {
         if(*place == 0) {
             ++optind;
         }
-        if(opterr && *ostr != ':')
-            (void)printf(
-                "illegal option -- %c\n", optopt);
+        if(opterr && *ostr != ':') {
+            (void)printf("illegal option -- %c\n", optopt);
+        }
         return (BADCH);
     }
 
     /* Does this option need an argument? */
     if(oli[1] != ':') {
         /* don't need argument */
-        optarg = 0;
+        optarg = NULL;
         if(*place == 0) {
             ++optind;
         }
@@ -108,7 +120,7 @@ getopt(int nargc, char *const nargv[], const char *ostr)
              * the argument is empty, we return NULL
              */
         {
-            optarg = 0;
+            optarg = NULL;
         } else if(nargc > ++optind) {
             optarg = nargv[optind];
         } else {
@@ -118,9 +130,8 @@ getopt(int nargc, char *const nargv[], const char *ostr)
                 return (BADARG);
             }
             if(opterr)
-                (void)printf(
-                    "option requires an argument -- %c\n",
-                    optopt);
+                (void)printf("option requires an argument -- %c\n",
+                             optopt);
             return (BADCH);
         }
         place = EMSG;
@@ -129,17 +140,12 @@ getopt(int nargc, char *const nargv[], const char *ostr)
     return (optopt);            /* return option letter */
 }
 
-/* getoptinit():
- * Since getopt() can be used by every command in the monitor
- * it's variables must be reinitialized prior to each command
- * executed through docommand()...
- */
 void
 getoptinit(void)
 {
-    optind = 1;
     opterr = 1;
+    optind = 1;
     optopt = 0;
     optreset = 0;
-    optarg = (char *)0;
+    optarg = 0;
 }
