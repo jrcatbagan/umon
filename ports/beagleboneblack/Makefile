@@ -35,7 +35,7 @@ CUSTOM_CFLAGS	= -mcpu=cortex-a8 -O2 -isystem $(ABIDIR)/include -Wno-char-subscri
 # The following variables are used to establish the system's memory map.
 # 
 BOOTROMBASE=0x402F0400
-BOOTROMLEN=0x010000
+BOOTROMLEN=0x01B000
 BOOTRAMBASE=0x80000000
 BOOTRAMLEN=0x010000
 RAMTSTROMBASE=0x80100000
