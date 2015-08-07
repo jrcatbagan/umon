@@ -7,7 +7,7 @@
 // Author(s):    Michael Kelly, Cogent Computer Systems, Inc.
 // Contributors: Luis Torrico, Cogent Computer Systems, Inc.
 // Date:         05-26-2002
-// Modified:	 06-26-2007
+// Modified:     06-26-2007
 // Description:  This file contains the interface layer between Micro Monitor
 //               and the Ethernet driver for the LAN921x on the CSB733.
 //
@@ -36,12 +36,12 @@ ulong tx_buf[400];
 
 /*
  * enreset():
- *	Reset the PHY and MAC.
+ *  Reset the PHY and MAC.
  */
 void
 enreset(void)
 {
-	smsc911x_reset();
+    smsc911x_reset();
 }
 
 /*
@@ -57,23 +57,23 @@ enreset(void)
 int
 eninit(void)
 {
-	return smsc911x_init();
+    return smsc911x_init();
 
 }
 
 int
 EtherdevStartup(int verbose)
 {
-	/* Initialize local device error counts (if any) here. */
-	/* OPT_ADD_CODE_HERE */
+    /* Initialize local device error counts (if any) here. */
+    /* OPT_ADD_CODE_HERE */
 
-	/* Put ethernet controller in reset: */
-	enreset();
+    /* Put ethernet controller in reset: */
+    enreset();
 
-	/* Initialize controller: */
-	eninit();
+    /* Initialize controller: */
+    eninit();
 
-	return(0);
+    return(0);
 }
 
 /* disablePromiscuousReception():
@@ -82,7 +82,7 @@ EtherdevStartup(int verbose)
 void
 disablePromiscuousReception(void)
 {
-	smsc911x_disable_promiscuous_reception();
+    smsc911x_disable_promiscuous_reception();
 }
 
 /* enablePromiscuousReception():
@@ -91,7 +91,7 @@ disablePromiscuousReception(void)
 void
 enablePromiscuousReception(void)
 {
-	smsc911x_enable_promiscuous_reception();
+    smsc911x_enable_promiscuous_reception();
 }
 
 /* disableBroadcastReception():
@@ -100,7 +100,7 @@ enablePromiscuousReception(void)
 void
 disableBroadcastReception(void)
 {
-	smsc911x_disable_broadcast_reception();
+    smsc911x_disable_broadcast_reception();
 }
 
 /* enableBroadcastReception():
@@ -109,32 +109,32 @@ disableBroadcastReception(void)
 void
 enableBroadcastReception(void)
 {
-	smsc911x_enable_broadcast_reception();
+    smsc911x_enable_broadcast_reception();
 }
 
 void
 disableMulticastReception(void)
 {
-	smsc911x_disable_multicast_reception();
+    smsc911x_disable_multicast_reception();
 }
 
 void
 enableMulticastReception(void)
 {
-	smsc911x_enable_multicast_reception();
+    smsc911x_enable_multicast_reception();
 }
 
 
-/* 
+/*
  * enselftest():
- *	Run a self test of the ethernet device(s).  This can be stubbed
- *	with a return(1).
- *	Return 1 if success; else -1 if failure.
+ *  Run a self test of the ethernet device(s).  This can be stubbed
+ *  with a return(1).
+ *  Return 1 if success; else -1 if failure.
  */
 int
 enselftest(int verbose)
 {
-	return(1);
+    return(1);
 }
 
 /* ShowEtherdevStats():
@@ -144,7 +144,7 @@ enselftest(int verbose)
 void
 ShowEtherdevStats(void)
 {
-	/* OPT_ADD_CODE_HERE */
+    /* OPT_ADD_CODE_HERE */
 }
 
 /* getXmitBuffer():
@@ -156,7 +156,7 @@ ShowEtherdevStats(void)
 uchar *
 getXmitBuffer(void)
 {
-	return((uchar *) tx_buf);
+    return((uchar *) tx_buf);
 }
 
 /* sendBuffer():
@@ -166,24 +166,25 @@ getXmitBuffer(void)
 int
 sendBuffer(int length)
 {
-	ulong temp32;
+    ulong temp32;
 
-    if (length < 64)
+    if(length < 64) {
         length = 64;
+    }
 
-	if (EtherVerbose &  SHOW_OUTGOING)
-		printPkt((struct ether_header *)tx_buf,length,ETHER_OUTGOING);
+    if(EtherVerbose &  SHOW_OUTGOING) {
+        printPkt((struct ether_header *)tx_buf,length,ETHER_OUTGOING);
+    }
 
-	// tell the cs8900a to send the tx buffer pointed to by tx_buf
-	temp32 = smsc911x_tx((ulong)tx_buf, (ulong)length);
+    // tell the cs8900a to send the tx buffer pointed to by tx_buf
+    temp32 = smsc911x_tx((ulong)tx_buf, (ulong)length);
 
-	EtherXFRAMECnt++;
-	if (temp32) {
-		return -1;
-	}
-	else {
-		return 0;
-	}
+    EtherXFRAMECnt++;
+    if(temp32) {
+        return -1;
+    } else {
+        return 0;
+    }
 }
 
 /* DisableEtherdev():
@@ -192,7 +193,7 @@ sendBuffer(int length)
 void
 DisableEtherdev(void)
 {
-	enreset();
+    enreset();
 }
 
 /* extGetIpAdd():
@@ -203,7 +204,7 @@ DisableEtherdev(void)
 char *
 extGetIpAdd(void)
 {
-	return((char *)0);
+    return((char *)0);
 }
 
 /* extGetEtherAdd():
@@ -214,7 +215,7 @@ extGetIpAdd(void)
 char *
 extGetEtherAdd(void)
 {
-	return((char *)0);
+    return((char *)0);
 }
 
 /*
@@ -225,17 +226,17 @@ extGetEtherAdd(void)
 int
 polletherdev(void)
 {
-	ulong pktbuf[RBUFSIZE/4];
-	int	pktlen, pktcnt = 0;
+    ulong pktbuf[RBUFSIZE/4];
+    int pktlen, pktcnt = 0;
 
-	pktlen = smsc911x_rx((uchar *)pktbuf);
+    pktlen = smsc911x_rx((uchar *)pktbuf);
 
-	if(pktlen) {
-		pktcnt = 1;
-		EtherRFRAMECnt++;
-		processPACKET((struct ether_header *)pktbuf, pktlen);
-	}
-	return(pktcnt);
+    if(pktlen) {
+        pktcnt = 1;
+        EtherRFRAMECnt++;
+        processPACKET((struct ether_header *)pktbuf, pktlen);
+    }
+    return(pktcnt);
 }
 
 #endif

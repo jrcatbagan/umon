@@ -10,22 +10,26 @@
 */
 
 struct tfsdev tfsdevtbl[] = {
-    {   "//FLASH/",
+    {
+        "//FLASH/",
         TFSSTART,
         TFSEND,
         TFSSPARE,
         TFSSPARESIZE,
         TFSSECTORCOUNT,
-        TFS_DEVTYPE_FLASH, },
+        TFS_DEVTYPE_FLASH,
+    },
 
 #ifdef FLASHRAM_BASE
-    {   "//RAM/",
+    {
+        "//RAM/",
         FLASHRAM_BASE,
         FLASHRAM_END-FLASHRAM_SECTORSIZE,
         FLASHRAM_END-FLASHRAM_SECTORSIZE+1,
         FLASHRAM_SECTORSIZE,
         FLASHRAM_SECTORCOUNT-1,
-        TFS_DEVTYPE_RAM | TFS_DEVINFO_AUTOINIT, },
+        TFS_DEVTYPE_RAM | TFS_DEVINFO_AUTOINIT,
+    },
 #endif
     { 0, TFSEOT,0,0,0,0,0 }
 };

@@ -1,12 +1,12 @@
 #define DEFAULT_BAUD_RATE 115200
 
-#define HWREAD32(a)	*(volatile unsigned long *)(a)
-#define HWREAD16(a)	*(volatile unsigned short *)(a)
-#define HWREAD8(a)	*(volatile unsigned char *)(a)
+#define HWREAD32(a) *(volatile unsigned long *)(a)
+#define HWREAD16(a) *(volatile unsigned short *)(a)
+#define HWREAD8(a)  *(volatile unsigned char *)(a)
 
-#define HWWRITE32(a,b)	*(volatile unsigned long *)(a) = (b)
-#define HWWRITE16(a,b)	*(volatile unsigned short *)(a) = (b)
-#define HWWRITE8(a,b)	*(volatile unsigned char *)(a) = (b)
+#define HWWRITE32(a,b)  *(volatile unsigned long *)(a) = (b)
+#define HWWRITE16(a,b)  *(volatile unsigned short *)(a) = (b)
+#define HWWRITE8(a,b)   *(volatile unsigned char *)(a) = (b)
 
 #define GPIO1_21    (1<<21)
 #define GPIO1_22    (1<<22)

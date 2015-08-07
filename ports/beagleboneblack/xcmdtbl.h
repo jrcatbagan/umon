@@ -9,4 +9,4 @@
     { "dummy",    dummycmd,   dummyHelp,    0 },
 */
 
-{"mmc",		mmc,		mmcHelp, 	0},
+{"mmc",     mmc,        mmcHelp,    0},
