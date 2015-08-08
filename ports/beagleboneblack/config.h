@@ -155,7 +155,7 @@
 #define INCLUDE_EDIT            0
 #define INCLUDE_DISASSEMBLER    0
 #define INCLUDE_UNZIP           0
-#define INCLUDE_ETHERNET        0
+#define INCLUDE_ETHERNET        1
 #define INCLUDE_ICMP            0
 #define INCLUDE_TFTP            0
 #define INCLUDE_DHCPBOOT        0
