@@ -181,7 +181,7 @@
 #define INCLUDE_PORTCMD         0
 #define INCLUDE_SYSLOG          0
 #define INCLUDE_HWTMR           0
-#define INCLUDE_VERBOSEHELP     0
+#define INCLUDE_VERBOSEHELP     1
 #define INCLUDE_GDB             0
 #define INCLUDE_USRLVL          0
 #define INCLUDE_JFFS2           0
