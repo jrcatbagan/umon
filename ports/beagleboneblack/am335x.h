@@ -567,36 +567,312 @@
 /* Ethernet Switch Subsystem Registers */
 #define CPSW_SS_BASE			(LF_FAST_BASE + 0x00100000)
 #define CPSW_SS_REG(_x_)		*(vulong *)(CPSW_SS_BASE + _x_)
+#define CPSW_SS_ID_VER          0x00
+#define CPSW_SS_CONTROL         0x04
+#define CPSW_SS_SOFT_RESET      0x08
+#define CPSW_SS_STAT_PORT_EN    0x0C
+#define CPSW_SS_PTYPE           0x10
+#define CPSW_SS_SOFT_IDLE       0x14
+#define CPSW_SS_THRU_RATE       0x18
+#define CPSW_SS_GAP_THRESH      0x1C
+#define CPSW_SS_TX_START_WDS    0x20
+#define CPSW_SS_FLOW_CONTROL    0x24
+#define CPSW_SS_VLAN_LTYPE      0x28
+#define CPSW_SS_TS_LTYPE        0x2C
+#define CPSW_SS_DLR_LTYPE       0x30
 /* Ethernet Switch Port Control Registers */
 #define CPSW_PORT_BASE			(LF_FAST_BASE + 0x00100100)
 #define CPSW_PORT_REG(_x_)		*(vulong *)(CPSW_PORT_BASE + _x_)
+#define CPSW_PORT_P0_CONTROL            0x0000
+#define CPSW_PORT_P0_MAX_BLKS           0x0008
+#define CPSW_PORT_P0_BLK_CNT            0x000C
+#define CPSW_PORT_P0_TX_IN_CTL          0x0010
+#define CPSW_PORT_P0_PORT_VLAN          0x0014
+#define CPSW_PORT_P0_TX_PRI_MAP         0x0018
+#define CPSW_PORT_P0_CPDMA_TX_PRI_MAP   0x001C
+#define CPSW_PORT_P0_CPDMA_RX_CH_MAP    0x0020
+#define CPSW_PORT_P0_RX_DSCP_PRI_MAP0   0x0030
+#define CPSW_PORT_P0_RX_DSCP_PRI_MAP1   0x0034
+#define CPSW_PORT_P0_RX_DSCP_PRI_MAP2   0x0038
+#define CPSW_PORT_P0_RX_DSCP_PRI_MAP3   0x003C
+#define CPSW_PORT_P0_RX_DSCP_PRI_MAP4   0x0040
+#define CPSW_PORT_P0_RX_DSCP_PRI_MAP5   0x0044
+#define CPSW_PORT_P0_RX_DSCP_PRI_MAP6   0x0048
+#define CPSW_PORT_P0_RX_DSCP_PRI_MAP7   0x004C
+#define CPSW_PORT_P1_CONTROL            0x0100
+#define CPSW_PORT_P1_MAX_BLKS           0x0108
+#define CPSW_PORT_P1_BLK_CNT            0x010C
+#define CPSW_PORT_P1_TX_IN_CTL          0x0110
+#define CPSW_PORT_P1_PORT_VLAN          0x0114
+#define CPSW_PORT_P1_TX_PRI_MAP         0x0118
+#define CPSW_PORT_P1_TS_SEQ_MTYPE       0x011C
+#define CPSW_PORT_P1_SA_LO              0x0120
+#define CPSW_PORT_P1_SA_HI              0x0124
+#define CPSW_PORT_P1_SEND_PERCENT       0x0128
+#define CPSW_PORT_P1_RX_DSCP_PRI_MAP0   0x0130
+#define CPSW_PORT_P1_RX_DSCP_PRI_MAP1   0x0134
+#define CPSW_PORT_P1_RX_DSCP_PRI_MAP2   0x0138
+#define CPSW_PORT_P1_RX_DSCP_PRI_MAP3   0x013C
+#define CPSW_PORT_P1_RX_DSCP_PRI_MAP4   0x0140
+#define CPSW_PORT_P1_RX_DSCP_PRI_MAP5   0x0144
+#define CPSW_PORT_P1_RX_DSCP_PRI_MAP6   0x0148
+#define CPSW_PORT_P1_RX_DSCP_PRI_MAP7   0x014C
+#define CPSW_PORT_P2_CONTROL            0x0200
+#define CPSW_PORT_P2_MAX_BLKS           0x0208
+#define CPSW_PORT_P2_BLK_CNT            0x020C
+#define CPSW_PORT_P2_TX_IN_CTL          0x0210
+#define CPSW_PORT_P2_PORT_VLAN          0x0214
+#define CPSW_PORT_P2_TX_PRI_MAP         0x0218
+#define CPSW_PORT_P2_TS_SEQ_MTYPE       0x021C
+#define CPSW_PORT_P2_SA_LO              0x0220
+#define CPSW_PORT_P2_SA_HI              0x0224
+#define CPSW_PORT_P2_SEND_PERCENT       0x0228
+#define CPSW_PORT_P2_RX_DSCP_PRI_MAP0   0x0230
+#define CPSW_PORT_P2_RX_DSCP_PRI_MAP1   0x0234
+#define CPSW_PORT_P2_RX_DSCP_PRI_MAP2   0x0238
+#define CPSW_PORT_P2_RX_DSCP_PRI_MAP3   0x023C
+#define CPSW_PORT_P2_RX_DSCP_PRI_MAP4   0x0240
+#define CPSW_PORT_P2_RX_DSCP_PRI_MAP5   0x0244
+#define CPSW_PORT_P2_RX_DSCP_PRI_MAP6   0x0248
+#define CPSW_PORT_P2_RX_DSCP_PRI_MAP7   0x024C
 /* CPPI DMA Controller Module Registers */
 #define CPSW_CPDMA_BASE			(LF_FAST_BASE + 0x00100800)
 #define CPSW_CPDMA_REG(_x_)		*(vulong *)(CPSW_CPDMA_BASE + _x_)
+#define CPSW_CPDMA_TX_IDVER             0x00
+#define CPSW_CPDMA_TX_CONTROL           0x04
+#define CPSW_CPDMA_TX_TEARDOWN          0x08
+#define CPSW_CPDMA_RX_IDVER             0x10
+#define CPSW_CPDMA_RX_CONTROL           0x14
+#define CPSW_CPDMA_RX_TEARDOWN          0x18
+#define CPSW_CPDMA_SOFT_RESET           0x1C
+#define CPSW_CPDMA_DMACONTROL           0x20
+#define CPSW_CPDMA_DMASTATUS            0x24
+#define CPSW_CPDMA_RX_BUFFER_OFFSET     0x28
+#define CPSW_CPDMA_EMCONTROL            0x2C
+#define CPSW_CPDMA_TX_PRI0_RATE         0x30
+#define CPSW_CPDMA_TX_PRI1_RATE         0x34
+#define CPSW_CPDMA_TX_PRI2_RATE         0x38
+#define CPSW_CPDMA_TX_PRI3_RATE         0x3C
+#define CPSW_CPDMA_TX_PRI4_RATE         0x40
+#define CPSW_CPDMA_TX_PRI5_RATE         0x44
+#define CPSW_CPDMA_TX_PRI6_RATE         0x48
+#define CPSW_CPDMA_TX_PRI7_RATE         0x4C
+#define CPSW_CPDMA_TX_INTSTAT_RAW       0x80
+#define CPSW_CPDMA_TX_INTSTAT_MASKED    0x84
+#define CPSW_CPDMA_TX_INTMASK_SET       0x88
+#define CPSW_CPDMA_TX_INTMASK_CLEAR     0x8C
+#define CPSW_CPDMA_IN_VECTOR            0x90
+#define CPSW_CPDMA_EOI_VECTOR           0x94
+#define CPSW_CPDMA_RX_INTSTAT_RAW       0xA0
+#define CPSW_CPDMA_RX_INSTAT_MASKED     0xA4
+#define CPSW_CPDMA_RX_INTMASK_SET       0xA8
+#define CPSW_CPDMA_RX_INTMASK_CLEAR     0xAC
+#define CPSW_CPDMA_DMA_INTSTAT_RAW      0xB0
+#define CPSW_CPDMA_DMA_INTSTAT_MASKED   0xB4
+#define CPSW_CPDMA_DMA_INTMASK_SET      0xB8
+#define CPSW_CPDMA_DMA_INTMASK_CLEAR    0xBC
+#define CPSW_CPDMA_RX0_PENDTHRESH       0xC0
+#define CPSW_CPDMA_RX1_PENDTHRESH       0xC4
+#define CPSW_CPDMA_RX2_PENDTHRESH       0xC8
+#define CPSW_CPDMA_RX3_PENDTHRESH       0xCC
+#define CPSW_CPDMA_RX4_PENDTHRESH       0xD0
+#define CPSW_CPDMA_RX5_PENDTHRESH       0xD4
+#define CPSW_CPDMA_RX6_PENDTHRESH       0xD8
+#define CPSW_CPDMA_RX7_PENDTHRESH       0xDC
+#define CPSW_CPDMA_RX0_FREEBUFFER       0xE0
+#define CPSW_CPDMA_RX1_FREEBUFFER       0xE4
+#define CPSW_CPDMA_RX2_FREEBUFFER       0xE8
+#define CPSW_CPDMA_RX3_FREEBUFFER       0xEC
+#define CPSW_CPDMA_RX4_FREEBUFFER       0xF0
+#define CPSW_CPDMA_RX5_FREEBUFFER       0xF4
+#define CPSW_CPDMA_RX6_FREEBUFFER       0xF8
+#define CPSW_CPDMA_RX7_FREEBUFFER       0xFC
 /* Ethernet Statistics Registers */
 #define CPSW_STATS_BASE			(LF_FAST_BASE + 0x00100900)
 #define CPSW_STATS_REG(_x_)		*(vulong *)(CPSW_STATS_BASE + _x_)
+#define CPSW_STATS_GOOD_RX_FRAMES               0x00
+#define CPSW_STATS_BROADCAST_RX_FRAMES          0x04
+#define CPSW_STATS_MULTICAST_RX_FRAMES          0x08
+#define CPSW_STATS_PAUSE_RX_FRAMES              0x0C
+#define CPSW_STATS_RX_CRC_ERRORS                0x10
+#define CPSW_STATS_RX_ALIGN_CODE_ERRORS         0x14
+#define CPSW_STATS_OVERSIZE_RX_FRAMES           0x18
+#define CPSW_STATS_RX_JABBERS                   0x1C
+#define CPSW_STATS_UNDERSIZE_RX_FRAMES          0x20
+#define CPSW_STATS_RX_FRAGMENTS                 0x24
+#define CPSW_STATS_RX_OCTETS                    0x30
+#define CPSW_STATS_GODO_TX_FRAMES               0x34
+#define CPSW_STATS_BROADCAST_TX_FRAMES          0x38
+#define CPSW_STATS_MULTICAST_TX_FRAMES          0x3C
+#define CPSW_STATS_PAUSE_TX_FRAMES              0x40
+#define CPSW_STATS_DEFFERED_TX_FRAMES           0x44
+#define CPSW_STATS_COLLISIONS                   0x48
+#define CPSW_STATS_SINGLE_COLLISION_TX_FRAMES   0x4C
+#define CPSW_STATS_MULTIPLE_COLLISION_TX_FRAMES 0x50
+#define CPSW_STATS_EXCESSIVE_COLLISIONS         0x54
+#define CPSW_STATS_LATE_COLLISIONS              0x58
+#define CPSW_STATS_TX_UNDERRUN                  0x5C
+#define CPSW_STATS_CARRIER_SENSE_ERRORS         0x60
+#define CPSW_STATS_TX_OCTETS                    0x64
+#define CPSW_STATS_RX_TX_64_OCTET_FRAMES        0x68
+#define CPSW_STATS_RX_TX_65_127_OCTET_FRAMES    0x6C
+#define CPSW_STATS_RX_TX_128_255_OCTET_FRAMES   0x70
+#define CPSW_STATS_RX_TX_256_511_OCTET_FRAMES   0x74
+#define CPSW_STATS_RX_TX_512_1023_OCTET_FRAMES  0x78
+#define CPSW_STATS_RX_TX_1024_UP_OCTET_FRAMES   0x7C
+#define CPSW_STATS_NET_OCTETS                   0x80
+#define CPSW_STATS_RX_START_OF_FAME_OVERRUNS    0x84
+#define CPSW_STATS_RX_MIDDLE_OF_FRAME_OVERRUNS  0x88
+#define CPSW_STATS_RX_DMA_OVERRUNS              0x8C
 /* CPPI DMA State RAM Registers */
 #define CPSW_STATERAM_BASE		(LF_FAST_BASE + 0x00100A00)
-#define CPSW_STATERAM_REG(_x_)		*(vulong *)(CPSW_STATERAM_BASE + _x_)
+#define CPSW_STATERAM_REG(_x_)	*(vulong *)(CPSW_STATERAM_BASE + _x_)
+#define CPSW_STATERAM_TX0_HDP   0x00
+#define CPSW_STATERAM_TX1_HDP   0x04
+#define CPSW_STATERAM_TX2_HDP   0x08
+#define CPSW_STATERAM_TX3_HDP   0x0C
+#define CPSW_STATERAM_TX4_HDP   0x10
+#define CPSW_STATERAM_TX5_HDP   0x14
+#define CPSW_STATERAM_TX6_HDP   0x18
+#define CPSW_STATERAM_TX7_HDP   0x2C
+#define CPSW_STATERAM_RX0_HDP   0x20
+#define CPSW_STATERAM_RX1_HDP   0x24
+#define CPSW_STATERAM_RX2_HDP   0x28
+#define CPSW_STATERAM_RX3_HDP   0x2C
+#define CPSW_STATERAM_RX4_HDP   0x30
+#define CPSW_STATERAM_RX5_HDP   0x34
+#define CPSW_STATERAM_RX6_HDP   0x38
+#define CPSW_STATERAM_RX7_HDP   0x3C
+#define CPSW_STATERAM_TX0_CP    0x40
+#define CPSW_STATERAM_TX1_CP    0x44
+#define CPSW_STATERAM_TX2_CP    0x48
+#define CPSW_STATERAM_TX3_CP    0x4C
+#define CPSW_STATERAM_TX4_CP    0x50
+#define CPSW_STATERAM_TX5_CP    0x54
+#define CPSW_STATERAM_TX6_CP    0x58
+#define CPSW_STATERAM_TX7_CP    0x5C
+#define CPSW_STATERAM_RX0_CP    0x60
+#define CPSW_STATERAM_RX1_CP    0x64
+#define CPSW_STATERAM_RX2_CP    0x68
+#define CPSW_STATERAM_RX3_CP    0x6C
+#define CPSW_STATERAM_RX4_CP    0x70
+#define CPSW_STATERAM_RX5_CP    0x74
+#define CPSW_STATERAM_RX6_CP    0x78
+#define CPSW_STATERAM_RX7_CP    0x7C
 /* Ethenet Time Sync Module Registers */
 #define CPSW_CPTS_BASE			(LF_FAST_BASE + 0x00100C00)
-#define CPSW_CPTS_REG(_x_)		*(vulong *)(CPSW_CPTS_BASE + _x_)
+#define CPSW_CPTS_REG(_x_)		*(vulong *)(CPSW_CPTS_BASE + _x_)a
+#define CPSW_CPTS_IDVER             0x00
+#define CPSW_CPTS_CONTROL           0x04
+#define CPSW_CPTS_TS_PUSH           0x0C
+#define CPSW_CPTS_TS_LOAD_VAL       0x10
+#define CPSW_CPTS_TS_LOAD_EN        0x14
+#define CPSW_CPTS_INTSTAT_RAW       0x20
+#define CPSW_CPTS_INTSTAT_MASKED    0x24
+#define CPSW_CPTS_INT_ENABLE        0x28
+#define CPSW_CPTS_EVENT_POP         0x30
+#define CPSW_CPTS_EVENT_LOW         0x34
+#define CPSW_CPTS_EVENT_HIGH        0x38
 /* Ethernet Address Lookup Engine Registers */
 #define CPSW_ALE_BASE			(LF_FAST_BASE + 0x00100D00)
 #define CPSW_ALE_REG(_x_)		*(vulong *)(CPSW_ALE_BASE + _x_)
-/* Ethernet Silver for Port 1 Registers */
+#define CPSW_ALE_IDVER          0x00
+#define CPSW_ALE_CONTROL        0x08
+#define CPSW_ALE_PRESCALE       0x10
+#define CPSW_UNKNOWN_VLAN       0x18
+#define CPSW_ALE_TBLCTL         0x20
+#define CPSW_ALE_TBLW2          0x34
+#define CPSW_ALE_TBLW1          0x3C
+#define CPSW_ALE_TBLW0          0x3C
+#define CPSW_ALE_PORTCTL0       0x40
+#define CPSW_ALE_PORTCTL1       0x44
+#define CPSW_ALE_PORTCTL2       0x48
+#define CPSW_ALE_PORTCTL3       0x4C
+#define CPSW_ALE_PORTCTL4       0x50
+#define CPSW_ALE_PORTCTL5       0x54
+/* Ethernet Sliver for Port 1 Registers */
 #define CPSW_SL1_BASE			(LF_FAST_BASE + 0x00100D80)
 #define CPSW_SL1_REG(_x_)		*(vulong *)(CPSW_SL1_BASE + _x_)
-/* Ethernet Silver for Port 2 Registers */
+#define CPSW_SL1_IDVER          0x00
+#define CPSW_SL1_MACCONTROL     0x04
+#define CPSW_SL1_MACSTATUS      0x08
+#define CPSW_SL1_SOFT_RESET     0x0C
+#define CPSW_SL1_RX_MAXLEN      0x10
+#define CPSW_SL1_BOFFTEST       0x14
+#define CPSW_SL1_RX_PAUSE       0x18
+#define CPSW_SL1_TX_PAUSE       0x1C
+#define CPSW_SL1_EMCONTROL      0x20
+#define CPSW_SL1_RX_PRI_MAP     0x24
+#define CPSW_SL1_TX_GAP         0x28
+/* Ethernet Sliver for Port 2 Registers */
 #define CPSW_SL2_BASE			(LF_FAST_BASE + 0x00100DC0)
 #define CPSW_SL2_REG(_x_)		*(vulong *)(CPSW_SL2_BASE + _x_)
+#define CPSW_SL2_IDVER          0x00
+#define CPSW_SL2_MACCONTROL     0x04
+#define CPSW_SL2_MACSTATUS      0x08
+#define CPSW_SL2_SOFT_RESET     0x0C
+#define CPSW_SL2_RX_MAXLEN      0x10
+#define CPSW_SL2_BOFFTEST       0x14
+#define CPSW_SL2_RX_PAUSE       0x18
+#define CPSW_SL2_TX_PAUSE       0x1C
+#define CPSW_SL2_EMCONTROL      0x20
+#define CPSW_SL2_RX_PRI_MAP     0x24
+#define CPSW_SL2_TX_GAP         0x28
 /* Ethernet MDIO Controller Registers */
-#define MDIO_BASE			(LF_FAST_BASE + 0x00101000)
+#define MDIO_BASE			    (LF_FAST_BASE + 0x00101000)
 #define MDIO_REG(_x_)			*(vulong *)(MDIO_BASE + _x_)
+#define MDIO_MDIOVER                0x00
+#define MDIO_MDIOCONTROL            0x04
+#define MDIO_MDIOALIVE              0x08
+#define MDIO_MDIOLINK               0x0C
+#define MDIO_MDIOLINKINTRAW         0x10
+#define MDIO_MDIOLINKINTMASKED      0x14
+#define MDIO_MDIOUSERINTRAW         0x20
+#define MDIO_MDIOUSERINTMASKED      0x24
+#define MDIO_MDIOUSERINTMASKSET     0x28
+#define MDIO_MDIOUSERINTMASKCLR     0x2C
+#define MDIO_MDIOUSERACCESS0        0x80
+#define MDIO_MDIOUSERPHYSEL0        0x84
+#define MDIO_MDIOUSERACCESS1        0x88
+#define MDIO_MDIOUSERPHYSEL1        0x8C
 /* Ethernet Subsystem Wrapper for RMII/RGMII Registers */
 #define CPSW_WR_BASE			(LF_FAST_BASE + 0x00101200)
 #define CPSW_WR_REG(_x_)		*(vulong *)(CPSW_WR_BASE + _x_)
+#define CPSW_WR_IDVER               0x00
+#define CPSW_WR_SOFT_RESET          0x04
+#define CPSW_WR_CONTROL             0x08
+#define CPSW_WR_INT_CONTROL         0x0C
+#define CPSW_WR_C0_RX_THRESH_EN     0x10
+#define CPSW_WR_C0_RX_EN            0x14
+#define CPSW_WR_C0_TX_EN            0x18
+#define CPSW_WR_C0_MISC_EN          0x1C
+#define CPSW_WR_C1_RX_THRESH_EN     0x20
+#define CPSW_WR_C1_RX_EN            0x24
+#define CPSW_WR_C1_TX_EN            0x28
+#define CPSW_WR_C1_MISC_EN          0x2C
+#define CPSW_WR_C2_RX_THRESH_EN     0x30
+#define CPSW_WR_C2_RX_EN            0x34
+#define CPSW_WR_C2_TX_EN            0x38
+#define CPSW_WR_C2_MISC_EN          0x3C
+#define CPSW_WR_C0_RX_THRESH_STAT   0x40
+#define CPSW_WR_C0_RX_STAT          0x44
+#define CPSW_WR_C0_TX_STAT          0x48
+#define CPSW_WR_C0_MISC_STAT        0x4C
+#define CPSW_WR_C1_RX_THRESH_STAT   0x50
+#define CPSW_WR_C1_RX_STAT          0x54
+#define CPSW_WR_C1_TX_STAT          0x58
+#define CPSW_WR_C1_MISC_STAT        0x5C
+#define CPSW_WR_C2_RX_THRESH_STAT   0x60
+#define CPSW_WR_C2_RX_STAT          0x64
+#define CPSW_WR_C2_TX_STAT          0x68
+#define CPSW_WR_C2_MISC_STAT        0x6C
+#define CPSW_WR_C0_RX_IMAX          0x70
+#define CPSW_WR_C0_TX_IMAX          0x74
+#define CPSW_WR_C1_RX_IMAX          0x78
+#define CPSW_WR_C1_TX_IMAX          0x7C
+#define CPSW_WR_C2_RX_IMAX          0x80
+#define CPSW_WR_C2_TX_IMAX          0x84
+#define CPSW_WR_RGMII_CTL           0x88
 /*===========================================================================*/
 
 
