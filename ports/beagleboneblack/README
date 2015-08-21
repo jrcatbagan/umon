@@ -186,6 +186,40 @@ The SD card is now ready.
 
 
 -----------------------------------------------------------------------
+eMMC:
+-----------------------------------------------------------------------
+Booting uMon from the onboard eMMC requires a multiple-step procedure
+that will be simplified in the future as the uMon port progresses.
+
+To transfer a uMon image into the onboard eMMC requires an SD card where
+uMon is configured to boot in RAW mode from a known offset.
+
+With uMon configured to boot in RAW mode from a known offset in the
+SD card, the next step is to determine the size of the uMon image in
+512-byte blocks.
+
+With all of this in place, the sequence of uMon commands required to
+transfer the uMon image are as follows:
+
+    sd init
+    mmc init
+    sd read <destination in RAM> <SD sector address> <# of 512-byte blocks>
+    mmc write <source in RAM> <eMMC sector address> <# of 512-byte blocks>
+
+With these steps, the uMon image is first transferred into DDR3 RAM
+and then written to the eMMC.  The reason for this appraoch is that
+there is currently no supported mechanism to write the eMMC directly
+from an SD card.
+
+The user must take care to transfer the uMon image in a location in
+RAM not currently owned by the uMon image currently in execution.
+
+As for the final destination in the eMMC, the uMon image must be stored
+in a locatation where the internal ROM-bootloader will be able to find
+and boot this image.
+
+
+-----------------------------------------------------------------------
 UART:
 -----------------------------------------------------------------------
 Unlike booting from SD, booting via UART does not require any GP
