@@ -1,9 +1,5 @@
 /*
- * Monitor configuration file for the Beaglebone Black
- *
- * Adapted by Jarielle Catbagan
- * email: jcatbagan93@gmail.com
- *
+ * Monitor configuration file
  *
  * General notice:
  * This code is part of a boot-monitor package developed as a generic base
@@ -17,6 +13,10 @@
  * Author:  Ed Sutter
  * email:   esutter@lucent.com
  * phone:   908-582-2351
+ *
+ *
+ * Adapted by Jarielle Catbagan for the Beaglebone Black
+ * email: jcatbagan93@gmail.com
  */
 
 #include "am335x.h"
