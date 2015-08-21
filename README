@@ -1,17 +1,17 @@
 This is the top-level of the MicroMonitor source tree.
 
 There are three main directories:
-umon_main:
+main:
   This is the common code reusable on various targets as the core
   of MicroMonitor's functionality.
-umon_ports:
+ports:
   This directory contains the public ports of MicroMonitor.  Each
   subdirectory contains the makefile and target-specific code for
   one uMon port.
-umon_apps:
+apps:
   This code provides a few different application examples for use
   after the bootmonitor is built and running on your target.  The
-  best place to go there is umon_apps/demo.  This directory contains
+  best place to go there is apps/demo.  This directory contains
   the source and makefile that support building a basic application
   for any target supported by MicroMonitor.  
 
@@ -19,9 +19,6 @@ For a quick introduction refer to:
 	http://www.umonfw.com/docs/white_paper.pdf
 For a lot more than you'll ever care to read about it refer to:
 	http://www.umonfw.com/docs/umon_user_manual.pdf
-OR...
-
-To get started, refer to umon_main/README.
 
 -----------------------------------------------------------------------
 
