@@ -15,10 +15,9 @@
  * phone:   908-582-2351
  * 
  *
- * Modified for the CSB740 - OMAP3530 Single Board
- *
- * rom_reset.s:
-  */
+ * Adapted by Jarielle Catbagan for the Beaglebone Black
+ * email: jcatbagan93@gmail.com
+ */
 
 #include "warmstart.h"
 #include "am335x.h"
